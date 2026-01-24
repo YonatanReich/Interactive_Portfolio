@@ -2,48 +2,49 @@
 import { useBox } from '@react-three/cannon'
 import { Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef } from 'react'
+import { useStore } from '../store.js'
+import { easing } from 'maath'
 
 export default function GlassPanel({ position, label, speed = 1, range = 1, id }) {
-  // 1. Physics Body: 'Kinematic' means it moves but isn't affected by gravity
+  // 1. Physics Body
   const [ref, api] = useBox(() => ({
     type: 'Kinematic', 
     position: position,
     args: [3, 2, 0.2] 
   }))
 
-  // Store the initial starting position
-  // We use a "ref" so the value persists without causing re-renders
+  const activeTarget = useStore((state) => state.activeTarget)
+  const isTargeted = activeTarget === id
+
   const startPos = useRef(position)
-
   const meshRef = useRef()
-  
 
-    useLayoutEffect(() => {
-        if (meshRef.current) {
-            meshRef.current.name = "GlassPanel"
-            meshRef.current.userData = { id }
-        }
-    }, [id])
-            
-
-
-
-
-
-    
+  useLayoutEffect(() => {
+    if (meshRef.current) {
+        meshRef.current.name = "GlassPanel"
+        meshRef.current.userData = { id }
+    }
+  }, [id])
+   
   // 2. Animation Loop
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime() * speed
+  // FIX: Pass (state, delta) correctly as two separate arguments
+  useFrame((state, delta) => {
+    // FIX: Access .clock from the 'state' variable
+    const t = state.clock.getElapsedTime() * speed
     
-    // Calculate new positions based on a Sine wave
-    // x: oscillates slightly left/right
-    // y: oscillates up/down (floating effect)
     const newX = startPos.current[0] + Math.sin(t) * (range * 0.5)
     const newY = startPos.current[1] + Math.cos(t) * range
-
-    // Apply the new position to the PHYSICS body
+    
     api.position.set(newX, newY, startPos.current[2])
+
+    if (meshRef.current) {
+      const targetScale = isTargeted ? 1.15 : 1
+      const targetColor = isTargeted ? "white" : "#34648a"
+
+      easing.damp3(meshRef.current.scale, targetScale, 0.2, delta)
+      easing.dampC(meshRef.current.material.color, targetColor, 0.2, delta)
+    }
   })
 
   return (
@@ -52,14 +53,14 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
         <boxGeometry args={[3, 2, 0.2]} />
         <meshPhysicalMaterial 
           color="#34648a" 
-          transmission={0.95} // High transparency
+          transmission={0.95} 
           opacity={0.1} 
           metalness={0} 
-          roughness={0}       // Perfectly smooth glass
-          ior={1.5}           // Index of Refraction (standard glass)
-          thickness={2}       // Important: gives the glass volume
-                  envMapIntensity={2}
-            clearcoat={1}       // Super shiny
+          roughness={0}       
+          ior={1.5}           
+          thickness={2}       
+          envMapIntensity={2}
+          clearcoat={1}       
         />
       </mesh>
 
@@ -71,8 +72,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
         anchorY="middle"
       >
         {label}
-          </Text>
-          <mesh/>
+      </Text>
     </group>
   )
 }
