@@ -2,7 +2,8 @@
 import { useState, useRef, useEffect} from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import {Howl, Howler} from 'howler'
+import { Howl, Howler } from 'howler'
+import {useStore} from '../store.js'
 
 // --- CONFIGURATION ---
 const BALL_SPEED = 60 // Fast throw
@@ -58,23 +59,23 @@ function Ball({ id, startPos, startDir, onRemove }) {
     for (const hit of hits) {
         
         // HIT GLASS (Trigger)
-        if (hit.object.name === "GlassPanel") {
-            if (!hitObjects.current.has(hit.object.uuid)) {
-                hitObjects.current.add(hit.object.uuid)
+      if (hit.object.name === "GlassPanel") {
+        if (!hitObjects.current.has(hit.object.uuid)) {
+          hitObjects.current.add(hit.object.uuid)
                 
-                // FIX 3: Store the ORIGINAL color, then flash
-                const originalColor = hit.object.material.color.getHex()
-                hit.object.material.color.set('#ff4444') 
-
-                setTimeout(() => {
-                    // Restore the exact color it had before
-                    hit.object.material.color.setHex(originalColor)
-                }, 300)
-            }
-            // Do NOT break here. The ball passes through glass, 
-            // so we might still need to hit a wall behind it in the same frame.
+          const targetId = hit.object.userData.id
+          if (targetId) {
+            // Update the global store to set this as the active target
+            useStore.getState().setActiveTarget(targetId)
+          }
+              
+          setTimeout(() => {
+            useStore.getState().resetTarget()
+          }, 5000)
+          // Do NOT break here. The ball passes through glass, 
+          // so we might still need to hit a wall behind it in the same frame.
         }
-
+      }
         // HIT WALL (Solid)
         else if (hit.object.name === "TunnelWall") {
 
