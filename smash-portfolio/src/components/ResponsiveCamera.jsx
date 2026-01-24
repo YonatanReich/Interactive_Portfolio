@@ -49,7 +49,8 @@ export default function ResponsiveCamera() {
 
   return (
     <CameraControls 
-      ref={controls} 
+      ref={controls}
+      enabled={false}
       smoothTime={0.8} 
       maxDistance={40} // increased max distance to allow mobile view
     />
