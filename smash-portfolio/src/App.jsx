@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { GradientTexture, Environment } from '@react-three/drei' 
 import { Physics } from '@react-three/cannon'
 import * as THREE from 'three'
+import { useEffect } from 'react'
 
 import GlassPanel from './components/GlassPanel.jsx'
 import TunnelSystem from './components/TunnelSystem.jsx'
@@ -11,7 +12,7 @@ import BallManager from './components/BallManager.jsx'
 
 // --- VISUAL PALETTE ---
 const TOP_COLOR = '#000000'     
-const HORIZON_COLOR = '#ffffffff' 
+const HORIZON_COLOR = '#ffffff' 
 const BOTTOM_COLOR = '#000000'
 const FOG_COLOR = HORIZON_COLOR 
 
@@ -31,10 +32,40 @@ function GradientBackground() {
 }
 
 export default function App() {
+
+ // --- BACKGROUND MUSIC LOGIC ---
+  useEffect(() => {
+    const startMusic = () => {
+      const audio = document.getElementById('bg_sound')
+      if (audio) {
+        // Set volume low so it doesn't overpower sound effects
+        audio.volume = 0.3 
+        audio.play().catch(e => console.log("Waiting for interaction..."))
+      }
+    }
+
+    // Try to play immediately (works on some desktops if user engaged previously)
+    startMusic()
+
+    // Add listener to force play on first click/tap (Required for iOS/Chrome)
+    window.addEventListener('click', startMusic, { once: true })
+    window.addEventListener('touchstart', startMusic, { once: true })
+
+    return () => {
+      window.removeEventListener('click', startMusic)
+      window.removeEventListener('touchstart', startMusic)
+    }
+  }, [] )
+
   return (
     <div style={{ height: '100vh', width: '100vw', background: '#000' }}>
+      <audio 
+        id="bg_sound" 
+        src="/Hole In One - Spiritual Ideas For Virtual Reality.mp3" 
+        loop 
+      />
       <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={[1, 1.5]}> 
-       
+      
         
         <ResponsiveCamera />
         <GradientBackground />
