@@ -71,13 +71,13 @@ export default function App() {
         <GradientBackground />
         
         {/* Fog matches the horizon to hide the infinite tunnel generation */}
-        <fog attach="fog" args={[FOG_COLOR, 20, 120]} />
+        <fog attach="fog" args={[FOG_COLOR, 40, 200]} />
 
         {/* --- LIGHTING --- */}
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ffffff" />
         {/* Blue backlight for cool rim-lighting on blocks */}
-        <spotLight position={[0, 10, -20]} intensity={5} color="#0088ff" />
+        
 
         {/* --- THE FIX: PURE ABSTRACT REFLECTIONS --- */}
         {/* We removed preset="city". Now we define our own "World" */}
