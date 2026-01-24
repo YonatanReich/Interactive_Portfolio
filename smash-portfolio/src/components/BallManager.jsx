@@ -1,17 +1,16 @@
 // src/components/BallManager.jsx
-import { useState, useRef, useEffect, use } from 'react'
+import { useState, useRef, useEffect} from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import wallHitEffect from '/wall_sound.wav'
-import {Howl} from 'howler'
+import {Howl, Howler} from 'howler'
 
 // --- CONFIGURATION ---
 const BALL_SPEED = 60 // Fast throw
 const GRAVITY = 30    // Heavy metal ball
 const TUNNEL_SPEED = 10 // Must match TunnelSystem speed to sync perfectly
 const wallHitSound = new Howl({
-  src: [wallHitEffect],
-    html5: false
+  src: ['/wall_sound.wav'],
+    html5: false,
 });
 
 function Ball({ id, startPos, startDir, onRemove }) {
@@ -93,7 +92,9 @@ function Ball({ id, startPos, startDir, onRemove }) {
             // BREAK! We hit a solid wall. Stop checking things behind it.
             break; 
         }
-    }
+      }
+      
+
 
     
 
@@ -119,10 +120,14 @@ function Ball({ id, startPos, startDir, onRemove }) {
 
 export default function BallManager() {
   const [balls, setBalls] = useState([])
-  const { camera, pointer, raycaster, gl } = useThree()
+    const { camera, pointer, raycaster, gl } = useThree()
+    
+
+ 
 
   useEffect(() => {
-    const handlePointerDown = () => {
+      const handlePointerDown = () => {
+        
       // 1. Calculate Throw Direction based on where user clicked
       raycaster.setFromCamera(pointer, camera)
       
