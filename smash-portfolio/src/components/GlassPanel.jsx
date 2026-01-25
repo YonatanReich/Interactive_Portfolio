@@ -41,8 +41,8 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     if (isTargeted) {
       // === ACTIVE MODE ===
       // Move to center of tunnel (z=-15) and grow huge
-      goalPos.set(0, 0, -15)
-      goalScale.set(4, 3, 1) 
+      goalPos.set(0, 0, -20)
+      goalScale.set(2, 2, 1) 
     } else {
       // === IDLE MODE ===
       // Float around original start position
@@ -106,7 +106,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
       >
         {label}
       </Text>
-      
+
     </group>
   )
 }
