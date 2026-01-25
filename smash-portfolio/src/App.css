@@ -12,65 +12,48 @@ body, html, #root {
   font-family: 'inter', sans-serif;
 }
 
-/* Ensure the overlay sits ON TOP of the canvas */
-.ui-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  /* Let clicks pass through to the 3D world... */
-  z-index: 10;
-}
 
-/* ...but re-enable clicks on the actual bars */
-.glass-bar {
+/* === Bar Styling === */
+.top-bar-glass,
+.bottom-bar-glass {
   pointer-events: auto;
-  position: absolute;
-  left: 0;
-  right: 0;
+  /* Re-enable clicks for the buttons */
+  width: 100%;
   padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  /* GLASSMORPHISM STYLE */
   background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
 }
 
-.top-bar {
-  top: 0;
+.top-bar-glass {
+  justify-content: space-between;
 }
 
-.bottom-bar {
-  bottom: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+.bottom-bar-glass {
   border-bottom: none;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Buttons and Text */
 .tabs button {
-  background: transparent;
+  background: none;
   border: none;
   color: rgba(255, 255, 255, 0.7);
   font-size: 1rem;
-  margin-right: 2rem;
-  cursor: pointer;
-  transition: color 0.3s, text-shadow 0.3s;
-  font-weight: 500;
+  font-weight: 700;
   text-transform: uppercase;
+  margin-right: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
 .tabs button:hover {
   color: white;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
 .mute-button {
@@ -80,19 +63,14 @@ body, html, #root {
   padding: 0.5rem 1rem;
   border-radius: 20px;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
-.mute-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.name {
-  font-weight: 700;
+.Name {
   color: white;
+  font-weight: 700;
+  margin-right: 10px;
 }
 
-.role {
-  color: #88ccff;
-  font-weight: 400;
+.Role {
+  color: #4CB4BB;
 }

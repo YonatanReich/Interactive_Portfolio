@@ -67,7 +67,7 @@ function Ball({ id, startPos, startDir, onRemove }) {
           const targetId = hit.object.userData.id
           if (targetId) {
             // Update the global store to set this as the active target
-            useStore.getState().setActiveTarget(targetId)
+            useStore.getState().setTarget(targetId)
           }
               
           setTimeout(() => {

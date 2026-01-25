@@ -8,7 +8,21 @@ export default function UI_Bars() {
     }))
     
     return (
-        <div className="ui-bars">
+        <div className="ui-bars"
+        style={{
+                /* CRITICAL LAYOUT STYLES (Inline to prevent Gray Screen) */
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                zIndex: 10,
+                pointerEvents: 'none', /* Clicks pass through to 3D */
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
+            }}
+        >
             <nav className="top-bar-glass">
                 <div className="tabs">
           <button onClick ={() => setTarget(null)}>Main menu</button>         

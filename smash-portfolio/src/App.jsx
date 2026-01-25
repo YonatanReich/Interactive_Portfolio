@@ -69,15 +69,15 @@ export default function App() {
   }, [isMuted]) // ✅ FIX 2: Re-run this logic when 'isMuted' changes
 
   return (
-    <div style={{ height: '100vh', width: '100vw', background: '#000' }}>
+    <div style={{position: 'relative', height: '100vh', width: '100vw', background: '#000' }}>
       <audio 
         id="bg_sound" 
         src="/Hole In One - Spiritual Ideas For Virtual Reality.mp3" 
         loop 
       />
       
-      {/* UI Overlay sits on top of Canvas */}
       <UI_Bars />
+      
       
       <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={[1, 1.5]}>
         
