@@ -1,10 +1,11 @@
-// src/GlassPanel.jsx
+// src/components/GlassPanel.jsx
 import { useBox } from '@react-three/cannon'
 import { Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useLayoutEffect, useRef } from 'react'
 import { useStore } from '../store.js'
 import { easing } from 'maath'
+import * as THREE from 'three'
 
 export default function GlassPanel({ position, label, speed = 1, range = 1, id }) {
   // 1. Physics Body
@@ -17,7 +18,8 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
   const activeTarget = useStore((state) => state.activeTarget)
   const isTargeted = activeTarget === id
 
-  const startPos = useRef(position)
+  // FIX: Convert the 'position' array to a Vector3 so we can use .x / .y / .z later
+  const startPos = useRef(new THREE.Vector3(...position))
   const meshRef = useRef()
 
   useLayoutEffect(() => {
@@ -28,22 +30,53 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
   }, [id])
    
   // 2. Animation Loop
-  // FIX: Pass (state, delta) correctly as two separate arguments
   useFrame((state, delta) => {
-    // FIX: Access .clock from the 'state' variable
-    const t = state.clock.getElapsedTime() * speed
-    
-    const newX = startPos.current[0] + Math.sin(t) * (range * 0.5)
-    const newY = startPos.current[1] + Math.cos(t) * range
-    
-    api.position.set(newX, newY, startPos.current[2])
+    // Safety check: ensure ref exists before animating
+    if (!ref.current) return
 
+    // 1. Determine our Goal Position & Scale based on state
+    const goalPos = new THREE.Vector3()
+    const goalScale = new THREE.Vector3()
+
+    if (isTargeted) {
+      // === ACTIVE MODE ===
+      // Move to center of tunnel (z=-15) and grow huge
+      goalPos.set(0, 0, -15)
+      goalScale.set(4, 3, 1) 
+    } else {
+      // === IDLE MODE ===
+      // Float around original start position
+      const t = state.clock.getElapsedTime() * speed
+      const hoverY = Math.cos(t) * range
+      
+      // FIX: Now startPos.current.x works because it's a Vector3
+      goalPos.set(
+        startPos.current.x, 
+        startPos.current.y + hoverY, 
+        startPos.current.z
+      )
+      goalScale.set(1, 1, 1) // Reset to normal size
+    }
+
+    // 2. Smoothly Animate the VISUAL GROUP (ref)
+    easing.damp3(ref.current.position, goalPos, 0.3, delta)
+    easing.damp3(ref.current.scale, goalScale, 0.3, delta)
+    
+    // 3. Sync the PHYSICS BODY
+    // "Teleport" the physics box to match our smooth visual animation
+    api.position.set(
+      ref.current.position.x, 
+      ref.current.position.y, 
+      ref.current.position.z
+    )
+
+    // 4. Child Mesh Effects (Color/Opacity)
     if (meshRef.current) {
-      const targetScale = isTargeted ? 1.15 : 1
-      const targetColor = isTargeted ? "white" : "#34648a"
-
-      easing.damp3(meshRef.current.scale, targetScale, 0.2, delta)
+      const targetColor = isTargeted ? "#000000" : "#34648a"
+      const targetOpacity = isTargeted ? 0.8 : 0.2
+      
       easing.dampC(meshRef.current.material.color, targetColor, 0.2, delta)
+      easing.damp(meshRef.current.material, 'opacity', targetOpacity, 0.2, delta)
     }
   })
 
@@ -73,6 +106,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
       >
         {label}
       </Text>
+      
     </group>
   )
 }
