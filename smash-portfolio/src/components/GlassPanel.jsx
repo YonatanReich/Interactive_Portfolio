@@ -7,6 +7,45 @@ import { useStore } from '../store.js'
 import { easing } from 'maath'
 import * as THREE from 'three'
 
+const CONTENT = {
+  modal_projects: {
+    title: "PROJECTS",
+    body: (
+      <>
+        <h3>🚀 Smash Portfolio</h3>
+        <p>Interactive 3D portfolio built with React Three Fiber.</p>
+        <br/>
+        <h3>🤖 AI Integrations</h3>
+        <p>Custom LLM agents using Python & OpenAI.</p>
+        <br/>
+        <h3>📱 Unity Games</h3>
+        <p>Published mobile games with C# and Unity.</p>
+      </>
+    )
+  },
+  modal_about: {
+    title: "ABOUT ME",
+    body: (
+      <>
+        <p>Computer Science Student</p>
+        <p>Passionate about <b>Graphics Programming</b> and <b>Web Development</b>.</p>
+        <br/>
+        <p>Stack: React, Three.js, Node.js, Python.</p>
+      </>
+    )
+  },
+  modal_skills: {
+    title: "SKILLS",
+    body: (
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+        <span>React</span><span>Three.js</span>
+        <span>Node.js</span><span>Python</span>
+        <span>C++</span><span>WebGL</span>
+      </div>
+    )
+  }
+}
+
 export default function GlassPanel({ position, label, speed = 1, range = 1, id }) {
   // 1. Physics Body
   const [ref, api] = useBox(() => ({
@@ -80,6 +119,8 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     }
   })
 
+  const curContent = CONTENT[id] 
+
   return (
     <group ref={ref}>
       <mesh ref={meshRef}>
@@ -96,17 +137,28 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
           clearcoat={1}       
         />
       </mesh>
-
-      <Text 
-        position={[0, 0, 0.15]} 
-        fontSize={0.5}
-        color="white"
-        anchorX="center"
-        anchorY="middle"
-      >
-        {label}
-      </Text>
-
+      {!isTargeted && (
+        <Text
+          position={[0, 0, 0.15]}
+          fontSize={0.5}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+        >
+          {label}
+        </Text>
+      )}
+      {isTargeted && (
+        <Text
+          position={[0, 0, 0.15]}
+          fontSize={0.5}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+        >
+          {"Hello world"}
+        </Text>
+      )}
     </group>
   )
 }
