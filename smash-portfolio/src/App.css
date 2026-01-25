@@ -11,3 +11,88 @@ body, html, #root {
   background: #111;
   font-family: 'inter', sans-serif;
 }
+
+/* Ensure the overlay sits ON TOP of the canvas */
+.ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* Let clicks pass through to the 3D world... */
+  z-index: 10;
+}
+
+/* ...but re-enable clicks on the actual bars */
+.glass-bar {
+  pointer-events: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* GLASSMORPHISM STYLE */
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+.top-bar {
+  top: 0;
+}
+
+.bottom-bar {
+  bottom: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: none;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.tabs button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin-right: 2rem;
+  cursor: pointer;
+  transition: color 0.3s, text-shadow 0.3s;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.tabs button:hover {
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.mute-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mute-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.name {
+  font-weight: 700;
+  color: white;
+}
+
+.role {
+  color: #88ccff;
+  font-weight: 400;
+}
