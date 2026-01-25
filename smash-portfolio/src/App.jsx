@@ -92,9 +92,9 @@ export default function App() {
           <nav className="top-bar-glass" style={navStyle}>
               <div className="tabs">
                 <button onClick={() => setTarget(null)} style={btnStyle}>Main menu</button>         
-                <button onClick={() => setTarget('projects')} style={btnStyle}>Projects</button>
-                <button onClick={() => setTarget('about')} style={btnStyle}>About Me</button>
-                <button onClick={() => setTarget('skills')} style={btnStyle}>Skills</button>    
+                <button onClick={() => setTarget('modal_projects')} style={btnStyle}>Projects</button>
+                <button onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
+                <button onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>    
               </div>
               <button onClick={toggleMute} style={muteBtnStyle}> 
                   {isMuted ? '🔇 Unmute' : '🔊 Mute'}  
