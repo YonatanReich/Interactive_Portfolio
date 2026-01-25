@@ -14,12 +14,13 @@ const wallHitSound = new Howl({
     html5: false,
 });
 
+
 function Ball({ id, startPos, startDir, onRemove }) {
   const mesh = useRef()
   const velocity = useRef(startDir.clone().multiplyScalar(BALL_SPEED))
-    const isStuck = useRef(false)
-    const hitObjects = useRef(new Set())
-    
+  const isStuck = useRef(false)
+  const hitObjects = useRef(new Set())
+  const isMuted = useStore((state) => state.isMuted)  
 
   useFrame((state, delta) => {
     if (!mesh.current) return
@@ -66,7 +67,7 @@ function Ball({ id, startPos, startDir, onRemove }) {
           const targetId = hit.object.userData.id
           if (targetId) {
             // Update the global store to set this as the active target
-            useStore.getState().setActiveTarget(targetId)
+            useStore.getState().setTarget(targetId)
           }
               
           setTimeout(() => {
@@ -78,9 +79,9 @@ function Ball({ id, startPos, startDir, onRemove }) {
       }
         // HIT WALL (Solid)
         else if (hit.object.name === "TunnelWall") {
-
-           wallHitSound.play();
-                
+        if (!isMuted) {
+          wallHitSound.play();
+        }
 
             isStuck.current = true
             const normal = hit.face.normal.clone()

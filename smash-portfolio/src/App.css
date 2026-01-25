@@ -11,3 +11,66 @@ body, html, #root {
   background: #111;
   font-family: 'inter', sans-serif;
 }
+
+
+/* === Bar Styling === */
+.top-bar-glass,
+.bottom-bar-glass {
+  pointer-events: auto;
+  /* Re-enable clicks for the buttons */
+  width: 100%;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.top-bar-glass {
+  justify-content: space-between;
+}
+
+.bottom-bar-glass {
+  border-bottom: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Buttons and Text */
+.tabs button {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-right: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.tabs button:hover {
+  color: white;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.mute-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.Name {
+  color: white;
+  font-weight: 700;
+  margin-right: 10px;
+}
+
+.Role {
+  color: #4CB4BB;
+}
