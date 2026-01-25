@@ -42,7 +42,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
       // === ACTIVE MODE ===
       // Move to center of tunnel (z=-15) and grow huge
       goalPos.set(0, 0, -20)
-      goalScale.set(2, 2, 1) 
+      goalScale.set(3, 3, 1) 
     } else {
       // === IDLE MODE ===
       // Float around original start position
@@ -59,8 +59,8 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     }
 
     // 2. Smoothly Animate the VISUAL GROUP (ref)
-    easing.damp3(ref.current.position, goalPos, 0.3, delta)
-    easing.damp3(ref.current.scale, goalScale, 0.3, delta)
+    easing.damp3(ref.current.position, goalPos, 0.5, delta)
+    easing.damp3(ref.current.scale, goalScale, 0.5, delta)
     
     // 3. Sync the PHYSICS BODY
     // "Teleport" the physics box to match our smooth visual animation
@@ -72,8 +72,8 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
 
     // 4. Child Mesh Effects (Color/Opacity)
     if (meshRef.current) {
-      const targetColor = isTargeted ? "#000000" : "#34648a"
-      const targetOpacity = isTargeted ? 0.8 : 0.2
+      const targetColor = isTargeted ? "#224059" : "#34648a"
+      const targetOpacity = isTargeted ? 0.5 : 0.2
       
       easing.dampC(meshRef.current.material.color, targetColor, 0.2, delta)
       easing.damp(meshRef.current.material, 'opacity', targetOpacity, 0.2, delta)
