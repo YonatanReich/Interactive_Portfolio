@@ -70,9 +70,6 @@ function Ball({ id, startPos, startDir, onRemove }) {
             useStore.getState().setTarget(targetId)
           }
               
-          setTimeout(() => {
-            useStore.getState().resetTarget()
-          }, 5000)
           // Do NOT break here. The ball passes through glass, 
           // so we might still need to hit a wall behind it in the same frame.
         }
