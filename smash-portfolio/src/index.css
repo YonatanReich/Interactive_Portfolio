@@ -11,6 +11,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 a {
@@ -64,5 +65,35 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+.bottom-bar-glass {
+  position: fixed;
+  bottom: max(0px, env(safe-area-inset-bottom));
+  pointer-events: auto;
+  width: 100%;
+  padding: 1rem 2rem;
+
+  /* Fixed typo: backgroundcolor -> background-color */
+  background-color: rgba(0, 0, 0, 0.3);
+
+  /* Standard blur */
+  backdrop-filter: blur(10px);
+  /* ⚠️ Essential for iPhone/iPad/Safari support: */
+  -webkit-backdrop-filter: blur(10px);
+
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .bottom-bar-glass {
+    /* Force it lower on iPad if it feels "floating" */
+    bottom: 0px !important;
+
+    
   }
 }

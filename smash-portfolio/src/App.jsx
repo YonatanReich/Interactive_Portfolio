@@ -102,7 +102,7 @@ export default function App() {
           </nav>
           
           {/* Bottom Bar */}
-          <footer className="bottom-bar-glass" style={footerStyle}>
+          <footer className="bottom-bar-glass">
               <span className="Name" style={{color: 'white', fontWeight: '700', marginRight: '10px'}}>Yonatan Reich</span>
               <span className="Role" style={{color: '#4CB4BB'}}>CS student</span>
           </footer>
@@ -159,17 +159,8 @@ const navStyle = {
   boxSizing: 'border-box'
 }
 
-const footerStyle = {
-  pointerEvents: 'auto',
-  width: '100%',
-  padding: '1rem 2rem',
-  background: 'rgba(0, 0, 0, 0.3)',
-  backdropFilter: 'blur(10px)',
-  borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-  display: 'flex',
-  alignItems: 'center',
-  boxSizing: 'border-box'
-}
+
+
 
 const btnStyle = {
   background: 'none',

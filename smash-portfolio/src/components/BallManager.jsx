@@ -83,7 +83,7 @@ function Ball({ id, startPos, startDir, onRemove }) {
             isStuck.current = true
             const normal = hit.face.normal.clone()
             normal.transformDirection(hit.object.matrixWorld)
-            const radiusOffset = normal.multiplyScalar(0.4)
+            const radiusOffset = normal.multiplyScalar(0.42)
             mesh.current.position.copy(hit.point).add(radiusOffset)
 
             

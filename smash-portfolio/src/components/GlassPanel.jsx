@@ -1,11 +1,12 @@
 // src/components/GlassPanel.jsx
 import { useBox } from '@react-three/cannon'
-import { Text } from '@react-three/drei'
+import { Text, Html, RoundedBox } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useLayoutEffect, useRef } from 'react'
 import { useStore } from '../store.js'
 import { easing } from 'maath'
 import * as THREE from 'three'
+import '../GlassPanel.css' 
 
 const CONTENT = {
   modal_projects: {
@@ -13,13 +14,13 @@ const CONTENT = {
     body: (
       <>
         <h3>🚀 Smash Portfolio</h3>
-        <p>Interactive 3D portfolio built with React Three Fiber.</p>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,.</p>
         <br/>
         <h3>🤖 AI Integrations</h3>
-        <p>Custom LLM agents using Python & OpenAI.</p>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,</p>
         <br/>
         <h3>📱 Unity Games</h3>
-        <p>Published mobile games with C# and Unity.</p>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,</p>
       </>
     )
   },
@@ -27,7 +28,9 @@ const CONTENT = {
     title: "ABOUT ME",
     body: (
       <>
-        <p>Computer Science Student</p>
+        <p>Computer Science Studenttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+          ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+          ttttttttttttttttttttttttttttttttttttttttt</p>
         <p>Passionate about <b>Graphics Programming</b> and <b>Web Development</b>.</p>
         <br/>
         <p>Stack: React, Three.js, Node.js, Python.</p>
@@ -60,6 +63,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
   // FIX: Convert the 'position' array to a Vector3 so we can use .x / .y / .z later
   const startPos = useRef(new THREE.Vector3(...position))
   const meshRef = useRef()
+  const textRef = useRef()
 
   useLayoutEffect(() => {
     if (meshRef.current) {
@@ -81,7 +85,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
       // === ACTIVE MODE ===
       // Move to center of tunnel (z=-15) and grow huge
       goalPos.set(0, 0, -20)
-      goalScale.set(3, 3, 1) 
+      goalScale.set(4, 5, 1) 
     } else {
       // === IDLE MODE ===
       // Float around original start position
@@ -117,14 +121,32 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
       easing.dampC(meshRef.current.material.color, targetColor, 0.2, delta)
       easing.damp(meshRef.current.material, 'opacity', targetOpacity, 0.2, delta)
     }
+if (textRef.current) {
+      const targetFillOpacity = isTargeted ? 0 : 1
+      
+      // If closing (not targeted), we want to WAIT before showing label
+      // But in JS loop we can't 'wait'. We just dampen slowly.
+      // A better trick: If targeted, fade out FAST. If not, fade in SLOW.
+      const smoothTime = isTargeted ? 0.3 : 0.8 // Fast out, Slow in
+      
+      easing.damp(textRef.current, 'fillOpacity', targetFillOpacity, smoothTime, delta)
+    }
   })
 
+
+  
+  
   const curContent = CONTENT[id] 
 
   return (
     <group ref={ref}>
-      <mesh ref={meshRef}>
-        <boxGeometry args={[3, 2, 0.2]} />
+      
+        <RoundedBox 
+  ref={meshRef}          // ✅ Pass the animation ref here
+  args={[3, 2, 0.2]}     // [Width, Height, Depth]
+  radius={0.1}           // Radius of the rounded corners
+  smoothness={4}         // Number of segments (higher = smoother)
+>
         <meshPhysicalMaterial 
           color="#34648a" 
           transmission={0.95} 
@@ -134,11 +156,13 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
           ior={1.5}           
           thickness={2}       
           envMapIntensity={2}
-          clearcoat={1}       
+          clearcoat={1}
+          
         />
-      </mesh>
-      {!isTargeted && (
-        <Text
+        </RoundedBox>
+      
+      <Text
+          ref ={textRef}
           position={[0, 0, 0.15]}
           fontSize={0.5}
           color="white"
@@ -147,18 +171,17 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
         >
           {label}
         </Text>
-      )}
-      {isTargeted && (
-        <Text
-          position={[0, 0, 0.15]}
-          fontSize={0.5}
-          color="white"
-          anchorX="center"
-          anchorY="middle"
-        >
-          {"Hello world"}
-        </Text>
-      )}
+      
+      
+        
+      <Html >
+         
+        <div className={`glass-panel-content ${isTargeted ? 'active' : ''}`}>
+          {curContent.body}
+        </div>
+      </Html>
+      
     </group>
   )
 }
+
