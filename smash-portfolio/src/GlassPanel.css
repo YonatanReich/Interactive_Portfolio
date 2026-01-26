@@ -3,7 +3,7 @@
 /* 1. Base Style (Optimized for iPad / Tablets) */
 .glass-panel-content {
     position: absolute;
-
+     user-select: all;
     /* ✅ Perfect Centering (No more guessing top/left pixels!) */
     top: 50%;
     left: 50%;
