@@ -107,12 +107,17 @@ function Ball({ id, startPos, startDir, onRemove }) {
     <mesh ref={mesh} position={startPos}>
       <sphereGeometry args={[0.4, 32, 32]} />
       {/* SHINY CHROME MATERIAL */}
-      <meshStandardMaterial 
-        color="#0084ff" 
-        metalness={1} 
-        roughness={0.4} 
-        envMapIntensity={2} 
-      />
+      <meshPhysicalMaterial 
+          color="#ffffff" 
+          transmission={0.95} 
+          opacity={0.1} 
+          metalness={0} 
+          roughness={0}       
+          ior={1.5}           
+          thickness={2}       
+          envMapIntensity={2}
+          clearcoat={1}       
+        />
     </mesh>
   )
 }
