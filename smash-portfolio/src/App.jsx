@@ -71,7 +71,8 @@ export default function App() {
   }, [isMuted]) 
 
   return (
-    <div style={{position: 'relative', height: '100vh', width: '100vw', background: '#000' }}>
+    <div style={{ position: 'relative', height: '100vh', width: '100vw', background: '#000' }}>
+      
       <audio 
         id="bg_sound" 
         src="/Hole In One - Spiritual Ideas For Virtual Reality.mp3" 
@@ -97,10 +98,11 @@ export default function App() {
                 <button onClick={() => setTarget(null)} style={btnStyle}>Main menu</button>         
                 <button onClick={() => setTarget('modal_projects')} style={btnStyle}>Projects</button>
                 <button onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
-                <button onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>    
+            <button onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>
+            <button onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
               </div>
               <button onClick={toggleMute} style={muteBtnStyle}> 
-                  {isMuted ? '🔇 Unmute' : '🔊 Mute'}  
+                  {isMuted ? '🔇' : '🔊'}  
               </button>
           </nav>
           
@@ -180,14 +182,14 @@ export default function App() {
 
 
 const btnStyle = {
-  background: 'none',
-  border: 'none',
+  background: 'transparent',
+  bordercolor: 'white',
   color: 'rgba(255, 255, 255, 0.7)',
   fontSize: '1rem',
   fontWeight: '700',
   textTransform: 'uppercase',
-  marginRight: '1.5rem',
-  cursor: 'pointer'
+  marginRight: '0.1rem',
+  cursor: 'pointer',
 }
 
 const muteBtnStyle = {
