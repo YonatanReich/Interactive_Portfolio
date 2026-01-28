@@ -28,24 +28,28 @@ export default function ResponsiveCamera() {
       controls.current.touches.two = 0
 
       // Move camera deep into the tunnel (adjust Z as needed)
-      controls.current.setLookAt(0, 0, -5, 0, 0, -20, true)
-    } 
-    else {
-      // === MODE: OVERVIEW (Home) ===
-      // Re-enable controls
-      controls.current.mouseButtons.left = 1 
-      controls.current.mouseButtons.right = 2
-      controls.current.mouseButtons.wheel = 8
-      
-      // FIX: Use the calculated 'homeZ' variable here!
-      // This ensures we return to z=30 on mobile, or z=12 on desktop.
-      controls.current.setLookAt(
-        0, 0, homeZ, // <--- DYNAMIC POSITION
-        0, 0, 0,     // Look at center
-        true         // Smooth transition
-      )
+      controls.current.setLookAt(0, 0, -10, 0, 0, -20, true)
+    } else {
+  const timer = setTimeout(() => {
+          
+        // 1. Re-enable Controls
+        controls.current.mouseButtons.left = 1 
+        controls.current.mouseButtons.right = 2
+        controls.current.mouseButtons.wheel = 8
+        
+        // 2. Move Camera Home
+        controls.current.setLookAt(
+          0, 0, homeZ, 
+          0, 0, 0,     
+          true         
+        )
+      }, 300) // <--- 800ms DELAY HERE
+
+      // Cleanup: If user clicks a panel quickly before the timer ends, 
+      // cancel this timer so we don't accidentally zoom out while zooming in.
+      return () => clearTimeout(timer)
     }
-  }, [activeTarget, homeZ]) // <--- Re-run if target changes OR screen resizes
+  }, [activeTarget, homeZ])
 
   return (
     <CameraControls 
