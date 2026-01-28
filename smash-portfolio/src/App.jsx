@@ -9,6 +9,7 @@ import GlassPanel from './components/GlassPanel.jsx'
 import TunnelSystem from './components/TunnelSystem.jsx'
 import ResponsiveCamera from './components/ResponsiveCamera.jsx'
 import BallManager from './components/BallManager.jsx'
+import InteractionHint from './components/InteractionHint.jsx'
 
 // --- VISUAL PALETTE ---
 const TOP_COLOR = '#000000'     
@@ -137,7 +138,7 @@ export default function App() {
           </div>
           </footer>
       </div>
-      
+      <InteractionHint/>
       <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={[1, 1.5]}>
         
         <ResponsiveCamera />
