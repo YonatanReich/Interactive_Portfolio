@@ -20,7 +20,8 @@ function Ball({ id, startPos, startDir, onRemove }) {
   const velocity = useRef(startDir.clone().multiplyScalar(BALL_SPEED))
   const isStuck = useRef(false)
   const hitObjects = useRef(new Set())
-  const isMuted = useStore((state) => state.isMuted)  
+  const isMuted = useStore((state) => state.isMuted) 
+  const target = useStore((state)=> state.target)
 
   useFrame((state, delta) => {
     if (!mesh.current) return
@@ -130,7 +131,11 @@ export default function BallManager() {
  
 
   useEffect(() => {
-      const handlePointerDown = () => {
+    const handlePointerDown = () => {
+        
+      if (target) {
+        return
+      }
         
       // 1. Calculate Throw Direction based on where user clicked
       raycaster.setFromCamera(pointer, camera)
