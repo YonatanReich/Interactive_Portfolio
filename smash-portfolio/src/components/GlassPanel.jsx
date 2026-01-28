@@ -1,12 +1,15 @@
 // src/components/GlassPanel.jsx
 import { useBox } from '@react-three/cannon'
 import { Text, Html, RoundedBox } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import { useLayoutEffect, useRef } from 'react'
 import { useStore } from '../store.js'
 import { easing } from 'maath'
 import * as THREE from 'three'
 import '../GlassPanel.css' 
+
+const screenWidth = window.innerWidth;
+const screenheight = window.innerHeight;
 
 const CONTENT = {
   modal_projects: {
@@ -56,7 +59,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     position: position,
     args: [3, 2, 0.2] 
   }))
-
+  const { viewport, camera } = useThree()
   const activeTarget = useStore((state) => state.activeTarget)
   const isTargeted = activeTarget === id
 
@@ -84,8 +87,12 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     if (isTargeted) {
       // === ACTIVE MODE ===
       // Move to center of tunnel (z=-15) and grow huge
-      goalPos.set(0, 0, -20)
-      goalScale.set(4, 5, 1) 
+      const targetZ = -35
+      goalPos.set(0, 1, targetZ)
+      const distance = Math.abs(targetZ - -10)
+      const vHeight = 2 * Math.tan((camera.fov * Math.PI / 180) / 2) * distance
+      const vWidth = vHeight * camera.aspect
+      goalScale.set(vWidth/2.9, vHeight/2, 1) 
     } else {
       // === IDLE MODE ===
       // Float around original start position
@@ -102,8 +109,8 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     }
 
     // 2. Smoothly Animate the VISUAL GROUP (ref)
-    easing.damp3(ref.current.position, goalPos, 0.5, delta)
-    easing.damp3(ref.current.scale, goalScale, 0.5, delta)
+    easing.damp3(ref.current.position, goalPos, 0.3, delta)
+    easing.damp3(ref.current.scale, goalScale, 0.3, delta)
     
     // 3. Sync the PHYSICS BODY
     // "Teleport" the physics box to match our smooth visual animation
@@ -145,7 +152,8 @@ if (textRef.current) {
   ref={meshRef}          // ✅ Pass the animation ref here
   args={[3, 2, 0.2]}     // [Width, Height, Depth]
   radius={0.1}           // Radius of the rounded corners
-  smoothness={4}         // Number of segments (higher = smoother)
+        smoothness={4}         // Number of segments (higher = smoother)
+        renderOrder={isTargeted? 999 : 0}
 >
         <meshPhysicalMaterial 
           color="#34648a" 
@@ -153,10 +161,12 @@ if (textRef.current) {
           opacity={0.1} 
           metalness={0} 
           roughness={0}       
-          ior={1.5}           
-          thickness={2}       
+          ior={isTargeted ? 1.0 : 1.5}           
+          thickness={isTargeted ? 0 : 2}       
           envMapIntensity={2}
           clearcoat={1}
+          depthTest={!isTargeted}
+          depthWrite={false}
           
         />
         </RoundedBox>

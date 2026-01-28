@@ -3,7 +3,7 @@
 /* 1. Base Style (Optimized for iPad / Tablets) */
 .glass-panel-content {
     position: absolute;
-
+     user-select: all;
     /* ✅ Perfect Centering (No more guessing top/left pixels!) */
     top: 50%;
     left: 50%;
@@ -34,7 +34,7 @@
 
 /* State: When Targeted (Added via template literal in JSX) */
 .glass-panel-content.active {
-    opacity: 1;
+    opacity: 0;
     pointer-events: auto;
     transition-delay: 0.4s;
     /* Wait for panel to expand */
