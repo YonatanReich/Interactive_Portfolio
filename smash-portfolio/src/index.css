@@ -80,13 +80,22 @@ button:focus-visible {
 
   /* Standard blur */
   backdrop-filter: blur(10px);
-  /* ⚠️ Essential for iPhone/iPad/Safari support: */
+ 
   -webkit-backdrop-filter: blur(10px);
 
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
-  box-sizing: border-box;
+  box-sizing: border-box; 
+  .scroll-btn-container {
+    position: absolute;
+      display: flex;
+      left: 45%;
+      flex-direction: row;
+      gap: 25px;
+      justify-content: center;
+      padding: 0;
+    }
 }
 
 @media (min-width: 768px) {
@@ -97,3 +106,80 @@ button:focus-visible {
     
   }
 }
+.nav-style {
+  pointer-events: auto;
+  width: 100%;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.3);
+
+  /* Backdrop Filter (Glass Effect) */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  /* Recommended for Safari/iOS support */
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+
+  /* User Select - Prevent Text Highlighting */
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+  user-select: none;
+  /* Standard */
+}
+
+.scroll-down-btn,.scroll-up-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  user-select: none;
+  /* Prevent text selection */
+  touch-action: manipulation;
+  /* Improves touch response */
+  -webkit-user-select: none;
+    /* Safari, Chrome */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+  }
+
+.scroll-down-btn:active, .scroll-up-btn:active {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0.95);
+  border-color: white;
+}
+
+.scroll-down-btn img, .scroll-up-btn img {
+  /* 1. Prevent dragging the image (The "Ghost" effect) */
+  pointer-events: none;
+
+  /* 2. Prevent blue selection highlight */
+  user-select: none;
+  -webkit-user-select: none;
+  /* Safari/Chrome */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Edge/IE */
+
+  /* 3. Layout fix */
+  display: block;
+  /* Removes tiny gap at bottom of inline images */
+}
+

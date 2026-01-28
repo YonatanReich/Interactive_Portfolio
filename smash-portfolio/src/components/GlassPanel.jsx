@@ -7,10 +7,10 @@ import { useStore } from '../store.js'
 import { easing } from 'maath'
 import * as THREE from 'three'
 import '../GlassPanel.css' 
+import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
 
-const screenWidth = window.innerWidth;
-const screenheight = window.innerHeight;
 
+const LOOP_LENGTH = 350; // Match TunnelChunk length
 const CONTENT = {
   modal_projects: {
     title: "PROJECTS",
@@ -49,6 +49,18 @@ const CONTENT = {
         <span>C++</span><span>WebGL</span>
       </div>
     )
+  },
+  modal_contact: {
+    title: "CONTACT",
+    body: (
+      <>
+        <h3>Let's Chat!</h3>
+        <p>Email: yonatan.reich@gmail.com</p>
+        <p>Phone: 050-331-8885</p>
+        <br/>
+        <p>Feel free to reach out for collaborations!</p>
+      </>
+    )
   }
 }
 
@@ -62,6 +74,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
   const { viewport, camera } = useThree()
   const activeTarget = useStore((state) => state.activeTarget)
   const isTargeted = activeTarget === id
+  const velocity = useScrollVelocity()
 
   // FIX: Convert the 'position' array to a Vector3 so we can use .x / .y / .z later
   const startPos = useRef(new THREE.Vector3(...position))
@@ -83,6 +96,43 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     // 1. Determine our Goal Position & Scale based on state
     const goalPos = new THREE.Vector3()
     const goalScale = new THREE.Vector3()
+    const safeDelta = delta > 0.1 ? 0.1 : delta
+
+      if (!isTargeted) {
+       const currentVel = velocity?.user?.current || 0
+       const moveDist = currentVel * safeDelta
+       startPos.current.z += moveDist
+
+       // === 🚀 THE FIX IS HERE ===
+       
+       // CASE A: Went too far forward (Behind camera) -> Send to Tunnel
+       if (startPos.current.z > 20) {
+          // 1. Update Logical Position
+          startPos.current.z -= LOOP_LENGTH
+          
+          // 2. HARD TELEPORT VISUALS (Bypass Animation)
+          // We force the mesh to the new spot instantly so damp3 doesn't "fly" it there.
+          ref.current.position.z -= LOOP_LENGTH
+          
+          // 3. HARD TELEPORT PHYSICS
+          api.position.set(
+            ref.current.position.x, 
+            ref.current.position.y, 
+            ref.current.position.z
+          )
+       }
+       
+       // CASE B: Went too deep in Tunnel -> Send to Behind Camera
+       if (startPos.current.z < -280) {
+          startPos.current.z += LOOP_LENGTH
+          ref.current.position.z += LOOP_LENGTH
+          api.position.set(
+            ref.current.position.x, 
+            ref.current.position.y, 
+            ref.current.position.z
+          )
+       }
+    }
 
     if (isTargeted) {
       // === ACTIVE MODE ===
@@ -94,6 +144,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
       const vWidth = vHeight * camera.aspect
       goalScale.set(vWidth/2.9, vHeight/2, 1) 
     } else {
+    
       // === IDLE MODE ===
       // Float around original start position
       const t = state.clock.getElapsedTime() * speed
@@ -123,7 +174,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     // 4. Child Mesh Effects (Color/Opacity)
     if (meshRef.current) {
       const targetColor = isTargeted ? "#224059" : "#34648a"
-      const targetOpacity = isTargeted ? 0.5 : 0.2
+      const targetOpacity = isTargeted ? 0.5 : 0.1
       
       easing.dampC(meshRef.current.material.color, targetColor, 0.2, delta)
       easing.damp(meshRef.current.material, 'opacity', targetOpacity, 0.2, delta)
@@ -143,7 +194,7 @@ if (textRef.current) {
 
   
   
-  const curContent = CONTENT[id] 
+  const curContent = CONTENT[id]
 
   return (
     <group ref={ref}>
@@ -162,7 +213,7 @@ if (textRef.current) {
           metalness={0} 
           roughness={0}       
           ior={isTargeted ? 1.0 : 1.5}           
-          thickness={isTargeted ? 0 : 2}       
+          thickness= {0}       
           envMapIntensity={2}
           clearcoat={1}
           depthTest={!isTargeted}
