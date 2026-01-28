@@ -1,104 +1,81 @@
-// src/components/BallManager.jsx
-import { useState, useRef, useEffect} from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { Howl, Howler } from 'howler'
-import {useStore} from '../store.js'
+import { Howl } from 'howler'
+import { useStore } from '../store.js'
 
 // --- CONFIGURATION ---
-const BALL_SPEED = 60 // Fast throw
-const GRAVITY = 30    // Heavy metal ball
-const TUNNEL_SPEED = 10 // Must match TunnelSystem speed to sync perfectly
+const BALL_SPEED = 60
+const GRAVITY = 30
+const TUNNEL_SPEED = 10 
+
+// Wall Hit Sound (Global)
 const wallHitSound = new Howl({
   src: ['/wall_sound.wav'],
-    html5: false,
+  html5: false,
 });
 
+// Throw Sound (Global - Preloaded)
+const throwSound = new Howl({
+    src: ['/ball_hit.mp3'], // Make sure this filename matches your project
+    volume: 0.5,
+    html5: false
+});
 
 function Ball({ id, startPos, startDir, onRemove }) {
   const mesh = useRef()
   const velocity = useRef(startDir.clone().multiplyScalar(BALL_SPEED))
   const isStuck = useRef(false)
   const hitObjects = useRef(new Set())
-  const isMuted = useStore((state) => state.isMuted) 
-  const target = useStore((state)=> state.target)
+  const isMuted = useStore((state) => state.activeTarget)
 
   useFrame((state, delta) => {
     if (!mesh.current) return
-    
-    const safeDelta = Math.min(delta, 0.1) // Prevent glitching on lag spikes
+    const safeDelta = Math.min(delta, 0.1)
 
-    // 1. BEHAVIOR: IF STUCK
+    // 1. STUCK BEHAVIOR
     if (isStuck.current) {
-      // Move backwards with the tunnel
       mesh.current.position.z += TUNNEL_SPEED * safeDelta
-      
-      // If it goes behind the camera, delete it
-      if (mesh.current.position.z > 50) {
-        onRemove(id)
-      }
+      if (mesh.current.position.z > 50) onRemove(id)
       return
     }
 
-    // 2. BEHAVIOR: IF FLYING
-    // Apply Gravity
+    // 2. FLYING BEHAVIOR
     velocity.current.y -= GRAVITY * safeDelta
-    
-    // Move ball
     mesh.current.position.addScaledVector(velocity.current, safeDelta)
 
-    // 3. COLLISION DETECTION
-    // Raycast forward to see if we hit a wall
+    // 3. COLLISION
     const raycaster = new THREE.Raycaster(
         mesh.current.position, 
         velocity.current.clone().normalize(), 
         0, 
-        2 // Check 2 units ahead
+        2 
     )
     
-    // Check intersection with anything named "TunnelWall"
     const hits = raycaster.intersectObjects(state.scene.children, true)
+    
     for (const hit of hits) {
-        
-        // HIT GLASS (Trigger)
+      // HIT GLASS
       if (hit.object.name === "GlassPanel") {
         if (!hitObjects.current.has(hit.object.uuid)) {
           hitObjects.current.add(hit.object.uuid)
-                
           const targetId = hit.object.userData.id
-          if (targetId) {
-            // Update the global store to set this as the active target
-            useStore.getState().setTarget(targetId)
-          }
-              
-          // Do NOT break here. The ball passes through glass, 
-          // so we might still need to hit a wall behind it in the same frame.
+          if (targetId) useStore.getState().setTarget(targetId)
         }
       }
-        // HIT WALL (Solid)
-        else if (hit.object.name === "TunnelWall") {
-        if (!isMuted) {
-          wallHitSound.play();
-        }
-
-            isStuck.current = true
-            const normal = hit.face.normal.clone()
-            normal.transformDirection(hit.object.matrixWorld)
-            const radiusOffset = normal.multiplyScalar(0.42)
-            mesh.current.position.copy(hit.point).add(radiusOffset)
-
-            
-            
-            // BREAK! We hit a solid wall. Stop checking things behind it.
-            break; 
-        }
+      // HIT WALL
+      else if (hit.object.name === "TunnelWall") {
+        if (!isMuted) wallHitSound.play();
+        
+        isStuck.current = true
+        const normal = hit.face.normal.clone()
+        normal.transformDirection(hit.object.matrixWorld)
+        mesh.current.position.copy(hit.point).add(normal.multiplyScalar(0.42))
+        break; 
       }
-      
+    }
 
-
-    
-
-    // Cleanup if missed and flew into void
+    // CLEANUP
     if (mesh.current.position.y < -50 || mesh.current.position.z < -300) {
       onRemove(id)
     }
@@ -107,7 +84,6 @@ function Ball({ id, startPos, startDir, onRemove }) {
   return (
     <mesh ref={mesh} position={startPos}>
       <sphereGeometry args={[0.4, 32, 32]} />
-      {/* SHINY CHROME MATERIAL */}
       <meshPhysicalMaterial 
           color="#ffffff" 
           transmission={0.95} 
@@ -125,23 +101,36 @@ function Ball({ id, startPos, startDir, onRemove }) {
 
 export default function BallManager() {
   const [balls, setBalls] = useState([])
-    const { camera, pointer, raycaster, gl } = useThree()
-    
+  
+  // 1. ACCESS STORE
+  const target = useStore((state) => state.target)
+  const isMuted = useStore((state) => state.isMuted)
 
- 
+  // 2. CREATE A LIVE REF FOR THE TARGET
+  // This ensures the event listener always sees the REAL value instantly
+  const targetRef = useRef(target)
 
+  // Sync ref whenever target changes
   useEffect(() => {
-    const handlePointerDown = () => {
+    targetRef.current = target
+  }, [target])
+
+  const { gl, get } = useThree() 
+  
+  useEffect(() => {
+    const handlePointerDown = (e) => {
         
-      if (target) {
-        return
-      }
-        
-      // 1. Calculate Throw Direction based on where user clicked
+      // 🛑 STOP SIGN: Check the REF, not the state variable directly
+      if (targetRef.current) return 
+
+      // Prevent clicking through UI buttons (extra safety)
+      if (e.target.closest('button') || e.target.closest('a')) return
+
+      const { camera, raycaster, pointer } = get() 
+
       raycaster.setFromCamera(pointer, camera)
       
       const direction = raycaster.ray.direction.clone()
-      // Adjust start position slightly below camera (like holding a gun)
       const startPos = camera.position.clone().add(new THREE.Vector3(0.5, -1, 0))
 
       const newBall = {
@@ -151,12 +140,18 @@ export default function BallManager() {
       }
 
       setBalls((prev) => [...prev, newBall])
+      
+      // Play Throw Sound
+      if (!isMuted) {
+          throwSound.play()
+      }
     }
 
-    // Attach to the canvas DOM element specifically
+    // Attach listener
     gl.domElement.addEventListener('pointerdown', handlePointerDown)
     return () => gl.domElement.removeEventListener('pointerdown', handlePointerDown)
-  }, [camera, pointer, raycaster, gl])
+    
+  }, [gl, isMuted]) // Depend only on gl/mute
 
   const removeBall = (id) => {
     setBalls((prev) => prev.filter((b) => b.id !== id))
