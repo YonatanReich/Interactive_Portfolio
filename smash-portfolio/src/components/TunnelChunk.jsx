@@ -7,8 +7,8 @@ export default function TunnelChunk({
   position, 
   wallOffset = 15, 
   ceilingOffset = 10, 
-  length = 200, 
-  blockCount = 300,
+  length = 300, 
+  blockCount =500,
   texture
 }) {
   const mesh = useRef()

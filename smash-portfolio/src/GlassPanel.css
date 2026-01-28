@@ -1,71 +1,108 @@
 /* src/GlassPanel.css */
 
-/* 1. Base Style (Optimized for iPad / Tablets) */
+/* =========================================
+   1. BASE STYLES (Hidden State)
+   ========================================= */
 .glass-panel-content {
+    /* Positioning */
     position: absolute;
-     user-select: all;
-    /* ✅ Perfect Centering (No more guessing top/left pixels!) */
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
 
-    /* Base Dimensions */
-    width: 740px;
-    height: 610px;
+    /* INITIAL STATE:
+     1. Scale down slightly (0.96)
+     2. Move it slightly higher (-48%) so it slides down into place
+  */
+    transform: translate(-50%, -48%) scale(0.96);
+
+    /* TRANSITION SETTINGS (The "Exit" Animation):
+     When removing the class, we want it to disappear INSTANTLY.
+     So we set delay to 0s here.
+  */
+    transition:
+        opacity 0.2s ease-in,
+        transform 0.2s ease-in;
+    transition-delay: 0s;
+    /* Close immediately */
+
+    /* Visibility */
+    opacity: 0;
+    pointer-events: none;
+
+    /* Scroll Engine */
+    overflow-y: auto;
+    overflow-x: hidden;
 
     /* Appearance */
     background: transparent;
+    padding: 0 20px;
+    box-sizing: border-box;
     color: rgba(255, 255, 255, 0.94);
-    font-size: 16px;
-    border-radius: 30px;
-
-    /* Text Logic */
-    white-space: normal;
-    overflow-wrap: break-word;
-    /* Forces long words to break */
-    overflow-y: auto;
-
-    /* Interaction */
-    transition: opacity 0.5s ease-in;
-    pointer-events: none;
-    /* Default to none */
-    opacity: 0;
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
-/* State: When Targeted (Added via template literal in JSX) */
+/* =========================================
+   2. ACTIVE STATE (Visible)
+   ========================================= */
 .glass-panel-content.active {
-    opacity: 0;
+    opacity: 1;
     pointer-events: auto;
-    transition-delay: 0.4s;
-    /* Wait for panel to expand */
+
+    /* Final Position: Dead Center */
+    transform: translate(-50%, -50%) scale(1);
+
+    /* TRANSITION SETTINGS (The "Enter" Animation):
+     1. Duration: 0.5s (Slow and smooth)
+     2. Curve: cubic-bezier (Soft landing)
+     3. DELAY: 0.3s (WAIT for the glass panel to open before showing text)
+  */
+    transition:
+        opacity 0.6s ease-out,
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+    transition-delay: 1s;
+    /* ✅ The fix: Waits 300ms before fading in */
 }
 
-/* ========================================= */
-/* 📱 MOBILE FIXES (Screens smaller than 768px) */
-/* ========================================= */
-@media (max-width: 200px) {
+/* =========================================
+   3. LAPTOPS & TABLETS (Width >= 800px)
+   ========================================= */
+@media (min-width: 800px) {
     .glass-panel-content {
-        /* Make the content box narrower to fit portrait phones */
-        width: 200px;
-        height: 400px;
-        /* Taller to match phone aspect ratio */
+        /* PC Positioning: Lower down (54%) */
+        top: 54%;
 
-        /* Shrink text slightly */
-        font-size: 24px;
-        padding: 10px;
+        /* Dimensions */
+        width: 100vw;
+        max-width: 1600px;
+        height: 75vh;
+        max-height: 900px;
+
+        padding: 0 40px;
+        font-size: 1.1rem;
+    }
+
+    /* IMPORTANT: 
+     We must update the 'hidden' transform for PC because the 'top' changed.
+     If we don't, the slide animation will look glitchy.
+  */
+    .glass-panel-content:not(.active) {
+        /* Slide from slightly above (-48%) relative to the new top */
+        transform: translate(-50%, -48%) scale(0.96);
     }
 }
 
-/* ========================================= */
-/* 💻 PC FIXES (Screens larger than 1200px)  */
-/* ========================================= */
-@media (min-width: 900px) {
-    .glass-panel-content {
-        /* Increase resolution for big monitors so text looks crisp */
-        width: 300px;
-        height: 800px;
+/* === CUSTOM SCROLLBAR (Webkit) === */
+.glass-panel-content::-webkit-scrollbar {
+    width: 8px;
+}
 
-        /* Scale up font so it's readable */
-        font-size: 22px;
-    }
+.glass-panel-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.glass-panel-content::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
 }

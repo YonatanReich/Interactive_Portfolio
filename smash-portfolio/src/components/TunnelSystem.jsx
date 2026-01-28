@@ -1,10 +1,11 @@
-// src/components/TunnelSystem.jsx
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import TunnelChunk from './TunnelChunk'
 import { useNeatTexture } from '../hooks/useNeatTexture.jsx'
-import { useStore } from '../store'
+import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
 
+// ... [KEEP YOUR EXISTING NEAT_CONFIG HERE] ...
+// (I am omitting the long object to save space, but DO NOT DELETE IT from your file)
 const NEAT_CONFIG = {
     colors: [
         { color: '#899D99', enabled: true },
@@ -61,45 +62,46 @@ const NEAT_CONFIG = {
     textureShapeSquiggles: 10,
 }
 
-
-const CHUNK_LENGTH = 200 
-
+const CHUNK_LENGTH = 350 
 export default function TunnelSystem() {
   const group1 = useRef()
   const group2 = useRef()
   const sharedTexture = useNeatTexture(NEAT_CONFIG)
-  const activeTarget = useStore((state) => state.activeTarget)
-  const SPEED = activeTarget ? 5 : 10
+  
+  // 1. USE THE SHARED VELOCITY
+  const velocity = useScrollVelocity()
 
   useFrame((state, delta) => {
     const safeDelta = delta > 0.1 ? 0.1 : delta
-    const moveDistance = SPEED * safeDelta
+    const moveDistance = velocity.total.current * safeDelta // <--- Use Hook Velocity
 
-    // Move both chunks forward
+    // Move chunks
     if (group1.current) group1.current.position.z += moveDistance
     if (group2.current) group2.current.position.z += moveDistance
 
-    // THE TREADMILL LOGIC
-    // If a chunk goes too far past the camera (+20), 
-    // snap it to the back of the other chunk.
+    // Infinite Loop Logic
+    const REVERSE_LIMIT = -CHUNK_LENGTH
     
-    if (group1.current && group1.current.position.z > CHUNK_LENGTH+30) {
+    if (group1.current && group1.current.position.z > CHUNK_LENGTH) {
       group1.current.position.z = group2.current.position.z - CHUNK_LENGTH
     }
-
-    if (group2.current && group2.current.position.z > CHUNK_LENGTH+30) {
+    if (group2.current && group2.current.position.z > CHUNK_LENGTH) {
       group2.current.position.z = group1.current.position.z - CHUNK_LENGTH
+    }
+
+    if (group1.current && group1.current.position.z < REVERSE_LIMIT) {
+       group1.current.position.z = group2.current.position.z + CHUNK_LENGTH
+    }
+    if (group2.current && group2.current.position.z < REVERSE_LIMIT) {
+       group2.current.position.z = group1.current.position.z + CHUNK_LENGTH
     }
   })
 
   return (
     <>
-      {/* Chunk 1 starts at 0 */}
       <group ref={group1} position={[0, 0, 0]}>
         <TunnelChunk length={CHUNK_LENGTH} texture={sharedTexture} />
       </group>
-
-      {/* Chunk 2 starts behind Chunk 1 */}
       <group ref={group2} position={[0, 0, -CHUNK_LENGTH]}>
         <TunnelChunk length={CHUNK_LENGTH} texture={sharedTexture} />
       </group>

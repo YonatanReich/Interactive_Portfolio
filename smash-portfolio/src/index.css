@@ -31,6 +31,42 @@ body {
   min-height: 100vh;
 }
 
+
+/* 1. Global Body Text (Clean & Readable) */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 2. Headers & Tech Titles (Futuristic) */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.tech-stack-title,
+/* Your "Tech Architecture" headers */
+.project-header h3,
+/* Project Titles */
+.social-button,
+/* "LinkedIn" text */
+.contact-label {
+  /* "EMAIL", "PHONE" labels */
+  font-family: 'Rajdhani', sans-serif;
+  text-transform: uppercase;
+  /* Optional: Looks more "system-like" */
+  letter-spacing: 0.5px;
+}
+
+.contact-value {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -80,13 +116,25 @@ button:focus-visible {
 
   /* Standard blur */
   backdrop-filter: blur(10px);
-  /* ⚠️ Essential for iPhone/iPad/Safari support: */
+ 
   -webkit-backdrop-filter: blur(10px);
 
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+  .scroll-btn-container {
+    position: absolute;
+      display: flex;
+      left: 45%;
+      flex-direction: row;
+      gap: 25px;
+      justify-content: center;
+      padding: 0;
+    }
 }
 
 @media (min-width: 768px) {
@@ -97,3 +145,180 @@ button:focus-visible {
     
   }
 }
+.nav-style {
+  pointer-events: auto;
+  width: 100%;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.3);
+
+  /* Backdrop Filter (Glass Effect) */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  /* Recommended for Safari/iOS support */
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+
+  /* User Select - Prevent Text Highlighting */
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+  user-select: none;
+  /* Standard */
+}
+
+.scroll-down-btn,.scroll-up-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  user-select: none;
+  /* Prevent text selection */
+  touch-action: manipulation;
+  /* Improves touch response */
+  -webkit-user-select: none;
+    /* Safari, Chrome */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+  }
+
+.scroll-down-btn:active, .scroll-up-btn:active {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0.95);
+  border-color: white;
+}
+
+.scroll-down-btn img, .scroll-up-btn img {
+  /* 1. Prevent dragging the image (The "Ghost" effect) */
+  pointer-events: none;
+
+  /* 2. Prevent blue selection highlight */
+  user-select: none;
+  -webkit-user-select: none;
+  /* Safari/Chrome */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Edge/IE */
+
+  /* 3. Layout fix */
+  display: block;
+}
+  /* Removes tiny gap at bottom of inline images */
+.tech-reasoning-grid {
+  display: flex;
+  align-items: center;
+}
+
+.project-link {
+  display: flex;
+  font-size: 2rem;
+  
+}
+
+.tech-item {
+  display:flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  margin-right: 40px;
+}
+
+.social-links{
+  display:flex;
+  flex-direction: column;
+  font-size: 2rem
+
+}
+
+.tech-name {
+    color:#b590ff;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.status-tag-here {
+  display: inline-block;
+  background-color: #28a745;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 100px;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+    transform: scale(1);
+  animation: pulsee 2s infinite;
+
+}
+
+.status-tag-open {
+  display: inline-block;
+  background-color: #28a745;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+  transform: scale(1);
+  animation: pulsee 2s infinite;
+
+}
+
+.status-tag-inDev {
+  display: inline-block;
+  background-color: #28a1a7;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+  transform: scale(1);
+  animation: pulsee 2s infinite;
+}
+
+@keyframes pulsee {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 212, 212, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+project-card{
+  font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+a[href*="neat.firecms.co"] {
+  display: none !important;
+}
+
+
