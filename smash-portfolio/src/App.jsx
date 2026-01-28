@@ -136,6 +136,16 @@ export default function App() {
             <img width="40" height="40" src="https://img.icons8.com/ultraviolet/40/long-arrow-down.png" alt="long-arrow-down"/>
           </button>
           </div>
+          <div className="CV-btn-container">
+            <a 
+    href="/Yonatan_Reich_CV.pdf" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    style={{ textDecoration: 'none' }} // Removes the link underline
+  >
+    <button style={btnStyle}>My Resume 📄</button>
+  </a>
+          </div>
           </footer>
       </div>
       <InteractionHint/>
