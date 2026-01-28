@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: ['smash-portfolio.local', 'localhost','uiwzt-77-127-128-46.a.free.pinggy.link']
+    allowedHosts: ['smash-portfolio.local', 'localhost','foqcr-77-127-128-46.a.free.pinggy.link']
   }
 })
 
