@@ -327,7 +327,7 @@ a[href*="neat.firecms.co"] {
   display: none !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 500px) {
 
   /* --- 1. TOP BAR (NAV) FIXES --- */
   .nav-style {
@@ -426,7 +426,7 @@ a[href*="neat.firecms.co"] {
   .glass-panel-content {
     width: 95vw !important;
     /* 85% of screen width */
-    max-height: 60vh !important;
+    max-height: 75vh !important;
     /* NEVER exceed 60% of height */
 
     /* Center it perfectly */
@@ -437,7 +437,7 @@ a[href*="neat.firecms.co"] {
     /* Typography Scaling */
     font-size: 0.75rem !important;
     line-height: 1.4 !important;
-    padding: 10px !important;
+    padding: 0cap !important;
 
     /* Enable Scrolling if text is too long */
     overflow-y: auto !important;
@@ -452,6 +452,68 @@ a[href*="neat.firecms.co"] {
   .glass-panel-content h3 {
     font-size: 1.5rem !important;
     margin-bottom: 10px !important;
+  }
+}
+
+/* 1. PC / DESKTOP (Default) */
+/* Fixes "stops too high" by allowing it to grow taller */
+.annotation,
+.glass-panel-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 500px;
+  /* Standard width */
+  max-height: 90vh;
+  /* ⬆️ Increased from 60vh to use more vertical space */
+
+  
+  backdrop-filter: blur(12px);
+  
+  border-radius: 12px;
+  padding: 30px;
+  color: white;
+  overflow-y: auto;
+  /* Scrollbar if content is huge */
+  z-index: 1000;
+
+  /* Hide scrollbar visually but keep functionality */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+
+
+
+
+/* 3. MOBILE LANDSCAPE (Horizontal Mode) */
+/* Fixes "spills on top and bottom" by capping height strictly */
+@media (max-height: 400px) {
+
+  .annotation,
+  .glass-panel-content {
+    width: 80vw !important;
+    max-height: 50vh !important;
+    /* STRICT cap so it fits inside the short screen */
+
+    /* Layout adjustments for short screens */
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px !important;
+  }
+
+  /* Shrink title and text specifically for landscape */
+  .annotation h1,
+  .glass-panel-content h1 {
+    margin: 5px 0 5px 0 !important;
+    font-size: 1.2rem !important;
+  }
+
+  .annotation p,
+  .glass-panel-content p {
+    font-size: 0.9rem !important;
   }
 }
 

@@ -66,6 +66,22 @@
 }
 
 /* =========================================
+   3. TABLET VERTICAL (Portrait Mode)
+   Fixes "Cuts off too early" on iPads
+   ========================================= */
+@media (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+    .glass-panel-content {
+        width: 105vw !important;
+        height: 80vh !important;
+        /* Use 85% of screen width */
+        max-height: 90vh !important;
+        /* Use 80% of screen height */
+        padding: 0 30px;
+        font-size: 1.1rem;
+    }
+}
+
+/* =========================================
    3. LAPTOPS & TABLETS (Width >= 800px)
    ========================================= */
 @media (min-width: 800px) {
@@ -106,4 +122,31 @@
 .glass-panel-content::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 4px;
+}
+
+@media (min-width: 1025px) {
+    .glass-panel-content {
+        
+        top: 55% !important;
+        left: 50% !important;
+        transform: translate(-50%, -45%) !important;
+
+        /* 2. THE HEIGHT FIX */
+        /* "Take full screen height (100vh) and subtract 140px for header/footer" */
+        height: calc(100vh - 140px) !important;
+        max-height: none !important;
+
+        /* 3. DIMENSIONS */
+        width: 105vw !important;
+       
+
+        padding: 0 50px !important;
+        font-size: 1.2rem !important;
+    }
+
+    /* Update the Hidden State for PC animations */
+    .glass-panel-content:not(.active) {
+        transform: translate(-50%, -48%) scale(0.96) !important;
+        opacity: 0 !important;
+    }
 }
