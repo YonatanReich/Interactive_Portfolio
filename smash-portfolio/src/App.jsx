@@ -138,7 +138,7 @@ export default function App() {
           </div>
           <div className="CV-btn-container">
             <a 
-    href="/Yonatan_Reich_CV.pdf" 
+    href="/Yonatan_Reich_Resume.pdf" 
     target="_blank" 
     rel="noopener noreferrer" 
     style={{ textDecoration: 'none' }} // Removes the link underline
