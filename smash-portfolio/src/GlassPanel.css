@@ -76,11 +76,12 @@
         /* Dimensions */
         width: 100vw;
         max-width: 1600px;
-        height: 75vh;
+        height: 70vh;
         max-height: 900px;
 
         padding: 0 40px;
         font-size: 1.1rem;
+        
     }
 
     /* IMPORTANT: 
