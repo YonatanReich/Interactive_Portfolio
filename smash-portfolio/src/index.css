@@ -327,4 +327,194 @@ a[href*="neat.firecms.co"] {
   display: none !important;
 }
 
+@media (max-width: 500px) {
+
+  /* --- 1. TOP BAR (NAV) FIXES --- */
+  .nav-style {
+    padding: 10px 5px !important;
+    /* Less padding */
+    flex-wrap: wrap;
+    /* Allow items to wrap if needed */
+  }
+
+  .nav-style .tabs {
+    display: flex;
+    
+    justify-content: center;
+    gap: 5px;
+    /* Add small gap between buttons */
+  }
+
+  /* Force shrink the Nav Buttons */
+  .nav-style button {
+    font-size: 0.7rem !important;
+    /* Shrink text */
+    padding: 5px 8px !important;
+    /* Shrink click area */
+    margin-right: 0 !important;
+  
+    
+    /* Darken bg for readability */
+  }
+
+  /* Mute Button specific fix */
+  .nav-style button[style*="muteBtnStyle"] {
+    padding: 5px 10px !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* --- 2. BOTTOM BAR (FOOTER) FIXES --- */
+  .bottom-bar-glass {
+    padding: 20px !important;
+    flex-direction: row;
+    /* Keep row, but scale items */
+    gap: 20px;
+    
+  }
+  
+  .bottom-bar-glass button{
+    font-size: 0.7rem !important;
+      /* Shrink text */
+      padding: 5px 8px !important;
+      /* Shrink click area */
+      margin-right: 0 !important;
+      
+  }
+
+  .Name {
+    font-size: 0.9rem !important;
+    margin-right: -8px !important;
+  }
+
+  .Role {
+    font-size: 0.8rem !important;
+    
+    /* OPTIONAL: Hide "CS Student" on very small phones to save space */
+  }
+
+.scroll-btn-container {
+  position: absolute;
+  display: flex;
+  left: 53% !important;
+  flex-direction: row;
+  gap: 25px;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Target the buttons to pull them closer using MARGINs */
+.scroll-btn-container button {
+  margin: 0 -5px !important;
+  /* This pulls them 5px closer to each other */
+  padding: 0 !important;
+  transform: scale(0.8);
+  /* Quick hack to shrink the whole button+icon */
+}
+  
+  .scroll-btn-container img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  /* --- 3. MODAL / TEXT BOX TRAP FIX (CRITICAL) --- */
+  /* This targets your GlassPanel content/annotation class */
+
+  /* Assuming your modal content class is .annotation or similar. 
+     If you use @react-three/drei <Html>, it might be a div inside it. */
+  .annotation,
+  .content-box,
+  .glass-panel-content {
+    width: 95vw !important;
+    /* 85% of screen width */
+    max-height: 75vh !important;
+    /* NEVER exceed 60% of height */
+
+    /* Center it perfectly */
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+
+    /* Typography Scaling */
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+    padding: 0cap !important;
+
+    /* Enable Scrolling if text is too long */
+    overflow-y: auto !important;
+
+    /* Ensure it sits BETWEEN header and footer */
+    z-index: 100 !important;
+    margin-top: 0 !important;
+  }
+
+  /* Make the title inside the modal smaller */
+  .annotation h1,
+  .glass-panel-content h3 {
+    font-size: 1.5rem !important;
+    margin-bottom: 10px !important;
+  }
+}
+
+/* 1. PC / DESKTOP (Default) */
+/* Fixes "stops too high" by allowing it to grow taller */
+.annotation,
+.glass-panel-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 500px;
+  /* Standard width */
+  max-height: 90vh;
+  /* ⬆️ Increased from 60vh to use more vertical space */
+
+  
+  backdrop-filter: blur(12px);
+  
+  border-radius: 12px;
+  padding: 30px;
+  color: white;
+  overflow-y: auto;
+  /* Scrollbar if content is huge */
+  z-index: 1000;
+
+  /* Hide scrollbar visually but keep functionality */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+
+
+
+
+/* 3. MOBILE LANDSCAPE (Horizontal Mode) */
+/* Fixes "spills on top and bottom" by capping height strictly */
+@media (max-height: 400px) {
+
+  .annotation,
+  .glass-panel-content {
+    width: 80vw !important;
+    max-height: 50vh !important;
+    /* STRICT cap so it fits inside the short screen */
+
+    /* Layout adjustments for short screens */
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px !important;
+  }
+
+  /* Shrink title and text specifically for landscape */
+  .annotation h1,
+  .glass-panel-content h1 {
+    margin: 5px 0 5px 0 !important;
+    font-size: 1.2rem !important;
+  }
+
+  .annotation p,
+  .glass-panel-content p {
+    font-size: 0.9rem !important;
+  }
+}
+
 
