@@ -1,4 +1,3 @@
-/* 1. THE MAIN WRAPPER */
 .target-cursor-wrapper {
     position: fixed;
     top: 0;
@@ -6,71 +5,56 @@
     width: 0;
     height: 0;
     pointer-events: none;
-    z-index: 2147483647 !important;
-    transform: translate(-50%, -50%) translateZ(0);
-
-    /* 🔥 THE HIGH-CONTRAST NEON STACK */
-    filter:
-        /* 1. Dark under-shadow: Forces separation from bright tunnel walls */
-        drop-shadow(0 0 2px rgba(0, 0, 0, 0.8))
-        /* 2. The signature Cyan glows */
-        drop-shadow(0 0 5px rgba(76, 180, 187, 1)) drop-shadow(0 0 15px rgba(76, 180, 187, 0.8)) drop-shadow(0 0 30px rgba(76, 180, 187, 0.5));
+    /* 🚨 Z-INDEX FIX: Stay above everything to prevent blur */
+    z-index: 2147483647;
+    /* Mix-blend-mode removed so we can force the cyan color */
 }
 
-/* 2. THE CENTER DOT */
 .target-cursor-dot {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 5px;
-    /* Slightly larger for visibility */
-    height: 5px;
-
-    /* Pure white core for maximum contrast */
+    width: 6px;
+    /* Slightly bigger dot */
+    height: 6px;
     background: #ffffff;
-
+    /* White core */
     border-radius: 50%;
     transform: translate(-50%, -50%);
     will-change: transform;
+
+    /* 🚨 GLOW EFFECT: Intense cyan halo */
+    filter: drop-shadow(0 0 4px #4CB4BB) drop-shadow(0 0 10px rgba(76, 180, 187, 0.6));
 }
 
-/* 3. THE BRACKETS (Corners) */
 .target-cursor-corner {
     position: absolute;
-    left: 50%;
-    top: 50%;
     width: 14px;
-    /* Slightly longer brackets */
     height: 14px;
-
-    /* Thicker, pure white borders */
-    border: 3px solid #ffffff;
-
+    /* 🚨 Brighter white borders for the corners */
+    border: 3px solid rgba(255, 255, 255, 0.9);
     will-change: transform;
+    box-sizing: border-box;
+    /* Ensures the borders expand correctly */
+
+    /* 🚨 GLOW EFFECT: Holographic cyan aura */
+    filter: drop-shadow(0 0 6px #4CB4BB) drop-shadow(0 0 12px rgba(76, 180, 187, 0.5));
 }
 
-
 .corner-tl {
-    transform: translate(-150%, -150%);
     border-right: none;
     border-bottom: none;
-    
 }
 
 .corner-tr {
-    transform: translate(50%, -150%);
     border-left: none;
     border-bottom: none;
 }
 
 .corner-br {
-    transform: translate(50%, 50%);
     border-left: none;
     border-top: none;
 }
 
 .corner-bl {
-    transform: translate(-150%, 50%);
     border-right: none;
     border-top: none;
 }

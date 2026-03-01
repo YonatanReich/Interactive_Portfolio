@@ -77,7 +77,7 @@ export default function App() {
       <TargetCursor 
         spinDuration={1.5}
         hideDefaultCursor
-        parallaxOn
+        parallaxOff = {false}
         hoverDuration={1}
       />  
       <audio 

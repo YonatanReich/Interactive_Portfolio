@@ -10,7 +10,18 @@ import '../GlassPanel.css'
 import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
 
 
+
 const LOOP_LENGTH = 350; // Match TunnelChunk length
+ const neonGlowStyle = {
+  color: 'rgba(76, 180, 187, 1)', // Pure white core
+  textShadow: `
+    0 0 8px rgba(76, 180, 187, 1), 
+    0 0 20px rgba(76, 180, 187, 0.6), 
+    0 0 30px rgba(76, 180, 187, 0.3)
+  `,
+  // Optional: Add a transition in case you want to animate it later
+  transition: 'text-shadow 0.3s ease'
+};
 const CONTENT = {
   modal_projects: {
     title: "PROJECTS",
@@ -20,7 +31,7 @@ const CONTENT = {
         {/* --- PROJECT 1: PORTFOLIO --- */}
         <div className="project-card">
           <div className="project-header cursor-target">
-            <h3>• Interactive SWE Portfolio</h3>
+            <h3>Interactive SWE Portfolio</h3>
             <h4 className="status-tag-live">LIVE</h4>
             </div>
             
@@ -65,7 +76,7 @@ const CONTENT = {
         {/* --- PROJECT 2: SANKEY TRACKER --- */}
         <div className="project-card">
           <div className="project-header cursor-target">
-            <h3>• Sankey Job Tracker</h3>
+            <h3>Sankey Job Tracker</h3>
             <span className="status-tag-inDev">IN DEVELOPMENT</span>
           </div>
           <p className="project-desc cursor-target">
@@ -111,7 +122,7 @@ const CONTENT = {
         {/* --- PROJECT 3: DRIVE CLONE --- */}
         <div className="project-card">
           <div className="project-header cursor-target">
-            <h3>• Full-Stack Drive Clone</h3>
+            <h3>Full-Stack Drive Clone</h3>
             <span className="status-tag-inDev">IN DEVELOPMENT</span>
           </div>
           <p className="project-desc cursor-target">
@@ -161,8 +172,8 @@ const CONTENT = {
         
         {/* --- BIO CARD --- */}
         <div className="project-card">
-          <div className="project-header cursor-target">
-            <h3>• The Developer:</h3>
+          <div className="project-header cursor-target" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h3>The Developer:</h3>
             <span className="status-tag live">Yonatan Reich, CS STUDENT</span>
           </div>
           
@@ -212,7 +223,7 @@ const CONTENT = {
         {/* --- MAIN SKILLS CARD --- */}
         <div className="project-card">
           <div className="project-header cursor-target">
-            <h3>• Technical Toolkit</h3>
+            <h3>Technical Toolkit</h3>
           </div>
           
           <p className="project-desc cursor-target">
@@ -304,72 +315,106 @@ const CONTENT = {
       </div>
     )
   },
-  modal_contact: {
+modal_contact: {
     title: "CONTACT",
     body: (
       <div className="project-container">
-        
-        {/* --- CONTACT CARD --- */}
         <div className="project-card">
+          
           <div className="project-header cursor-target">
-            <h3>• Let's Build Together</h3>
-            <span className="status-tag-open">OPEN TO WORK</span>
+            <h3>Let's Build Together</h3>
           </div>
           
           <p className="project-desc cursor-target">
-            I am currently seeking a <strong>Student Position</strong> or <strong>Internship</strong> in Software Development (Backend / Full Stack).
+            I am currently seeking a <strong style={neonGlowStyle}> Student Position</strong> or <strong style={neonGlowStyle}> Full Time Position</strong> in Software Development (Backend / Full Stack).
             <br/><br/>
             I bring a disciplined, architectural mindset to every project. If you are looking for a developer who cares about the "Why" and "How" of every line of code, let's talk.
           </p>
 
-          {/* 1. DIRECT CHANNELS */}
-          <div className="tech-stack-section">
-            <h4 className="tech-stack-title">✦ Direct Channels</h4>
-            <div className="contact-grid ">
-              
-              {/* Email */}
-              <a href="mailto:yonatan.reich@gmail.com" className="contact-item">
-                <div className="contact-icon">✉</div>
-                <div className="contact-info cursor-target">
-                  <span className="contact-label">Email: </span>
-                  <span className="contact-value">yonatan.reich@gmail.com</span>
-                </div>
-              </a>
+          <div className="cyber-terminal-stack">
+            
+            {/* Email */}
+            <a href="mailto:yonatan.reich@gmail.com" className="cyber-row cursor-target">
+               <div className="row-prefix">
+  <span className="icon">
+    <img 
+      src="/email-svgrepo-com.svg" 
+      alt="Email" 
+      className="pixel-icon" 
+    />
+  </span> 
+  EMAIL
+</div>
+              <div className="row-data">yonatan.reich@gmail.com</div>
+              <div className="row-action">[ Email me ]</div>
+            </a>
 
-              {/* Phone */}
-              <a href="tel:0503318885" className="contact-item">
-                <div className="contact-icon">📞</div>
-                <div className="contact-info cursor-target">
-                  <span className="contact-label">Phone: </span>
-                  <span className="contact-value">050-331-8885</span>
-                </div>
-              </a>
+            {/* Phone */}
+            <a href="tel:0503318885" className="cyber-row cursor-target">
+              <div className="row-prefix">
+  <span className="icon">
+    <img 
+      src="/phone-call-svgrepo-com.svg" 
+      alt="Phone" 
+      className="pixel-icon" 
+    />
+  </span> 
+  PHONE
+</div>
+              <div className="row-data">050-331-8885</div>
+              <div className="row-action">[ Call me ]</div>
+            </a>
 
-              {/* Location (Non-clickable) */}
-              <div className="contact-item static cursor-target">
-                <div className="contact-icon">📍</div>
-                <div className="contact-info cursor-target">
-                  <span className="contact-label">Based In Ramat Gan, Israel</span>
-                </div>
-              </div>
-
+            {/* Location */}
+            <div className="cyber-row cursor-target">
+               <div className="row-prefix">
+  <span className="icon">
+    <img 
+      src="/location-svgrepo-com.svg" 
+      alt="Location" 
+      className="pixel-icon" 
+    />
+  </span> 
+  LOCATION
+</div>
+              <div className="row-data">Ramat Gan, Israel</div>
+              <div className="row-action">[ I'm located here ]</div>
             </div>
-          </div>
 
-          {/* 2. SOCIAL LINKS */}
-          <div className="social-links">
-              <a href="https://linkedin.com/in/yonatan-reich-SWE" target="_blank" rel="noreferrer" className="social-button linkedin cursor-target">
-                <span>Linked<strong>In</strong></span>
-                <span className="arrow">&rarr;</span>
-              </a>
-              <a href="https://github.com/YonatanReich" target="_blank" rel="noreferrer" className="social-button github cursor-target">
-                <span>Git<strong>Hub</strong></span>
-                <span className="arrow">&rarr;</span>
-              </a>
-          </div>
+            {/* LinkedIn */}
+            <a href="https://linkedin.com/in/yonatan-reich-SWE" target="_blank" rel="noreferrer" className="cyber-row cursor-target">
+               <div className="row-prefix">
+  <span className="icon">
+    <img 
+      src="/LI-Logo.png" 
+      alt="LinkedIn" 
+      className="pixel-icon" 
+    />
+  </span> 
+  LINKEDIN
+</div>
+             <div className="row-data"></div>
+              <div className="row-action">[ Visit my profile ]</div>
+            </a>
 
+            {/* GitHub */}
+            <a href="https://github.com/YonatanReich" target="_blank" rel="noreferrer" className="cyber-row cursor-target">
+              <div className="row-prefix">
+  <span className="icon">
+    <img 
+      src="/GitHub_Invertocat_Black.svg" 
+      alt="GitHub" 
+      className="pixel-icon" 
+    />
+  </span> 
+  GITHUB
+</div>
+              <div className="row-data"></div>
+              <div className="row-action">[ See my work ]</div>
+            </a>
+
+          </div>
         </div>
-
       </div>
     )
   }
