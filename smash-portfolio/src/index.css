@@ -65,6 +65,27 @@ h6,
   letter-spacing: 0.5px;
 }
 
+.project-header {
+  /* Gives the header a solid, calculable box for the cursor to grab */
+  padding: 12px 16px;
+
+  /* Make sure any spacing is pushed to the bottom, outside the hover area */
+  margin-bottom: 10px;
+
+  /* Keeps the text and tags aligned nicely */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  /* Prevents squishing on small screens */
+}
+
+/* Kill the invisible margins on the h3 that are throwing off the cursor math */
+.project-header h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .contact-value {
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
@@ -88,25 +109,31 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+      background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+      
+        /* TRACE: Bright glowing border */
+        border: 1px solid rgba(76, 180, 187, 0.8);
+      
+      
+        /* HOLOGRAPHIC SHADOWS: Drop shadow + Outer glow + Inner reflection */
+        box-shadow:
+          0 15px 35px rgba(0, 0, 0, 0.4),
+          0 0 20px rgba(76, 180, 187, 0.3),
+          inset 0 0 15px rgba(76, 180, 187, 0.15);
+      
+        /* Smooth entry animation (Will snap back instantly when mouse leaves) */
+        transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+
+        text-shadow: 0 0 10px rgba(76, 180, 187, 0.7);
+          transition: text-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+
 
 .bottom-bar-glass {
   position: fixed;
@@ -262,19 +289,17 @@ button:focus-visible {
     font-weight: bold;
 }
 
-.status-tag-here {
+.status-tag-live {
   display: inline-block;
-  background-color: #28a745;
+  background-color: #00d532;
   color: white;
   font-size: 1rem;
   font-weight: 600;
   padding: 2px 6px;
   border-radius: 4px;
-  margin-left: 100px;
   box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-    transform: scale(1);
+  transform: scale(1);
   animation: pulsee 2s infinite;
-
 }
 
 .status-tag-open {

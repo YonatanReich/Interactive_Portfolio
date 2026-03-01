@@ -1,3 +1,4 @@
+/* 1. THE MAIN WRAPPER */
 .target-cursor-wrapper {
     position: fixed;
     top: 0;
@@ -5,37 +6,55 @@
     width: 0;
     height: 0;
     pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: difference;
-    transform: translate(-50%, -50%);
+    z-index: 2147483647 !important;
+    transform: translate(-50%, -50%) translateZ(0);
+
+    /* 🔥 THE HIGH-CONTRAST NEON STACK */
+    filter:
+        /* 1. Dark under-shadow: Forces separation from bright tunnel walls */
+        drop-shadow(0 0 2px rgba(0, 0, 0, 0.8))
+        /* 2. The signature Cyan glows */
+        drop-shadow(0 0 5px rgba(76, 180, 187, 1)) drop-shadow(0 0 15px rgba(76, 180, 187, 0.8)) drop-shadow(0 0 30px rgba(76, 180, 187, 0.5));
 }
 
+/* 2. THE CENTER DOT */
 .target-cursor-dot {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 4px;
-    height: 4px;
-    background: #fff;
+    width: 5px;
+    /* Slightly larger for visibility */
+    height: 5px;
+
+    /* Pure white core for maximum contrast */
+    background: #ffffff;
+
     border-radius: 50%;
     transform: translate(-50%, -50%);
     will-change: transform;
 }
 
+/* 3. THE BRACKETS (Corners) */
 .target-cursor-corner {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 12px;
-    height: 12px;
-    border: 3px solid #fff;
+    width: 14px;
+    /* Slightly longer brackets */
+    height: 14px;
+
+    /* Thicker, pure white borders */
+    border: 3px solid #ffffff;
+
     will-change: transform;
 }
+
 
 .corner-tl {
     transform: translate(-150%, -150%);
     border-right: none;
     border-bottom: none;
+    
 }
 
 .corner-tr {

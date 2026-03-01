@@ -139,7 +139,7 @@ const TargetCursor = ({
         }
       }
     };
-    window.addEventListener('scroll', scrollHandler, { passive: true });
+    window.addEventListener('scroll', scrollHandler, { passive: true, capture: true });
 
     const mouseDownHandler = () => {
       if (!dotRef.current) return;
@@ -284,7 +284,7 @@ const TargetCursor = ({
 
       window.removeEventListener('mousemove', moveHandler);
       window.removeEventListener('mouseover', enterHandler);
-      window.removeEventListener('scroll', scrollHandler);
+      window.removeEventListener('scroll', scrollHandler), { capture: true };
       window.removeEventListener('mousedown', mouseDownHandler);
       window.removeEventListener('mouseup', mouseUpHandler);
 
@@ -296,7 +296,7 @@ const TargetCursor = ({
       document.body.style.cursor = originalCursor;
 
       isActiveRef.current = false;
-      targetCornerPositionsRef.current = null;
+      targetCornerPositionsRef.current = null;  
       activeStrengthRef.current = 0;
     };
   }, [targetSelector, spinDuration, moveCursor, constants, hideDefaultCursor, isMobile, hoverDuration, parallaxOn]);

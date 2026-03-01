@@ -19,33 +19,34 @@ const CONTENT = {
         
         {/* --- PROJECT 1: PORTFOLIO --- */}
         <div className="project-card">
-          <div className="project-header">
+          <div className="project-header cursor-target">
             <h3>• Interactive SWE Portfolio</h3>
-            <span className="status-tag live">LIVE</span>
-            <span className="status-tag-here">You are Here!</span>
-          </div>
-          <p className="project-desc">
+            <h4 className="status-tag-live">LIVE</h4>
+            </div>
+            
+          
+          <p className="project-desc cursor-target">
             A high-performance 3D web experience built to demonstrate front-end mastery and graphics programming skills.
           </p>
-          <div className="project-problem">
+          <div className="project-problem cursor-target">
             <strong>The Problem:</strong> In a saturated junior market, standard resumes are skimmed and forgotten. This project aims to arrest attention immediately, increasing dwell time and leaving a memorable impression on recruiters.
           </div>
           <div className="tech-stack-section">
             <h4 className="tech-stack-title">⚡ Tech Architecture</h4>
             <div className="tech-reasoning-grid">
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">React 19 & JavaScript</span>
-                <span className="tech-why">
+                <span className="tech-why ">
                   Provides the component-based architecture needed to manage the complex synchronization between the 2D UI overlays and the 3D scene state.
                 </span>
               </div>
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">React Three Fiber (WebGL)</span>
                 <span className="tech-why">
                   A declarative renderer that optimizes the Three.js loop, allowing for efficient 60FPS animation while keeping the codebase modular and readable.
                 </span>
               </div>
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Vite Ecosystem</span>
                 <span className="tech-why">
                   Selected for its high-performance build pipeline, enabling rapid prototyping of shaders and physics interactions.
@@ -54,8 +55,8 @@ const CONTENT = {
             </div>
           </div>
           <div className="project-links">
-            <a href="https://yonatanreich.dev" className="project-link">Go to project &rarr;</a>
-            <a href="https://github.com/YonatanReich/Interactive_Portfolio" className="project-link">View Repository &rarr;</a>
+            <a href="https://yonatanreich.dev" className="project-link cursor-target">Go to project &rarr;</a>
+            <a href="https://github.com/YonatanReich/Interactive_Portfolio" className="project-link cursor-target">View Repository &rarr;</a>
           </div>
         </div>
 
@@ -63,35 +64,35 @@ const CONTENT = {
 
         {/* --- PROJECT 2: SANKEY TRACKER --- */}
         <div className="project-card">
-          <div className="project-header">
+          <div className="project-header cursor-target">
             <h3>• Sankey Job Tracker</h3>
             <span className="status-tag-inDev">IN DEVELOPMENT</span>
           </div>
-          <p className="project-desc">
+          <p className="project-desc cursor-target">
             A data-visualization tool designed to organize the chaotic job hunt process into actionable insights.
           </p>
-          <div className="project-problem">
+          <div className="project-problem cursor-target">
             <strong>The Problem:</strong> Tracking hundreds of applications via spreadsheets lacks depth. Candidates lose track of where they fail (Resume vs. Interview). This app visualizes the funnel to reveal bottlenecks in the process.
           </div>
           <div className="tech-stack-section">
             <h4 className="tech-stack-title">⚡ Tech Architecture</h4>
             <div className="tech-reasoning-grid">
               
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Next.js 14 & TypeScript</span>
                 <span className="tech-why">
                   Utilizes the App Router and Server Actions to unify the frontend and backend, ensuring end-to-end type safety without the need for a separate API layer.
                 </span>
               </div>
 
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">D3.js Visualization Engine</span>
                 <span className="tech-why">
                   Bypasses standard charting libraries in favor of raw D3 calculations, enabling custom Sankey flow logic that dynamically adapts to complex job application states.
                 </span>
               </div>
 
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Prisma & PostgreSQL</span>
                 <span className="tech-why">
                   A robust relational database strategy managed via Prisma ORM to strictly enforce schema validation for user data and application history.
@@ -101,7 +102,7 @@ const CONTENT = {
             </div>
           </div>
           <div className="project-links">
-            <a href="https://github.com/YonatanReich/Sankey-job-hunt-web-app" className="project-link">View Progress &rarr;</a>
+            <a href="https://github.com/YonatanReich/Sankey-job-hunt-web-app" className="project-link  cursor-target">View Progress &rarr;</a>
           </div>
         </div>
 
@@ -109,35 +110,35 @@ const CONTENT = {
 
         {/* --- PROJECT 3: DRIVE CLONE --- */}
         <div className="project-card">
-          <div className="project-header">
+          <div className="project-header cursor-target">
             <h3>• Full-Stack Drive Clone</h3>
             <span className="status-tag-inDev">IN DEVELOPMENT</span>
           </div>
-          <p className="project-desc">
+          <p className="project-desc cursor-target">
             A distributed file storage system featuring web and mobile clients, architected with a polyglot backend.
           </p>
-          <div className="project-problem">
+          <div className="project-problem cursor-target">
              <strong>The Problem:</strong> Bridging the gap between high-level web APIs and low-level systems programming. This project solves the challenge of handling binary streams and compression by offloading heavy lifting to C++.
           </div>
           <div className="tech-stack-section">
             <h4 className="tech-stack-title">⚡ Tech Architecture</h4>
             <div className="tech-reasoning-grid">
               
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Node.js & C++ Hybrid Core</span>
                 <span className="tech-why">
                   Implements a microservices pattern where the Node.js API acts as a gateway, communicating via raw TCP sockets with a custom C++ server optimized for file manipulation and RLE compression.
                 </span>
               </div>
 
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">React & React Native (Expo)</span>
                 <span className="tech-why">
                   A multi-client ecosystem using React for the web dashboard and Expo Router for the mobile app, ensuring a unified user experience across devices.
                 </span>
               </div>
 
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Docker & MongoDB</span>
                 <span className="tech-why">
                   Fully containerized environment using Docker Compose to orchestrate the polyglot backend services and persistent MongoDB metadata storage.
@@ -147,7 +148,7 @@ const CONTENT = {
             </div>
           </div>
           <div className="project-links">
-            <a href="#" className="project-link">View Progress &rarr;</a>
+            <a href="#" className="project-link cursor-target">View Progress &rarr;</a>
           </div>
         </div>
         </div>
@@ -160,12 +161,12 @@ const CONTENT = {
         
         {/* --- BIO CARD --- */}
         <div className="project-card">
-          <div className="project-header">
-            <h3>• The Developer</h3>
+          <div className="project-header cursor-target">
+            <h3>• The Developer:</h3>
             <span className="status-tag live">Yonatan Reich, CS STUDENT</span>
           </div>
           
-          <p className="project-desc">
+          <p className="project-desc cursor-target">
             I am a Computer Science student at <strong>Bar-Ilan University</strong>, expected to graduate in <strong>Summer 2027</strong>.
             <br/><br/>
             Beyond the code, I am defined by a disciplined approach to life. I believe in smart, but rigours work in order to achieve any goal I put in front of myself. My passion lies in seeing a process through from <strong>A to Z</strong>—taking an abstract concept, architecting the solution, and driving it all the way to a polished deployment.
@@ -175,21 +176,21 @@ const CONTENT = {
             <h4 className="tech-stack-title">⚛ Core Philosophy</h4>
             <div className="tech-reasoning-grid">
               
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">End-to-End Ownership</span>
                 <span className="tech-why">
                   I thrive on responsibility. Whether it's a low-level backend service or a responsive UI, I am committed to understanding and mastering every layer of the stack to deliver a complete product.
                 </span>
               </div>
 
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Creative Problem Solving</span>
                 <span className="tech-why">
                   I view constraints as opportunities. I enjoy dissecting complex problems to find elegant, efficient solutions rather than relying on quick fixes or patches.
                 </span>
               </div>
 
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Disciplined Growth</span>
                 <span className="tech-why">
                   Consistency is my superpower. I am constantly refining my toolset, learning new paradigms (like this portfolio), and holding my code to the highest standard.
@@ -210,12 +211,11 @@ const CONTENT = {
         
         {/* --- MAIN SKILLS CARD --- */}
         <div className="project-card">
-          <div className="project-header">
+          <div className="project-header cursor-target">
             <h3>• Technical Toolkit</h3>
-            <span className="status-tag live">STUDENT</span>
           </div>
           
-          <p className="project-desc">
+          <p className="project-desc cursor-target">
             I am constantly polishing my skills and upgrading my technical toolkit. My goal is to understand the "magic" behind the code- from how a CPU executes instructions to how a web browser renders a page.
           </p>
 
@@ -224,21 +224,21 @@ const CONTENT = {
             <h4 className="tech-stack-title">⚙️ Systems Programming</h4>
             <div className="tech-reasoning-grid">
               
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">C & C++</span>
                 <span className="tech-why">
                   My primary languages for university coursework. Experienced with manual memory management (pointers/malloc) and systems-level logic.
                 </span>
               </div>
 
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Operating Systems Concepts</span>
                 <span className="tech-why">
                    Currently analyzing the internals of process management, threads, and concurrency to understand how software interacts with hardware.
                 </span>
               </div>
               
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Assembly (x86)</span>
                 <span className="tech-why">
                    Gained exposure to low-level instructions and registers, providing a mental model for how high-level code is actually executed.
@@ -249,18 +249,18 @@ const CONTENT = {
           </div>
 
           {/* 2. WEB DEV (Project Level) */}
-          <div className="tech-stack-section">
+          <div className="tech-stack-section ">
             <h4 className="tech-stack-title">🌐 Web Development</h4>
-            <div className="tech-reasoning-grid">
+            <div className="tech-reasoning-grid ">
               
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">React & Frontend</span>
                 <span className="tech-why">
                   Self-taught. Comfortable building interactive UIs (like this portfolio) using Hooks, State, and modern CSS/Tailwind.
                 </span>
               </div>
 
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Node.js & Databases</span>
                 <span className="tech-why">
                    Experience connecting frontends to scalable backends, working with REST APIs, authentication, and SQL/NoSQL databases.
@@ -271,26 +271,26 @@ const CONTENT = {
           </div>
 
           {/* 3. CORE THEORY (OOP Added Here) */}
-          <div className="tech-stack-section">
+          <div className="tech-stack-section ">
             <h4 className="tech-stack-title">🧠 CS Fundamentals</h4>
-            <div className="tech-reasoning-grid">
+            <div className="tech-reasoning-grid ">
               
               {/* ✅ OOP added prominently here */}
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Object-Oriented Programming</span>
                 <span className="tech-why">
                    Strong academic foundation in Design Patterns, Inheritance, and Polymorphism (via C++ & Java). I focus on writing modular, maintainable code structures.
                 </span>
               </div>
 
-              <div className="tech-item">
+              <div className="tech-item cursor-target">
                 <span className="tech-name">Algorithms & Data Structures</span>
                 <span className="tech-why">
                    Studying core theory (Graphs, Trees, Sorting) to solve problems efficiently. I prioritize logical correctness and time complexity (Big O) in my solutions.
                 </span>
               </div>
               
-               <div className="tech-item">
+               <div className="tech-item cursor-target">
                 <span className="tech-name">Python</span>
                 <span className="tech-why">
                    My go-to tool for automation scripts, data processing, and rapid prototyping.
@@ -311,12 +311,12 @@ const CONTENT = {
         
         {/* --- CONTACT CARD --- */}
         <div className="project-card">
-          <div className="project-header">
+          <div className="project-header cursor-target">
             <h3>• Let's Build Together</h3>
             <span className="status-tag-open">OPEN TO WORK</span>
           </div>
           
-          <p className="project-desc">
+          <p className="project-desc cursor-target">
             I am currently seeking a <strong>Student Position</strong> or <strong>Internship</strong> in Software Development (Backend / Full Stack).
             <br/><br/>
             I bring a disciplined, architectural mindset to every project. If you are looking for a developer who cares about the "Why" and "How" of every line of code, let's talk.
@@ -325,12 +325,12 @@ const CONTENT = {
           {/* 1. DIRECT CHANNELS */}
           <div className="tech-stack-section">
             <h4 className="tech-stack-title">✦ Direct Channels</h4>
-            <div className="contact-grid">
+            <div className="contact-grid ">
               
               {/* Email */}
               <a href="mailto:yonatan.reich@gmail.com" className="contact-item">
                 <div className="contact-icon">✉</div>
-                <div className="contact-info">
+                <div className="contact-info cursor-target">
                   <span className="contact-label">Email: </span>
                   <span className="contact-value">yonatan.reich@gmail.com</span>
                 </div>
@@ -339,16 +339,16 @@ const CONTENT = {
               {/* Phone */}
               <a href="tel:0503318885" className="contact-item">
                 <div className="contact-icon">📞</div>
-                <div className="contact-info">
+                <div className="contact-info cursor-target">
                   <span className="contact-label">Phone: </span>
                   <span className="contact-value">050-331-8885</span>
                 </div>
               </a>
 
               {/* Location (Non-clickable) */}
-              <div className="contact-item static">
+              <div className="contact-item static cursor-target">
                 <div className="contact-icon">📍</div>
-                <div className="contact-info">
+                <div className="contact-info cursor-target">
                   <span className="contact-label">Based In Ramat Gan, Israel</span>
                 </div>
               </div>
@@ -358,11 +358,11 @@ const CONTENT = {
 
           {/* 2. SOCIAL LINKS */}
           <div className="social-links">
-              <a href="https://linkedin.com/in/yonatan-reich-SWE" target="_blank" rel="noreferrer" className="social-button linkedin">
+              <a href="https://linkedin.com/in/yonatan-reich-SWE" target="_blank" rel="noreferrer" className="social-button linkedin cursor-target">
                 <span>Linked<strong>In</strong></span>
                 <span className="arrow">&rarr;</span>
               </a>
-              <a href="https://github.com/YonatanReich" target="_blank" rel="noreferrer" className="social-button github">
+              <a href="https://github.com/YonatanReich" target="_blank" rel="noreferrer" className="social-button github cursor-target">
                 <span>Git<strong>Hub</strong></span>
                 <span className="arrow">&rarr;</span>
               </a>

@@ -78,7 +78,7 @@ export default function App() {
         spinDuration={1.5}
         hideDefaultCursor
         parallaxOn
-        hoverDuration={0.2}
+        hoverDuration={1}
       />  
       <audio 
         id="bg_sound" 
