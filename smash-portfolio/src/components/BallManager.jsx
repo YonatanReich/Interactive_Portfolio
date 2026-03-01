@@ -3,48 +3,68 @@ import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { Howl } from 'howler'
 import { useStore } from '../store.js'
+import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
 
 // --- CONFIGURATION ---
 const BALL_SPEED = 60
 const GRAVITY = 30
-const TUNNEL_SPEED = 10 
+const upaward_arc = 8
 
-// Wall Hit Sound (Global)
+// Wall Hit Sound
 const wallHitSound = new Howl({
   src: ['/wall_sound.wav'],
   html5: false,
 });
 
-// Throw Sound (Global - Preloaded)
+// Throw Sound
 const throwSound = new Howl({
-    src: ['/ball_hit.mp3'], // Make sure this filename matches your project
+    src: ['/ball_hit.mp3'], 
     volume: 0.5,
     html5: false
 });
 
 function Ball({ id, startPos, startDir, onRemove }) {
+  const isMuted = useStore((state) => state.isMuted)
+  
   const mesh = useRef()
-  const velocity = useRef(startDir.clone().multiplyScalar(BALL_SPEED))
+// 1. Calculate the initial velocity vector first
+  const initialVel = startDir.clone().multiplyScalar(BALL_SPEED);
+  
+  // 2. Adding the upward aim assist 
+  initialVel.y += upaward_arc; // Or use your UPWARD_ARC variable
+  // 3. Pass the final calculated vector into the ref
+  const velocity = useRef(initialVel);
   const isStuck = useRef(false)
   const hitObjects = useRef(new Set())
-  const isMuted = useStore((state) => state.activeTarget)
+
+  // 1. NEW REFS FOR SYNCING
+  const stuckTo = useRef(null)               // The actual wall mesh we hit
+  const stuckOffset = useRef(new THREE.Vector3()) // The position relative to that wall
 
   useFrame((state, delta) => {
     if (!mesh.current) return
     const safeDelta = Math.min(delta, 0.1)
 
-    // 1. STUCK BEHAVIOR
-    if (isStuck.current) {
-      mesh.current.position.z += TUNNEL_SPEED * safeDelta
-      if (mesh.current.position.z > 50) onRemove(id)
-      return
+    // 2. FIXED STUCK BEHAVIOR
+    if (isStuck.current && stuckTo.current) {
+        // Instead of moving Z manually, we calculate where the anchor point is now
+        // This ensures perfect sync even if the tunnel scrolls, jumps, or stops.
+        const worldPos = stuckOffset.current.clone()
+        stuckTo.current.localToWorld(worldPos)
+        mesh.current.position.copy(worldPos)
+
+        // Check if it has moved out of view (using World Position)
+        if (mesh.current.position.z > 50) {
+            onRemove(id)
+        }
+        return
     }
 
-    // 2. FLYING BEHAVIOR
-    velocity.current.y -= GRAVITY * safeDelta
+    // 3. FLYING BEHAVIOR
+    velocity.current.y -= GRAVITY * safeDelta 
     mesh.current.position.addScaledVector(velocity.current, safeDelta)
 
-    // 3. COLLISION
+    // 4. COLLISION
     const raycaster = new THREE.Raycaster(
         mesh.current.position, 
         velocity.current.clone().normalize(), 
@@ -55,7 +75,6 @@ function Ball({ id, startPos, startDir, onRemove }) {
     const hits = raycaster.intersectObjects(state.scene.children, true)
     
     for (const hit of hits) {
-      // HIT GLASS
       if (hit.object.name === "GlassPanel") {
         if (!hitObjects.current.has(hit.object.uuid)) {
           hitObjects.current.add(hit.object.uuid)
@@ -63,19 +82,27 @@ function Ball({ id, startPos, startDir, onRemove }) {
           if (targetId) useStore.getState().setTarget(targetId)
         }
       }
-      // HIT WALL
       else if (hit.object.name === "TunnelWall") {
         if (!isMuted) wallHitSound.play();
         
         isStuck.current = true
+        
+        // A. Visual Snap
         const normal = hit.face.normal.clone()
         normal.transformDirection(hit.object.matrixWorld)
         mesh.current.position.copy(hit.point).add(normal.multiplyScalar(0.42))
+
+        // B. PARENTING LOGIC (The Fix)
+        // We save the wall we hit and calculate our offset relative to it
+        stuckTo.current = hit.object
+        stuckOffset.current.copy(mesh.current.position)
+        stuckTo.current.worldToLocal(stuckOffset.current) // Converts world pos -> local pos
+
         break; 
       }
     }
 
-    // CLEANUP
+    // Cleanup void balls
     if (mesh.current.position.y < -50 || mesh.current.position.z < -300) {
       onRemove(id)
     }
@@ -85,15 +112,8 @@ function Ball({ id, startPos, startDir, onRemove }) {
     <mesh ref={mesh} position={startPos}>
       <sphereGeometry args={[0.4, 32, 32]} />
       <meshPhysicalMaterial 
-          color="#ffffff" 
-          transmission={0.95} 
-          opacity={0.1} 
-          metalness={0} 
-          roughness={0}       
-          ior={1.5}           
-          thickness={2}       
-          envMapIntensity={2}
-          clearcoat={1}       
+          color="#ffffff" transmission={0.95} opacity={0.1} metalness={0} roughness={0}       
+          ior={1.5} thickness={2} envMapIntensity={2} clearcoat={1}       
         />
     </mesh>
   )
@@ -101,35 +121,15 @@ function Ball({ id, startPos, startDir, onRemove }) {
 
 export default function BallManager() {
   const [balls, setBalls] = useState([])
-  
-  // 1. ACCESS STORE
-  const target = useStore((state) => state.target)
-  const isMuted = useStore((state) => state.isMuted)
-
-  // 2. CREATE A LIVE REF FOR THE TARGET
-  // This ensures the event listener always sees the REAL value instantly
-  const targetRef = useRef(target)
-
-  // Sync ref whenever target changes
-  useEffect(() => {
-    targetRef.current = target
-  }, [target])
-
   const { gl, get } = useThree() 
   
   useEffect(() => {
     const handlePointerDown = (e) => {
-        
-      // 🛑 STOP SIGN: Check the REF, not the state variable directly
-      if (targetRef.current) return 
-
-      // Prevent clicking through UI buttons (extra safety)
-      if (e.target.closest('button') || e.target.closest('a')) return
+      if (e.target !== gl.domElement) return;
+      if (useStore.getState().target) return; 
 
       const { camera, raycaster, pointer } = get() 
-
       raycaster.setFromCamera(pointer, camera)
-      
       const direction = raycaster.ray.direction.clone()
       const startPos = camera.position.clone().add(new THREE.Vector3(0.5, -1, 0))
 
@@ -141,17 +141,15 @@ export default function BallManager() {
 
       setBalls((prev) => [...prev, newBall])
       
-      // Play Throw Sound
-      if (!isMuted) {
+      if (!useStore.getState().isMuted) {
           throwSound.play()
       }
     }
 
-    // Attach listener
     gl.domElement.addEventListener('pointerdown', handlePointerDown)
     return () => gl.domElement.removeEventListener('pointerdown', handlePointerDown)
     
-  }, [gl, isMuted]) // Depend only on gl/mute
+  }, [gl])
 
   const removeBall = (id) => {
     setBalls((prev) => prev.filter((b) => b.id !== id))

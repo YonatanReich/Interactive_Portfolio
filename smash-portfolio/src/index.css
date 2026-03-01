@@ -1,12 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+* {
+  cursor: none !important;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Rajdhani', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -14,62 +18,142 @@
   overflow: hidden;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
+/* 1. Global Body Text (Clean & Readable) */
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
-
-
-/* 1. Global Body Text (Clean & Readable) */
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 2. Headers & Tech Titles (Futuristic) */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.tech-stack-title,
-/* Your "Tech Architecture" headers */
-.project-header h3,
-/* Project Titles */
-.social-button,
-/* "LinkedIn" text */
-.contact-label {
-  /* "EMAIL", "PHONE" labels */
-  font-family: 'Rajdhani', sans-serif;
-  text-transform: uppercase;
-  /* Optional: Looks more "system-like" */
-  letter-spacing: 0.5px;
+/* Base Link Style */
+a {
+  color: rgba(76, 180, 187, 1);
+  text-shadow:
+    0 0 8px rgba(76, 180, 187, 1),
+    0 0 20px rgba(76, 180, 187, 0.6),
+    0 0 30px rgba(76, 180, 187, 0.3);
+  transition: text-shadow 0.3s ease, color 0.3s ease;
 }
 
-.contact-value {
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 600;
-  letter-spacing: 1px;
+/* Hide FireCMS Badge */
+a[href*="neat.firecms.co"] {
+  display: none !important;
+}
+
+/* =========================================
+   FUTURISTIC TYPOGRAPHY HIERARCHY (CENTERED)
+   ========================================= */
+
+/* LEVEL 1: Main System Titles (h1, h2) */
+h1,
+h2 {
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  width: 100%;
+  color: #ffffff;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 10px rgba(76, 180, 187, 0.8),
+    0 0 30px rgba(76, 180, 187, 0.4);
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+/* LEVEL 2: Interactive Sub-Headers */
+
+.project-header  {
+  font-family: 'Orbitron', sans-serif;
+  text-decoration: underline rgba(76, 180, 187, 0.8) 2px;
+  text-align: center;
+  color: rgba(76, 180, 187, 1);
+  letter-spacing: 0.05rem;
+  font-weight: 600;
+  text-shadow:
+    0 0 8px rgba(76, 180, 187, 0.6),
+    0 0 15px rgba(76, 180, 187, 0.2);
+}
+
+/* FLEXBOX CENTERING FIX for Project Headers */
+.project-header {
+  padding: 12px 16px;
+  margin: 0 auto 10px auto !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.project-header h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* LEVEL 3: Tech Stack Header (Always glowing, bigger, slicker) */
+.tech-stack-title {
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  display: block;
+  width: 100%;
+  color: #ffffff;
+  font-size: 1.3rem;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-shadow:
+    0 0 10px rgba(76, 180, 187, 0.8),
+    0 0 20px rgba(76, 180, 187, 0.4);
+}
+
+/* LEVEL 4: System Data & Labels */
+.contact-label {
+  text-align: center;
+  display: block;
+  width: 100%;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+/* Hover state ONLY for contact labels now */
+.contact-item:hover .contact-label {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(76, 180, 187, 0.8);
+}
+
+/* LEVEL 5: Action Buttons (.social-button) */
+.social-button {
+  color: rgba(76, 180, 187, 0.9);
+  font-weight: 500;
+  letter-spacing: 0.1rem;
+  transition: all 0.3s ease;
+}
+
+/* =========================================
+   UI COMPONENTS & BUTTONS
+   ========================================= */
+
+.contact-value {
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.project-card {
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 button {
@@ -78,30 +162,47 @@ button {
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
+  font-family: 'orbitron', sans-serif;
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
-  border-color: #646cff;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(76, 180, 187, 0.8);
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(76, 180, 187, 0.3),
+    inset 0 0 15px rgba(76, 180, 187, 0.15);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  text-shadow: 0 0 10px rgba(76, 180, 187, 0.7);
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* =========================================
+   NAVIGATION & BARS
+   ========================================= */
+
+.nav-style {
+  pointer-events: auto;
+  width: 100%;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .bottom-bar-glass {
@@ -110,76 +211,34 @@ button:focus-visible {
   pointer-events: auto;
   width: 100%;
   padding: 1rem 2rem;
-
-  /* Fixed typo: backgroundcolor -> background-color */
   background-color: rgba(0, 0, 0, 0.3);
-
-  /* Standard blur */
   backdrop-filter: blur(10px);
- 
   -webkit-backdrop-filter: blur(10px);
-
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  font-family: 'Rajdhani', sans-serif;
-    font-weight: 600;
-    letter-spacing: 1px;
-  .scroll-btn-container {
-    position: absolute;
-      display: flex;
-      left: 45%;
-      flex-direction: row;
-      gap: 25px;
-      justify-content: center;
-      padding: 0;
-    }
-        .CV-btn-container {
-          position: absolute;
-          left: 82%;
-        }
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
-
-
-@media (min-width: 768px) {
-  .bottom-bar-glass {
-    /* Force it lower on iPad if it feels "floating" */
-    bottom: 0px !important;
-
-    
-  }
-}
-.nav-style {
-  pointer-events: auto;
-  width: 100%;
-  padding: 1rem 2rem;
-  background: rgba(0, 0, 0, 0.3);
-
-  /* Backdrop Filter (Glass Effect) */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  /* Recommended for Safari/iOS support */
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.bottom-bar-glass .scroll-btn-container {
+  position: absolute;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-
-  /* User Select - Prevent Text Highlighting */
-  -webkit-user-select: none;
-  /* Safari */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* IE/Edge */
-  user-select: none;
-  /* Standard */
+  left: 45%;
+  flex-direction: row;
+  gap: 25px;
+  justify-content: center;
+  padding: 0;
 }
 
-.scroll-down-btn,.scroll-up-btn {
+.bottom-bar-glass .CV-btn-container {
+  position: absolute;
+  left: 82%;
+}
+
+.scroll-down-btn,
+.scroll-up-btn {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -194,39 +253,29 @@ button:focus-visible {
   justify-content: center;
   transition: all 0.2s ease;
   user-select: none;
-  /* Prevent text selection */
   touch-action: manipulation;
-  /* Improves touch response */
   -webkit-user-select: none;
-    /* Safari, Chrome */
-    -moz-user-select: none;
-    /* Firefox */
-    -ms-user-select: none;
-  }
+}
 
-.scroll-down-btn:active, .scroll-up-btn:active {
+.scroll-down-btn:active,
+.scroll-up-btn:active {
   background: rgba(255, 255, 255, 0.3);
   transform: scale(0.95);
   border-color: white;
 }
 
-.scroll-down-btn img, .scroll-up-btn img {
-  /* 1. Prevent dragging the image (The "Ghost" effect) */
+.scroll-down-btn img,
+.scroll-up-btn img {
   pointer-events: none;
-
-  /* 2. Prevent blue selection highlight */
   user-select: none;
   -webkit-user-select: none;
-  /* Safari/Chrome */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* Edge/IE */
-
-  /* 3. Layout fix */
   display: block;
 }
-  /* Removes tiny gap at bottom of inline images */
+
+/* =========================================
+   CONTENT LAYOUT & TAGS
+   ========================================= */
+
 .tech-reasoning-grid {
   display: flex;
   align-items: center;
@@ -235,69 +284,52 @@ button:focus-visible {
 .project-link {
   display: flex;
   font-size: 2rem;
-  
 }
 
 .tech-item {
-  display:flex;
+  display: flex;
   flex-direction: column;
   margin-bottom: 20px;
   margin-right: 40px;
 }
 
-.social-links{
-  display:flex;
+.social-links {
+  display: flex;
   flex-direction: column;
-  font-size: 2rem
-
+  font-size: 2rem;
 }
 
 .tech-name {
-    color:#b590ff;
-    font-size: 1.2rem;
-    font-weight: bold;
+  color: #b590ff;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
-.status-tag-here {
+/* Status Tags */
+.status-tag-live,
+.status-tag-open,
+.status-tag-inDev {
   display: inline-block;
-  background-color: #28a745;
   color: white;
   font-size: 1rem;
   font-weight: 600;
   padding: 2px 6px;
   border-radius: 4px;
-  margin-left: 100px;
   box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-    transform: scale(1);
+  transform: scale(1);
   animation: pulsee 2s infinite;
+}
 
+.status-tag-live {
+  background-color: #00d532;
 }
 
 .status-tag-open {
-  display: inline-block;
   background-color: #28a745;
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
-  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-  transform: scale(1);
-  animation: pulsee 2s infinite;
-
 }
 
 .status-tag-inDev {
-  display: inline-block;
   background-color: #28a1a7;
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
-  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-  transform: scale(1);
-  animation: pulsee 2s infinite;
 }
 
 @keyframes pulsee {
@@ -317,68 +349,74 @@ button:focus-visible {
   }
 }
 
-project-card{
-  font-family: 'Rajdhani', sans-serif;
-    font-weight: 600;
-    letter-spacing: 1px;
+/* =========================================
+   GLASS PANELS & MODALS (DESKTOP)
+   ========================================= */
+
+.annotation,
+.glass-panel-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  max-height: 90vh;
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 30px;
+  color: white;
+  overflow-y: auto;
+  z-index: 1000;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
 
-a[href*="neat.firecms.co"] {
-  display: none !important;
+/* =========================================
+   MEDIA QUERIES (MOBILE & RESPONSIVE)
+   ========================================= */
+
+@media (min-width: 768px) {
+  .bottom-bar-glass {
+    bottom: 0px !important;
+  }
 }
 
 @media (max-width: 500px) {
 
-  /* --- 1. TOP BAR (NAV) FIXES --- */
+  /* TOP BAR FIXES */
   .nav-style {
     padding: 10px 5px !important;
-    /* Less padding */
     flex-wrap: wrap;
-    /* Allow items to wrap if needed */
   }
 
   .nav-style .tabs {
     display: flex;
-    
     justify-content: center;
     gap: 5px;
-    /* Add small gap between buttons */
   }
 
-  /* Force shrink the Nav Buttons */
   .nav-style button {
     font-size: 0.7rem !important;
-    /* Shrink text */
     padding: 5px 8px !important;
-    /* Shrink click area */
     margin-right: 0 !important;
-  
-    
-    /* Darken bg for readability */
   }
 
-  /* Mute Button specific fix */
   .nav-style button[style*="muteBtnStyle"] {
     padding: 5px 10px !important;
     font-size: 0.9rem !important;
   }
 
-  /* --- 2. BOTTOM BAR (FOOTER) FIXES --- */
+  /* BOTTOM BAR FIXES */
   .bottom-bar-glass {
     padding: 20px !important;
     flex-direction: row;
-    /* Keep row, but scale items */
     gap: 20px;
-    
   }
-  
-  .bottom-bar-glass button{
+
+  .bottom-bar-glass button {
     font-size: 0.7rem !important;
-      /* Shrink text */
-      padding: 5px 8px !important;
-      /* Shrink click area */
-      margin-right: 0 !important;
-      
+    padding: 5px 8px !important;
+    margin-right: 0 !important;
   }
 
   .Name {
@@ -388,66 +426,46 @@ a[href*="neat.firecms.co"] {
 
   .Role {
     font-size: 0.8rem !important;
-    
-    /* OPTIONAL: Hide "CS Student" on very small phones to save space */
   }
 
-.scroll-btn-container {
-  position: absolute;
-  display: flex;
-  left: 53% !important;
-  flex-direction: row;
-  gap: 25px;
-  justify-content: center;
-  padding: 0;
-}
+  .scroll-btn-container {
+    position: absolute;
+    display: flex;
+    left: 53% !important;
+    flex-direction: row;
+    gap: 25px;
+    justify-content: center;
+    padding: 0;
+  }
 
-/* Target the buttons to pull them closer using MARGINs */
-.scroll-btn-container button {
-  margin: 0 -5px !important;
-  /* This pulls them 5px closer to each other */
-  padding: 0 !important;
-  transform: scale(0.8);
-  /* Quick hack to shrink the whole button+icon */
-}
-  
+  .scroll-btn-container button {
+    margin: 0 -5px !important;
+    padding: 0 !important;
+    transform: scale(0.8);
+  }
+
   .scroll-btn-container img {
     width: 30px !important;
     height: 30px !important;
   }
 
-  /* --- 3. MODAL / TEXT BOX TRAP FIX (CRITICAL) --- */
-  /* This targets your GlassPanel content/annotation class */
-
-  /* Assuming your modal content class is .annotation or similar. 
-     If you use @react-three/drei <Html>, it might be a div inside it. */
+  /* MODAL / TEXT BOX TRAP FIX */
   .annotation,
   .content-box,
   .glass-panel-content {
     width: 95vw !important;
-    /* 85% of screen width */
     max-height: 75vh !important;
-    /* NEVER exceed 60% of height */
-
-    /* Center it perfectly */
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-
-    /* Typography Scaling */
     font-size: 0.75rem !important;
     line-height: 1.4 !important;
     padding: 0cap !important;
-
-    /* Enable Scrolling if text is too long */
     overflow-y: auto !important;
-
-    /* Ensure it sits BETWEEN header and footer */
     z-index: 100 !important;
     margin-top: 0 !important;
   }
 
-  /* Make the title inside the modal smaller */
   .annotation h1,
   .glass-panel-content h3 {
     font-size: 1.5rem !important;
@@ -455,56 +473,18 @@ a[href*="neat.firecms.co"] {
   }
 }
 
-/* 1. PC / DESKTOP (Default) */
-/* Fixes "stops too high" by allowing it to grow taller */
-.annotation,
-.glass-panel-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  width: 500px;
-  /* Standard width */
-  max-height: 90vh;
-  /* ⬆️ Increased from 60vh to use more vertical space */
-
-  
-  backdrop-filter: blur(12px);
-  
-  border-radius: 12px;
-  padding: 30px;
-  color: white;
-  overflow-y: auto;
-  /* Scrollbar if content is huge */
-  z-index: 1000;
-
-  /* Hide scrollbar visually but keep functionality */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-}
-
-
-
-
-
-/* 3. MOBILE LANDSCAPE (Horizontal Mode) */
-/* Fixes "spills on top and bottom" by capping height strictly */
+/* MOBILE LANDSCAPE */
 @media (max-height: 400px) {
 
   .annotation,
   .glass-panel-content {
     width: 80vw !important;
     max-height: 50vh !important;
-    /* STRICT cap so it fits inside the short screen */
-
-    /* Layout adjustments for short screens */
     display: flex;
     flex-direction: column;
     padding: 10px 20px !important;
   }
 
-  /* Shrink title and text specifically for landscape */
   .annotation h1,
   .glass-panel-content h1 {
     margin: 5px 0 5px 0 !important;
@@ -517,4 +497,222 @@ a[href*="neat.firecms.co"] {
   }
 }
 
+/* 1. Center the grid container */
+.contact-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Centers children horizontally */
+  gap: 15px;
+  /* Adds nice spacing between items */
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* 2. Center the individual contact blocks */
+.contact-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  /* Space between the icon and text */
+  width: fit-content;
+  margin: 0 auto !important;
+  /* Forces the fit-content box to the center */
+  padding: 10px 20px;
+}
+
+/* Adjust the icon to sit nicely next to the text */
+.contact-icon {
+  font-size: 1.5rem;
+  color: #4CB4BB;
+  /* Keeps the cyan theme going */
+  text-shadow: 0 0 10px rgba(76, 180, 187, 0.6);
+}
+
+/* 3. Center the Social Links section */
+.social-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  margin-top: 30px;
+  /* Adds breathing room from the section above */
+}
+
+/* 4. Make the social buttons uniform and centered */
+.social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: fit-content;
+  margin: 0 auto !important;
+  padding: 12px 30px;
+  font-size: 2rem;
+  /* Scales the text down a bit from 2rem to look sleeker */
+  text-decoration: none;
+  /* Removes the underline from links */
+}
+
+/* Space out the arrow on the buttons */
+.social-button .arrow {
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+
+/* Cyber-touch: Make the arrow slide right when hovered! */
+.social-button:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* =========================================
+   CONTACT MODAL: FULL-VIEWPORT EXTENSION BARS
+   ========================================= */
+
+.cyber-terminal-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 850px;
+  margin: 35px auto 10px auto;
+  /* Required to keep the full-width bars centered */
+  align-items: center;
+}
+
+.cyber-row {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+
+  /* Starting width */
+  width: 100%;
+  padding: 16px 20px;
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(76, 180, 187, 0.1);
+  border-bottom: 1px solid rgba(76, 180, 187, 0.1);
+  border-left: 4px solid #4CB4BB;
+  border-right: 4px solid transparent;
+
+  text-decoration: none;
+  /* Faster transition for a 'snappier' feel */
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  left: 0;
+}
+
+.row-prefix {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  color: #4CB4BB;
+  letter-spacing: 0.15rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.row-prefix .icon {
+  font-size: 1.2rem;
+  text-shadow: 0 0 10px rgba(76, 180, 187, 0.6);
+}
+
+.row-data {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+}
+
+.row-action {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  color: rgb(0, 238, 255);
+  text-align: right;
+  letter-spacing: 0.1rem;
+}
+
+/* --- THE FULL-WIDTH EXTENSION --- */
+.cyber-row:hover {
+  /* 1. EXTEND TO VIEWPORT: The margin/width combo breaks it out of the parent container */
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+
+  /* 2. GLOW UP */
+  background: linear-gradient(90deg,
+      rgba(76, 180, 187, 0) 0%,
+      rgba(76, 180, 187, 0.2) 20%,
+      rgba(76, 180, 187, 0.2) 80%,
+      rgba(76, 180, 187, 0) 100%);
+
+  border-color: rgba(76, 180, 187, 0.8);
+  border-left: 10px solid #ffffff;
+  border-right: 10px solid #ffffff;
+
+  box-shadow: 0 0 40px rgba(76, 180, 187, 0.2);
+  padding: 18px 15vw;
+  /* Adds extra padding so text stays away from screen edges */
+}
+
+.cyber-row:hover .row-data {
+  letter-spacing: 0.1rem;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  transition: all 0.4s ease;
+}
+
+.cyber-row:hover .row-action {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(76, 180, 187, 0.8);
+}
+
+/* Mobile Stacking */
+@media (max-width: 700px) {
+  .cyber-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .cyber-row:hover {
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    border-right: none;
+  }
+}
+
+.pixel-icon {
+  height: 40px;
+  width: auto;
+  display: block;
+  /* Removes baseline gap */
+
+  /* 1. This forces the icon to be Cyan (#4CB4BB) even if the SVG is black */
+  filter:
+    brightness(0) saturate(100%) invert(72%) sepia(18%) saturate(1007%) hue-rotate(135deg) brightness(91%) contrast(88%)
+    /* 2. Adds the holographic glow to the image */
+    drop-shadow(0 0 5px rgba(76, 180, 187, 0.8));
+}
+
+/* Ensure the prefix container aligns them */
+.row-prefix {
+  display: flex;
+  align-items: center;
+  /* Forces image and text to share the same center-line */
+  gap: 12px;
+}
+
+.pixel-icon-phone {
+  height: 60px !important;
+  width: auto;
+  display: block;
+  filter:
+    brightness(0) saturate(100%) invert(72%) sepia(18%) saturate(1007%) hue-rotate(135deg) brightness(91%) contrast(88%)
+    drop-shadow(0 0 5px rgba(76, 180, 187, 0.8));
+}
 

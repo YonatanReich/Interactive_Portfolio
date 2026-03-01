@@ -150,3 +150,68 @@
         opacity: 0 !important;
     }
 }
+
+
+
+
+
+/* 1. HOVER STATE: Activates the glow, lift, and smooth entry */
+
+.project-header:hover,
+.project-desc:hover,
+.project-problem:hover,
+.tech-item:hover,
+.project-link:hover,
+
+.contact-info:hover,
+.social-button:hover {
+    /* LIFT: Pulls it off the screen and scales it up slightly */
+    
+
+    /* FROST: Adds the glass thickness */
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+
+    /* TRACE: Bright glowing border */
+    border: 1px solid rgba(76, 180, 187, 0.8);
+    
+
+    /* HOLOGRAPHIC SHADOWS: Drop shadow + Outer glow + Inner reflection */
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(76, 180, 187, 0.3),
+        inset 0 0 15px rgba(76, 180, 187, 0.15);
+
+    /* Smooth entry animation (Will snap back instantly when mouse leaves) */
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 2. TEXT GLOW: Activates when the parent container is hovered */
+
+.project-card:hover .project-link,
+.tech-item:hover .tech-name,
+.contact-item:hover .contact-label,
+.social-button:hover span {
+    text-shadow: 0 0 10px rgba(76, 180, 187, 0.7);
+    transition: text-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* =========================================
+   SHRINK-WRAP FIX (Limits div width to content)
+   ========================================= */
+
+/* Add this to force the inner elements to hug their text tightly */
+.project-header,
+.project-desc,
+.project-problem,
+.tech-item,
+.contact-item,
+.contact-info,
+.social-button,
+.project-link {
+    width: fit-content;
+
+    /* Optional: If shrink-wrapping makes them sit too close together, 
+       ensure they have a little breathing room */
+    margin-bottom: 8px;
+}
