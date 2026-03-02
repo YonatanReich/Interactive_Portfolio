@@ -8,6 +8,7 @@ import { easing } from 'maath'
 import * as THREE from 'three'
 import '../GlassPanel.css' 
 import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
+import gsap from 'gsap'
 
 
 
@@ -563,16 +564,37 @@ if (textRef.current) {
   })
 
   useEffect(() => {
+    // Skip the first mount so panels don't snap to the camera on load
     if (isFirstMount.current) {
       isFirstMount.current = false
       return
     }
-  
-    const homeZ = getHomeZ()
-    const resetZ = homeZ - 10
-    api.position.set(position[0], position[1], resetZ)
-  }, [panelResetTrigger])
 
+    // 1. Calculate the target Z (10-15 units in front of camera)
+    const homeZ = getHomeZ()
+    const resetZ = homeZ - 15
+
+    gsap.to(startPos.current,{
+      z: resetZ,
+      duration: 0.5,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        api.position.set(
+          ref.current.position.x,
+          ref.current.position.y,
+          ref.current.position.z
+        )
+      }
+    })
+  
+  // 4. Update the visual mesh position instantly to prevent the 1-frame "skip"
+  if (ref.current) {
+    gsap.fromTo(meshRef.current.material,
+      { opacity: 0 },
+      { opacity: 0.1, duration: 1.5, ease: "power2.inOut" }
+    )
+  }
+}, [panelResetTrigger])
 
   
   

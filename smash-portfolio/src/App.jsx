@@ -129,7 +129,7 @@ export default function App() {
     >
       <nav className="nav-style" style={{ pointerEvents: 'auto' }}>
         <div className="tabs">
-          <button className="cursor-target" onClick={() => { resetEntered(); setTarget(null); }} style={btnStyle}>BACK_TO_BOOT</button>
+          <button className="cursor-target" onClick={() => { resetEntered(); setTarget(null); triggerPanelReset(); }} style={btnStyle}>BACK_TO_BOOT</button>
           <button className="cursor-target" onClick={() => setTarget(null)} style={btnStyle}>Main menu</button>        
           <button className="cursor-target" onClick={() => setTarget('modal_projects')} style={btnStyle}>Projects</button>
           <button className="cursor-target" onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
@@ -153,13 +153,23 @@ export default function App() {
           <button className="scroll-down-btn cursor-target" onPointerDown={startBackward} onPointerUp={stop} onPointerLeave={stop}>
             <img width="40" height="40" src="https://img.icons8.com/ultraviolet/40/long-arrow-down.png" className="pixel-icon" alt="down" style={{ pointerEvents: 'none' }} />
            </button>
-           <button className="scroll-down-btn cursor-target">
-            <img width="40" height="40" src="/reset-svgrepo-com.svg" className="pixel-icon" alt="down" style={{ pointerEvents: 'none' }} />
-           </button>
+           <button 
+  className="scroll-down-btn cursor-target" 
+  onClick={() => { triggerPanelReset(); console.log("Reset Triggered"); }} // 🚀 THE FIX: Trigger the reset signal
+>
+  <img 
+    width="40" 
+    height="40" 
+    src="/reset-svgrepo-com.svg" 
+    className="pixel-icon" 
+    alt="reset panels" 
+    
+  />
+</button>
         </div>
         
         <div className="CV-btn-container">
-          <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }} onClick={() => { triggerPanelReset(); resetEntered(); }}>
+          <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
               <button className="cursor-target" style={btnStyle}>My Resume 📄</button>
           </a>
         </div>

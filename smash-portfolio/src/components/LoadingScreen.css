@@ -1,24 +1,40 @@
 .gate-wrapper {
     position: fixed;
     inset: 0;
-    width: 100vw;
-    height: 100vh;
     z-index: 10000;
-    background: #000000;
+    background: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* 🚀 SLOWER & SHARPER: Increased to 2.5s with a "launch" curve */
+    /* 🚀 Ensure transition is here so it animates when 'is-warping' is removed */
     transition:
-        transform 2.5s cubic-bezier(0.85, 0, 0.15, 1),
-        opacity 2s ease-in;
+        transform 2s cubic-bezier(0.85, 0, 0.15, 1),
+        opacity 1.5s ease-out;
     will-change: transform, opacity;
+
+    /* Default State (Boot Screen) */
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* 🚀 This handles the background color for the shader */
+.shader-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #000;
 }
 
 .gate-wrapper.is-warping {
-    /* 🚀 SHOT THROUGH: Scale up massively to fly "past" the camera */
-    transform: scale(10);
+    transform: scale(15);
+    /* 🚀 Increased scale to fly "past" camera */
     opacity: 0;
-    /* Removed blur to keep the terminal text sharp as it flies by */
     pointer-events: none;
+}
+
+.terminal-card {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2rem;
+    border: 1px solid #4d3dff;
+    backdrop-filter: blur(10px);
 }
