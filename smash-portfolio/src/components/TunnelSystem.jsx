@@ -1,11 +1,11 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
+import * as THREE from 'three'
 import TunnelChunk from './TunnelChunk'
 import { useNeatTexture } from '../hooks/useNeatTexture.jsx'
 import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
+import { useStore } from '../store.js'
 
-// ... [KEEP YOUR EXISTING NEAT_CONFIG HERE] ...
-// (I am omitting the long object to save space, but DO NOT DELETE IT from your file)
 const NEAT_CONFIG = {
     colors: [
         { color: '#899D99', enabled: true },
@@ -62,33 +62,59 @@ const NEAT_CONFIG = {
     textureShapeSquiggles: 10,
 }
 
-const CHUNK_LENGTH = 350 
+const CHUNK_LENGTH = 700 
+
 export default function TunnelSystem() {
   const group1 = useRef()
   const group2 = useRef()
+  
+  const isEntered = useStore((state) => state.isEntered)
+  const velocity = useScrollVelocity()
   const sharedTexture = useNeatTexture(NEAT_CONFIG)
   
-  // 1. USE THE SHARED VELOCITY
-  const velocity = useScrollVelocity()
+  const warpVelocity = useRef(1)
+  const hasReachedPeak = useRef(false) // 🚨 Track if we've already hit the high speed
 
   useFrame((state, delta) => {
     const safeDelta = delta > 0.1 ? 0.1 : delta
-    const moveDistance = velocity.total.current * safeDelta // <--- Use Hook Velocity
+    
+if (isEntered) {
+    if (!hasReachedPeak.current) {
+      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 80, 0.03); // 🚀 Higher peak
+      
+      // 🚀 STRETCH EFFECT: Scale the tunnel chunks to make them feel longer
+      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 2.5, 0.02);
+      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 2.5, 0.02);
+      
+      if (warpVelocity.current > 45) hasReachedPeak.current = true;
+    } else {
+    // ⏪ REVERSE ACCELERATION: Briefly speed up and stretch while "flying back"
+    if (warpVelocity.current < 30 && state.clock.elapsedTime < 2) { // Temporary burst
+      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 30, 0.05);
+      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 2.5, 0.02);
+      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 2.5, 0.02);
+    } else {
+      // Settle back to idle speed
+      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 1, 0.05);
+      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 1, 0.05);
+      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 1, 0.05);
+    }
+  }
+  }
 
-    // Move chunks
+  const moveDistance = velocity.total.current * safeDelta * warpVelocity.current
+
     if (group1.current) group1.current.position.z += moveDistance
     if (group2.current) group2.current.position.z += moveDistance
 
     // Infinite Loop Logic
     const REVERSE_LIMIT = -CHUNK_LENGTH
-    
     if (group1.current && group1.current.position.z > CHUNK_LENGTH) {
       group1.current.position.z = group2.current.position.z - CHUNK_LENGTH
     }
     if (group2.current && group2.current.position.z > CHUNK_LENGTH) {
       group2.current.position.z = group1.current.position.z - CHUNK_LENGTH
     }
-
     if (group1.current && group1.current.position.z < REVERSE_LIMIT) {
        group1.current.position.z = group2.current.position.z + CHUNK_LENGTH
     }

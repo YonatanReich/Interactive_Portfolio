@@ -10,6 +10,7 @@ import TunnelSystem from './components/TunnelSystem.jsx'
 import ResponsiveCamera from './components/ResponsiveCamera.jsx'
 import BallManager from './components/BallManager.jsx'
 import InteractionHint from './components/InteractionHint.jsx'
+import LandingPage from './components/LoadingScreen.jsx'
 
 // --- VISUAL PALETTE ---
 const TOP_COLOR = '#000000'     
@@ -41,6 +42,9 @@ export default function App() {
   const startForward = () => setScrollDirection(1)
   const startBackward = () => setScrollDirection(-1)
   const stop = () => setScrollDirection(0)
+  const isEntered = useStore((state) => state.isEntered)
+  const resetEntered = useStore((state) => state.resetEntered)
+  const triggerPanelReset = useStore((state) => state.triggerPanelReset)
   // --- BACKGROUND MUSIC LOGIC ---
   useEffect(() => {
     const audio = document.getElementById('bg_sound')
@@ -71,130 +75,109 @@ export default function App() {
     }
   }, [isMuted]) 
 
-  return (
+ return (
+  <div style={{ position: 'relative', height: '100vh', width: '100vw', background: '#000', overflow: 'hidden' }}>
     
-    <div style={{ position: 'relative', height: '100vh', width: '100vw', background: '#000' }}>
-      <TargetCursor 
-        spinDuration={1.5}
-        hideDefaultCursor
-        parallaxOff = {false}
-        hoverDuration={1}
-      />  
-      <audio 
-        id="bg_sound" 
-        src="/Hole In One - Spiritual Ideas For Virtual Reality.mp3" 
-        loop 
-      />
+    {/* 1. BACKGROUND LAYER: The 3D Scene */}
+     <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={[1, 1.5] }>
+       <color attach="background" args={['#202020']} />
+      <ResponsiveCamera />
+      <GradientBackground />
+      <fog attach="fog" args={[FOG_COLOR, 40, 300]} />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ffffff" />
+      
+      <Environment resolution={256} background={false}>
+        <mesh scale={100}>
+          <sphereGeometry args={[1, 64, 64]} />
+          <meshBasicMaterial side={THREE.BackSide}>
+             <GradientTexture stops={[0, 1]} colors={['#002266', '#ffffff']} size={1024} />
+          </meshBasicMaterial>
+        </mesh>
+      </Environment>
+      
+      <TunnelSystem />
+      <BallManager />
 
-  
+      <Physics gravity={[0, -5, 0]}>
+        <GlassPanel position={[-5, 2, 0]} label="Projects" range={0.5} speed={1.2} id="modal_projects" />
+        <GlassPanel position={[0, -3, -4]} label="About Me" range={0.8} speed={0.8} id="modal_about" />
+        <GlassPanel position={[5, 1, -2]} label="Skills" range={0.6} speed={1.0} id="modal_skills" />
+        <GlassPanel position={[0,2,-1]} label="Contact me" range={1} speed={1} id="modal_contact" />
+      </Physics>
+    </Canvas>
+
+    {/* 2. LOADING LAYER: Sits on top of Canvas but below UI HUD */}
+    <LandingPage />
+
+    {/* 3. UI HUD LAYER: Navigation, Footer, and Buttons */}
     <div 
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 10,
-          pointerEvents: 'none', /* Clicks pass through the empty space */
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between'
-        }}
-      >
-          {/* Top Bar */}
-          {/* 👇 ADDED pointerEvents: 'auto' so the nav is clickable again */}
-          <nav className="nav-style" style={{ pointerEvents: 'auto' }}>
-              <div className="tabs">
-                {/* 👇 ADDED className="cursor-target" to ALL buttons */}
-                <button className="cursor-target" onClick={() => setTarget(null)} style={btnStyle}>Main menu</button>        
-                <button className="cursor-target" onClick={() => setTarget('modal_projects')} style={btnStyle}>Projects</button>
-                <button className="cursor-target" onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
-                <button className="cursor-target" onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>
-                <button className="cursor-target" onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
-              </div>
-              
-              <button className="cursor-target" onClick={toggleMute} style={muteBtnStyle}> 
-                  {isMuted ? '🔇' : '🔊'}  
-              </button>
-          </nav>
-          
-          {/* Bottom Bar */}
-          {/* 👇 ADDED pointerEvents: 'auto' so the footer is clickable again */}
-          <footer className="bottom-bar-glass" style={{ pointerEvents: 'auto' }}>
-              <span className="Name" style={{color: 'white', fontWeight: '700', marginRight: '10px'}}>Yonatan Reich</span>
-              <span className="Role" style={{ color: '#4CB4BB' }}>CS student</span>
-          
-          <div className="scroll-btn-container">
-            <button
-              className="scroll-up-btn cursor-target" /* 👈 ADDED cursor-target */
-              onPointerDown={startForward}
-              onPointerUp={stop}
-              onPointerLeave={stop}
-              aria-label="Scroll Forward"
-            >
-              <img width="40" height="40" src="https://img.icons8.com/ultraviolet/40/long-arrow-up.png" alt="long-arrow-up" style={{ pointerEvents: 'none' }} />
-            </button>
-            <button
-              className="scroll-down-btn cursor-target" /* 👈 ADDED cursor-target */
-              onPointerDown={startBackward}
-              onPointerUp={stop}
-              onPointerLeave={stop}
-              aria-label="Scroll Backward"
-            >
-              <img width="40" height="40" src="https://img.icons8.com/ultraviolet/40/long-arrow-down.png" alt="long-arrow-down" style={{ pointerEvents: 'none' }} />
-            </button>
-          </div>
-          
-          <div className="CV-btn-container">
-            <a 
-                href="YonatanR_Resume.pdf" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                style={{ textDecoration: 'none' }} 
-            >
-                {/* 👇 ADDED cursor-target */}
-                <button className="cursor-target" style={btnStyle}>My Resume 📄</button>
-            </a>
-          </div>
-          </footer>
-      </div>
-      <InteractionHint/>
-      <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={[1, 1.5]}>
+      style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 10,
+        opacity: isEntered ? 1 : 0, 
+        transition: 'opacity 1s ease 1s', 
+        pointerEvents: 'none', /* Clicks pass through to 3D scene */
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+      }}
+    >
+      <nav className="nav-style" style={{ pointerEvents: 'auto' }}>
+        <div className="tabs">
+          <button className="cursor-target" onClick={() => { resetEntered(); setTarget(null); }} style={btnStyle}>BACK_TO_BOOT</button>
+          <button className="cursor-target" onClick={() => setTarget(null)} style={btnStyle}>Main menu</button>        
+          <button className="cursor-target" onClick={() => setTarget('modal_projects')} style={btnStyle}>Projects</button>
+          <button className="cursor-target" onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
+          <button className="cursor-target" onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>
+          <button className="cursor-target" onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
+        </div>
         
-        <ResponsiveCamera />
-        <GradientBackground />
+        <button className="cursor-target" onClick={toggleMute} style={muteBtnStyle}> 
+            {isMuted ? '🔇' : '🔊'}  
+        </button>
+      </nav>
+      
+      <footer className="bottom-bar-glass" style={{ pointerEvents: 'auto' }}>
+        <span className="Name" style={{color: 'white', fontWeight: '700', marginRight: '10px'}}>Yonatan Reich</span>
+        <span className="Role" style={{ color: '#4CB4BB' }}>CS student</span>
         
-        <fog attach="fog" args={[FOG_COLOR, 40, 300]} />
-
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ffffff" />
+        <div className="scroll-btn-container">
+          <button className="scroll-up-btn cursor-target" onPointerDown={startForward} onPointerUp={stop} onPointerLeave={stop}>
+            <img width="40" height="40" src="https://img.icons8.com/ultraviolet/40/long-arrow-up.png" className='pixel-icon' alt="up" style={{ pointerEvents: 'none' }} />
+          </button>
+          <button className="scroll-down-btn cursor-target" onPointerDown={startBackward} onPointerUp={stop} onPointerLeave={stop}>
+            <img width="40" height="40" src="https://img.icons8.com/ultraviolet/40/long-arrow-down.png" className="pixel-icon" alt="down" style={{ pointerEvents: 'none' }} />
+           </button>
+           <button className="scroll-down-btn cursor-target">
+            <img width="40" height="40" src="/reset-svgrepo-com.svg" className="pixel-icon" alt="down" style={{ pointerEvents: 'none' }} />
+           </button>
+        </div>
         
-        <Environment resolution={256} background={false}>
-          <mesh scale={100}>
-            <sphereGeometry args={[1, 64, 64]} />
-            <meshBasicMaterial side={THREE.BackSide}>
-               <GradientTexture 
-                 stops={[0, 1]} 
-                 colors={['#002266', '#ffffff']} 
-                 size={1024} 
-               />
-            </meshBasicMaterial>
-          </mesh>
-        </Environment>
-        
-        <TunnelSystem />
-        <BallManager />
-
-        <Physics gravity={[0, -5, 0]}>
-          <GlassPanel position={[-5, 2, 0]} label="Projects" range={0.5} speed={1.2} id="modal_projects" />
-          <GlassPanel position={[0, -3, -4]} label="About Me" range={0.8} speed={0.8} id="modal_about" />
-          <GlassPanel position={[5, 1, -2]} label="Skills" range={0.6} speed={1.0} id="modal_skills" />
-          <GlassPanel position={[0,2,-1]} label="Contact me" range={1} speed={1} id="modal_contact" />
-        </Physics>
-        
-      </Canvas>
+        <div className="CV-btn-container">
+          <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }} onClick={() => { triggerPanelReset(); resetEntered(); }}>
+              <button className="cursor-target" style={btnStyle}>My Resume 📄</button>
+          </a>
+        </div>
+      </footer>
     </div>
-  )
+
+    {/* 4. TOP MOST UTILITY LAYER: Cursor, Audio, and Hints */}
+    <TargetCursor 
+      spinDuration={1.5}
+      hideDefaultCursor
+      parallaxOff={false}
+      hoverDuration={1}
+    />  
+    <InteractionHint />
+    <audio id="bg_sound" src="/Hole In One - Spiritual Ideas For Virtual Reality.mp3" loop />
+
+  </div>
+);
 }
 
 

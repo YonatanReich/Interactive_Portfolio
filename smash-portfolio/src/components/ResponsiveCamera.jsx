@@ -1,62 +1,50 @@
-import { useEffect, useRef } from 'react'
+import { use, useEffect, useRef } from 'react'
 import { CameraControls } from '@react-three/drei'
-import { useThree } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import { useStore } from '../store'
 
 export default function ResponsiveCamera() {
   const controls = useRef()
+  const isEntered = useStore((state) => state.isEntered)
   const activeTarget = useStore((state) => state.activeTarget)
-  
-  // 1. GET SCREEN SIZE
-  const { size } = useThree()
-  
-  // 2. CALCULATE "HOME" POSITION
-  // If mobile (<1000px), pull back to z=30. If Desktop, z=12.
-  const isMobile = size.width < 1000
-  const homeZ = isMobile ? 30 : 12
+  const getHomeZ = useStore((state) => state.getHomeZ)
+  const homeZ = getHomeZ()
+  const setCameraZ = useStore((state) => state.setCameraZ)
 
   useEffect(() => {
     if (!controls.current) return
 
-    if (activeTarget) {
-      // === MODE: ZOOMED IN (Tunnel) ===
-      // Disable controls so user is locked in
-      controls.current.mouseButtons.left = 0 
-      controls.current.mouseButtons.right = 0
-      controls.current.mouseButtons.wheel = 0
+    if (!isEntered) {
+      // --- STATE A: THE BOOT SCREEN (Backwards) ---
+      controls.current.setLookAt(0, 0, 150, 0, 0, 0, true) 
+
+      controls.current.mouseButtons.left = 0
       controls.current.touches.one = 0
-      controls.current.touches.two = 0
+    } 
+    else {
+      // --- STATE B: THE TUNNEL VIEW (Forwards) ---
+      // 🚀 Determine destination: -10 for panels, homeZ for main tunnel
+      const targetZ = activeTarget ? -10 : homeZ
+      const lookAtZ = activeTarget ? -20 : 0
+      
+      // 🚀 BUG FIX: Use targetZ and lookAtZ here!
+      controls.current.setLookAt(0, 0, targetZ, 0, 0, lookAtZ, true)
 
-      // Move camera deep into the tunnel (adjust Z as needed)
-      controls.current.setLookAt(0, 0, -10, 0, 0, -20, true)
-    } else {
-  const timer = setTimeout(() => {
-          
-        // 1. Re-enable Controls
-        controls.current.mouseButtons.left = 1 
-        controls.current.mouseButtons.right = 2
-        controls.current.mouseButtons.wheel = 8
-        
-        // 2. Move Camera Home
-        controls.current.setLookAt(
-          0, 0, homeZ, 
-          0, 0, 0,     
-          true         
-        )
-      }, 300) // <--- 800ms DELAY HERE
-
-      // Cleanup: If user clicks a panel quickly before the timer ends, 
-      // cancel this timer so we don't accidentally zoom out while zooming in.
-      return () => clearTimeout(timer)
+      // Restore navigation controls only if not viewing a panel
+      controls.current.mouseButtons.left = activeTarget ? 0 : 1
+      controls.current.touches.one = activeTarget ? 0 : 1
     }
-  }, [activeTarget, homeZ])
+  }, [isEntered, activeTarget, homeZ])
 
+  useFrame((state) => {
+    setCameraZ(state.camera.position.z)
+  })
   return (
     <CameraControls 
-      ref={controls}
-      enabled={false}
-      smoothTime={0.8} 
-      maxDistance={40} // increased max distance to allow mobile view
+      ref={controls} 
+      enabled={false} 
+      smoothTime={0.7} // Balanced speed for both forward and reverse dollying
+      maxDistance={250} // Must be higher than 150 to allow the boot position
     />
   )
 }

@@ -2,7 +2,7 @@
 import { useBox } from '@react-three/cannon'
 import { Text, Html, RoundedBox } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useStore } from '../store.js'
 import { easing } from 'maath'
 import * as THREE from 'three'
@@ -11,7 +11,7 @@ import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
 
 
 
-const LOOP_LENGTH = 350; // Match TunnelChunk length
+const LOOP_LENGTH = 700; // Match TunnelChunk length
  const neonGlowStyle = {
   color: 'rgba(76, 180, 187, 1)', // Pure white core
   textShadow: `
@@ -386,7 +386,7 @@ modal_contact: {
                <div className="row-prefix">
   <span className="icon">
     <img 
-      src="/LI-Logo.png" 
+      src="/LI-In-Bug.png" 
       alt="LinkedIn" 
       className="pixel-icon" 
     />
@@ -432,6 +432,9 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
   const isTargeted = activeTarget === id
   const isOtherActive = activeTarget && !isTargeted
   const velocity = useScrollVelocity()
+  const panelResetTrigger = useStore((state) => state.panelResetTrigger)
+  const getHomeZ = useStore((state) => state.getHomeZ)
+  const isFirstMount = useRef(true)
 
   // FIX: Convert the 'position' array to a Vector3 so we can use .x / .y / .z later
   const startPos = useRef(new THREE.Vector3(...position))
@@ -558,6 +561,17 @@ if (textRef.current) {
       easing.damp(textRef.current, 'fillOpacity', targetFillOpacity, smoothTime, delta)
     }
   })
+
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false
+      return
+    }
+  
+    const homeZ = getHomeZ()
+    const resetZ = homeZ - 10
+    api.position.set(position[0], position[1], resetZ)
+  }, [panelResetTrigger])
 
 
   
