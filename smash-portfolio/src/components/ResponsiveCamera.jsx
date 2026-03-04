@@ -11,31 +11,21 @@ export default function ResponsiveCamera() {
   const homeZ = getHomeZ()
   const setCameraZ = useStore((state) => state.setCameraZ)
 
-  useEffect(() => {
-    if (!controls.current) return
+const isTransitioning = useStore((state) => state.isTransitioning);
 
-    if (!isEntered) {
-      console.log("Exiting tunnel")
-      // --- STATE A: THE BOOT SCREEN (Backwards) ---
-      
-      controls.current.setLookAt(0, 0, 150, 0, 0, 0, true) 
+useEffect(() => {
+  if (!controls.current) return;
 
-      controls.current.mouseButtons.left = 0
-      controls.current.touches.one = 0
-    } 
-    else {
-     console.log("Entering tunnel")
-      const targetZ = activeTarget ? -10 : homeZ
-      const lookAtZ = activeTarget ? -20 : 0
-      
-      // 🚀 BUG FIX: Use targetZ and lookAtZ here!
-      controls.current.setLookAt(0, 0, targetZ, 0, 0, lookAtZ, true)
-
-      // Restore navigation controls only if not viewing a panel
-      controls.current.mouseButtons.left = activeTarget ? 0 : 1
-      controls.current.touches.one = activeTarget ? 0 : 1
-    }
-  }, [isEntered, activeTarget, homeZ])
+  // 🚀 Only go to Boot Screen position if we are NOT entered AND NOT transitioning
+  if (!isEntered && !isTransitioning) {
+    controls.current.setLookAt(0, 0, 150, 0, 0, 0, true);
+  } 
+  else {
+    const targetZ = activeTarget ? -10 : homeZ;
+    const lookAtZ = activeTarget ? -20 : 0
+    controls.current.setLookAt(0, 0, targetZ, 0, 0, lookAtZ, true);
+  }
+}, [isEntered, isTransitioning, activeTarget, homeZ]);
 
   useFrame((state) => {
     setCameraZ(state.camera.position.z)

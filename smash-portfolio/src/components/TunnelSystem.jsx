@@ -6,62 +6,6 @@ import { useNeatTexture } from '../hooks/useNeatTexture.jsx'
 import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
 import { useStore } from '../store.js'
 
-const NEAT_CONFIG = {
-    colors: [
-        { color: '#899D99', enabled: true },
-        { color: '#5f2727', enabled: true },
-        { color: '#373c38', enabled: true },
-        { color: '#0099bb', enabled: true },
-        { color: '#303B42', enabled: true },
-        { color: '#2E7075', enabled: true },
-    ],
-    speed: 5,
-    horizontalPressure: 5,
-    verticalPressure: 4,
-    waveFrequencyX: 4,
-    waveFrequencyY: 5,
-    waveAmplitude: 0,
-    shadows: 4,
-    highlights: 4,
-    colorBrightness: 1,
-    colorSaturation: 0,
-    wireframe: true,
-    colorBlending: 3,
-    backgroundColor: '#202020',
-    backgroundAlpha: 0.95,
-    grainScale: 2,
-    grainSparsity: 0,
-    grainIntensity: 0.575,
-    grainSpeed: 0.1,
-    resolution: 1.45,
-    yOffset: 0,
-    yOffsetWaveMultiplier: 5.5,
-    yOffsetColorMultiplier: 5.2,
-    yOffsetFlowMultiplier: 6,
-    flowDistortionA: 3.7,
-    flowDistortionB: 1.4,
-    flowScale: 2.9,
-    flowEase: 0.32,
-    flowEnabled: true,
-    mouseDistortionStrength: 0.12,
-    mouseDistortionRadius: 0.37,
-    mouseDecayRate: 0.921,
-    mouseDarken: 0.24,
-    enableProceduralTexture: true,
-    textureVoidLikelihood: 0.27,
-    textureVoidWidthMin: 60,
-    textureVoidWidthMax: 420,
-    textureBandDensity: 1.2,
-    textureColorBlending: 0.06,
-    textureSeed: 333,
-    textureEase: 1,
-    proceduralBackgroundColor: '#0E0707',
-    textureShapeTriangles: 20,
-    textureShapeCircles: 15,
-    textureShapeBars: 15,
-    textureShapeSquiggles: 10,
-}
-
 const CHUNK_LENGTH = 700 
 
 export default function TunnelSystem() {
@@ -70,53 +14,52 @@ export default function TunnelSystem() {
   
   const isEntered = useStore((state) => state.isEntered)
   const velocity = useScrollVelocity()
-  const sharedTexture = useNeatTexture(NEAT_CONFIG)
+  const sharedTexture = useNeatTexture()
   const isTransitioning = useStore((state) => state.isTransitioning);
   const warpVelocity = useRef(1)
   const hasReachedPeak = useRef(false) // 🚨 Track if we've already hit the high speed
 
-  useFrame((state, delta) => {
-  const safeDelta = delta > 0.1 ? 0.1 : delta
 
-  // --- 1. STATE-BASED ACCELERATION LOGIC ---
+
+useFrame((state, delta) => {
+  const safeDelta = delta > 0.1 ? 0.1 : delta;
+
+  // --- 1. DEFINE VELOCITY & STRETCH ---
   if (isTransitioning) {
-    // ⏪ REVERSE WARP: Triggered during reset
-    // We target a high velocity (60) and heavy stretch (4.0)
-    warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 60, 0.08)
-    group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 4.0, 0.05)
-    group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 4.0, 0.05)
-    
-    // IMPORTANT: Reset the forward peak flag so the next entry warp works
-    hasReachedPeak.current = false 
+    // ⏪ REVERSE WARP: Blast backwards during the 2s transition
+    warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 60, 0.08);
+    group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 4.0, 0.05);
+    group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 4.0, 0.05);
+    hasReachedPeak.current = false; // Reset for next entry
   } 
   else if (isEntered) {
     // ⏩ FORWARD WARP: Standard entry
     if (!hasReachedPeak.current) {
-      // Accelerate to peak
-      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 80, 0.03)
-      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 2.5, 0.02)
-      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 2.5, 0.02)
-      
-      if (warpVelocity.current > 75) hasReachedPeak.current = true
+      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 80, 0.03);
+      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 2.5, 0.02);
+      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 2.5, 0.02);
+      if (warpVelocity.current > 45) hasReachedPeak.current = true;
     } else {
-      // Settle back to idle speed once peak is hit
-      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 1, 0.05)
-      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 1, 0.05)
-      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 1, 0.05)
+      // Settle to idle
+      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 1, 0.05);
+      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 1, 0.05);
+      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 1, 0.05);
     }
   } 
   else {
-    // 💤 IDLE: Normal speed
-    warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 1, 0.05)
-    group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 1, 0.05)
-    group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 1, 0.05)
+    // 💤 IDLE
+    warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 1, 0.05);
+    group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 1, 0.05);
+    group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 1, 0.05);
   }
 
   // --- 2. APPLY MOVEMENT ---
-  const moveDistance = velocity.total.current * safeDelta * warpVelocity.current
+  // If transitioning, we multiply by -1 to ensure the tunnel moves OUTWARDS
+  const directionMultiplier = isTransitioning ? -1 : 1;
+  const moveDistance = velocity.total.current * safeDelta * warpVelocity.current * directionMultiplier;
 
-  if (group1.current) group1.current.position.z += moveDistance
-  if (group2.current) group2.current.position.z += moveDistance
+  if (group1.current) group1.current.position.z += moveDistance;
+  if (group2.current) group2.current.position.z += moveDistance;
 
   // --- 3. INFINITE LOOP LOGIC ---
   const REVERSE_LIMIT = -CHUNK_LENGTH
