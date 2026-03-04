@@ -129,7 +129,7 @@ export default function App() {
     >
       <nav className="nav-style" style={{ pointerEvents: 'auto' }}>
         <div className="tabs">
-          <button className="cursor-target" onClick={() => { resetEntered(); setTarget(null); triggerPanelReset(); }} style={btnStyle}>BACK_TO_BOOT</button>
+          <button className="cursor-target" onClick={() => { resetEntered(); setTarget(null); triggerPanelReset(); }} style={btnStyle}>Exit tunnel</button>
           <button className="cursor-target" onClick={() => setTarget(null)} style={btnStyle}>Main menu</button>        
           <button className="cursor-target" onClick={() => setTarget('modal_projects')} style={btnStyle}>Projects</button>
           <button className="cursor-target" onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
@@ -144,7 +144,7 @@ export default function App() {
       
       <footer className="bottom-bar-glass" style={{ pointerEvents: 'auto' }}>
         <span className="Name" style={{color: 'white', fontWeight: '700', marginRight: '10px'}}>Yonatan Reich</span>
-        <span className="Role" style={{ color: '#4CB4BB' }}>CS student</span>
+        <span className="Role" style={{ color: '#4CB4BB' }}>Software Developer</span>
         
         <div className="scroll-btn-container">
           <button className="scroll-up-btn cursor-target" onPointerDown={startForward} onPointerUp={stop} onPointerLeave={stop}>
@@ -155,7 +155,7 @@ export default function App() {
            </button>
            <button 
   className="scroll-down-btn cursor-target" 
-  onClick={() => { triggerPanelReset(); console.log("Reset Triggered"); }} // 🚀 THE FIX: Trigger the reset signal
+  onClick={() => { triggerPanelReset(); console.log("Reset Triggered"); }} 
 >
   <img 
     width="40" 
@@ -195,7 +195,7 @@ export default function App() {
 
 
 
-const btnStyle = {
+export const btnStyle = {
   background: 'transparent',
   bordercolor: 'white',
   color: 'rgba(255, 255, 255, 0.7)',

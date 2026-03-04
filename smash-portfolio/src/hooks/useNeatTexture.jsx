@@ -13,7 +13,9 @@ export function useNeatTexture() {
     if (!canvas) return;
 
     // 🚀 2. Convert it into a Three.js material
+     // Ensure colors are vibrant and not washed out
     const newTexture = new THREE.CanvasTexture(canvas);
+    
     newTexture.wrapS = THREE.RepeatWrapping;
     newTexture.wrapT = THREE.RepeatWrapping;
     newTexture.minFilter = THREE.LinearFilter; 

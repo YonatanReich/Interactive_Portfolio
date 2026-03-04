@@ -1,9 +1,10 @@
 // src/components/LoadingScreen.jsx
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NeatGradient } from '@firecms/neat';
 import { useStore } from '../store';
 import './LoadingScreen.css';
 import TextType from './TextType';
+import { btnStyle } from '../App';
 
 
 const LOADING_NEAT_CONFIG = {
@@ -65,7 +66,7 @@ const LOADING_NEAT_CONFIG = {
 const LoadingScreen = () => {
   const isEntered = useStore((state) => state.isEntered);
   const isTransitioning = useStore((state) => state.isTransitioning);
-
+  const [nameDone, setNameDone] = useState(false);
   const canvasRef = useRef(null);
   const gradientRef = useRef(null);
 
@@ -73,6 +74,8 @@ const LoadingScreen = () => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
+
+
 
     gradientRef.current = new NeatGradient({
       ref: canvasRef.current,
@@ -112,31 +115,41 @@ const LoadingScreen = () => {
             pointerEvents: 'none'
         }}
       >
-        <div className="terminal-card" style={{ pointerEvents: isWarping ? 'none' : 'auto' }}>
-          
-          {/* 🚀 No <h1> wrapper here! The component BECOMES the h1. 
-              🚀 All rogue props (ambientLight, variableSpeed, texts) have been deleted! */}
-          <TextType 
-            as="h1"
-            text="YONATAN REICH\nSOFTWARE DEVELOPER"
-            loop={false} 
-            typingSpeed={75}
-            showCursor={true}
-            cursorCharacter="█"
-            cursorBlinkDuration={0.5}
-            style={{ 
-              whiteSpace: 'pre-line', // Crucial for the \n to work
-              margin: '0 0 20px 0' 
-            }}
-          />
+       <div className="terminal-card" style={{ pointerEvents: isWarping ? 'none' : 'auto' }}>
+  
+  {/* Line 1: Yonatan Reich */}
+  <TextType 
+    as="h1"
+    text="YONATAN REICH"
+    loop={false}
+    typingSpeed={60}
+    showCursor={!nameDone} // 🚀 Hide cursor when line 1 is done
+    cursorCharacter="█"
+    onSentenceComplete={() => setNameDone(true)} // 🚀 Trigger next line
+    style={{ margin: 0 }}
+  />
 
-          <button 
-            className="warp-trigger-btn cursor-target" 
-            onClick={() => useStore.getState().setEntered()}
-          >
-            learn more
-          </button>
-        </div>
+  {/* Line 2: Software Developer */}
+  {nameDone && (
+    <TextType 
+      as="h2"
+      text="SOFTWARE DEVELOPER."
+      loop={false}
+      typingSpeed={60}
+      showCursor={true}
+      cursorCharacter="█"
+      initialDelay={500} // 🚀 Slight pause before starting line 2
+      style={{ margin: 0 }}
+    />
+  )}
+
+  <button 
+    className="warp-trigger-btn cursor-target" style={btnStyle} 
+    onClick={() => useStore.getState().setEntered()}
+  >
+    Learn more
+  </button>
+</div>
         
         <div className="vignette"></div>
       </div>
