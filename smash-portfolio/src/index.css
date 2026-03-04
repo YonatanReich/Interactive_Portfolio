@@ -716,3 +716,29 @@ button:focus-visible {
     drop-shadow(0 0 5px rgba(76, 180, 187, 0.8));
 }
 
+/* =========================================
+   TABLET & VERTICAL IPAD (501px - 1024px)
+   ========================================= */
+@media (min-width: 501px) and (max-width: 1024px) {
+  .nav-style {
+    /* Reduce the outer edges to give the buttons more physical room */
+    padding: 1rem 1rem !important;
+  }
+
+  .nav-style .tabs {
+    /* Tighten the invisible gap between the buttons */
+    gap: 8px;
+  }
+
+  .nav-style button {
+    /* Shrink the text and the inner button padding */
+    font-size: 0.8rem !important;
+    padding: 0.5em 0.8em !important;
+  }
+
+  /* Optional: Shrink the mute button slightly to match */
+  .nav-style button[style*="muteBtnStyle"] {
+    padding: 0.5em 0.8em !important;
+    font-size: 0.9rem !important;
+  }
+}

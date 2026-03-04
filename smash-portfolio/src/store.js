@@ -11,4 +11,27 @@ export const useStore = create((set) => ({
     
     isMuted: false,
     toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
+
+   isEntered: false,
+    isTransitioning: false, // 🚀 New state
+    
+    setEntered: () => set({ isEntered: true, isTransitioning: false }),
+    
+    resetEntered: () => {
+        set({ isTransitioning: true, activeTarget: null }); // Start 3D movement first
+        // Delay the full state reset to let the animation breathe
+        setTimeout(() => set({ isEntered: false, isTransitioning: false }), 2000);
+    },
+
+    cameraZ: 12,
+
+    getHomeZ: () => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    return isMobile ? 30 : 40
+    },
+    
+    setCameraZ: (z) => set({ cameraZ: z }),
+
+    panelResetTrigger: 0,
+    triggerPanelReset: () => set((state) => ({ panelResetTrigger: state.panelResetTrigger + 1 })),
 }))

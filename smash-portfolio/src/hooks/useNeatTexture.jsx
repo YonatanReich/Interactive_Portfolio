@@ -1,67 +1,42 @@
-import { useEffect, useRef, useState } from 'react'
-import { NeatGradient } from '@firecms/neat'
-import * as THREE from 'three'
-import { useFrame } from '@react-three/fiber'
+// src/hooks/useNeatTexture.jsx
+import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 
-export function useNeatTexture(config = {}) {
-  const textureRef = useRef(null)
-  const [_, forceUpdate] = useState(0)
+export function useNeatTexture() {
+  const [texture, setTexture] = useState(null);
+  const textureRef = useRef(null);
 
   useEffect(() => {
-    // 1. Create Canvas
-    const canvas = document.createElement('canvas')
-    // Keep resolution moderate (256x256 is good for performance/quality balance)
-    canvas.width = 256
-    canvas.height = 256
+    // 🚀 1. Find the single source of truth canvas from the Boot Screen
+    const canvas = document.getElementById('shared-neat-canvas');
+    if (!canvas) return;
 
-    // 2. CSS: Make it technically "visible" but hidden behind everything
-    // We do NOT set width/height to 1px anymore. We let it be full size.
-    canvas.style.position = 'fixed'
-    canvas.style.top = '0'
-    canvas.style.left = '0'
-    canvas.style.width = '256px' 
-    canvas.style.height = '256px'
+    // 🚀 2. Convert it into a Three.js material
+     // Ensure colors are vibrant and not washed out
+    const newTexture = new THREE.CanvasTexture(canvas);
     
-    // Z-Index -9999 puts it behind the 3D canvas
-    canvas.style.zIndex = '-9999' 
-    
-    // Opacity 0 makes it invisible, but the browser still renders it
-    canvas.style.opacity = '0' 
-    
-    // Important: Prevent it from capturing mouse clicks
-    canvas.style.pointerEvents = 'none'
+    newTexture.wrapS = THREE.RepeatWrapping;
+    newTexture.wrapT = THREE.RepeatWrapping;
+    newTexture.minFilter = THREE.LinearFilter; 
+    newTexture.colorSpace=THREE.SRGBColorSpace; // Ensure correct color rendering
+    textureRef.current = newTexture;
+    setTexture(newTexture);
 
-    document.body.appendChild(canvas)
-
-    // 3. Initialize Neat Gradient
-    const neat = new NeatGradient({
-      ref: canvas,
-      ...config
-    })
-
-    // 4. Create Texture
-    textureRef.current = new THREE.CanvasTexture(canvas)
-    
-    // Force re-render
-    forceUpdate((n) => n + 1)
-
-    // 5. Cleanup
     return () => {
-      neat.destroy()
-      if (textureRef.current) textureRef.current.dispose()
-      if (document.body.contains(canvas)) {
-        document.body.removeChild(canvas)
-      }
-    }
-  }, []) // Empty dependency array = run once on mount
+      if (textureRef.current) textureRef.current.dispose();
+    };
+  }, []);
 
-  useFrame(() => {
-    // Simple, robust update every single frame.
-    // No skipping, no complex logic.
-    if (textureRef.current) {
-      textureRef.current.needsUpdate = true
+  // 🚀 3. Throttle the upload to ~30fps. 
+  // This keeps the liquid looking smooth while eliminating GPU lag!
+  let lastUpdate = 0;
+  useFrame((state) => {
+    if (textureRef.current && state.clock.elapsedTime - lastUpdate > 0.033) {
+      textureRef.current.needsUpdate = true;
+      lastUpdate = state.clock.elapsedTime;
     }
-  })
+  });
 
-  return textureRef.current
+  return texture;
 }
