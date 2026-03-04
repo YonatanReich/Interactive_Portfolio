@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { NeatGradient } from '@firecms/neat';
 import { useStore } from '../store';
 import './LoadingScreen.css';
+import TextType from './TextType';
 
 
 const LOADING_NEAT_CONFIG = {
@@ -32,7 +33,7 @@ const LOADING_NEAT_CONFIG = {
     grainSparsity: 0,
     grainIntensity: 0.575,
     grainSpeed: 0.1,
-    resolution: 1.45,
+    resolution: 1,
     yOffset: 0,
     yOffsetWaveMultiplier: 5.5,
     yOffsetColorMultiplier: 5.2,
@@ -107,19 +108,33 @@ const LoadingScreen = () => {
       <div 
         className={`gate-wrapper ${isWarping ? 'is-warping' : ''}`}
         style={{ 
-            backgroundColor: 'transparent', // 🚀 Force it to be see-through
-            pointerEvents: 'none'           // 🚀 Let the mouse pass through to the liquid!
+            backgroundColor: 'transparent',
+            pointerEvents: 'none'
         }}
       >
-        {/* 🚀 Reactivate pointerEvents ONLY on the card so the button is clickable */}
         <div className="terminal-card" style={{ pointerEvents: isWarping ? 'none' : 'auto' }}>
-          <h1 className="terminal-title">SYSTEM_READY</h1>
-          <p className="terminal-status"> INITIALIZING NEURAL_LINK...</p>
+          
+          {/* 🚀 No <h1> wrapper here! The component BECOMES the h1. 
+              🚀 All rogue props (ambientLight, variableSpeed, texts) have been deleted! */}
+          <TextType 
+            as="h1"
+            text="YONATAN REICH\nSOFTWARE DEVELOPER"
+            loop={false} 
+            typingSpeed={75}
+            showCursor={true}
+            cursorCharacter="█"
+            cursorBlinkDuration={0.5}
+            style={{ 
+              whiteSpace: 'pre-line', // Crucial for the \n to work
+              margin: '0 0 20px 0' 
+            }}
+          />
+
           <button 
             className="warp-trigger-btn cursor-target" 
             onClick={() => useStore.getState().setEntered()}
           >
-            [ INITIALIZE_WARP ]
+            learn more
           </button>
         </div>
         

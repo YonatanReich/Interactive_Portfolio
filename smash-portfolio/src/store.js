@@ -26,8 +26,8 @@ export const useStore = create((set) => ({
     cameraZ: 12,
 
     getHomeZ: () => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 1000
-    return isMobile ? 30 : 12
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    return isMobile ? 30 : 40
     },
     
     setCameraZ: (z) => set({ cameraZ: z }),

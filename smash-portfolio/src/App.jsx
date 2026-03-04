@@ -79,7 +79,7 @@ export default function App() {
   <div style={{ position: 'relative', height: '100vh', width: '100vw', background: '#000', overflow: 'hidden' }}>
     
     {/* 1. BACKGROUND LAYER: The 3D Scene */}
-     <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={[1, 1.5] } ambientLight intensity={1} >
+     <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={[1, 1.5] }>
        <color attach="background" args={['#202020']} />
       <ResponsiveCamera />
       <GradientBackground />

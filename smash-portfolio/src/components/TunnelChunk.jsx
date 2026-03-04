@@ -59,6 +59,7 @@ export default function TunnelChunk({
           roughness={0.1} 
           envMapIntensity={2}
           map={texture}
+          
         >
          
         </meshStandardMaterial>

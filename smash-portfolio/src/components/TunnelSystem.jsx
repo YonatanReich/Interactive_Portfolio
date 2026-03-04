@@ -28,17 +28,17 @@ useFrame((state, delta) => {
   if (isTransitioning) {
     // ⏪ REVERSE WARP: Blast backwards during the 2s transition
     warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 60, 0.08);
-    group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 4.0, 0.05);
-    group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 4.0, 0.05);
+    group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 2.5, 0.02);
+    group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 2.5, 0.02);
     hasReachedPeak.current = false; // Reset for next entry
   } 
   else if (isEntered) {
     // ⏩ FORWARD WARP: Standard entry
     if (!hasReachedPeak.current) {
-      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 80, 0.03);
+      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 60, 0.08);
       group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 2.5, 0.02);
       group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 2.5, 0.02);
-      if (warpVelocity.current > 45) hasReachedPeak.current = true;
+      if (warpVelocity.current > 25) hasReachedPeak.current = true;
     } else {
       // Settle to idle
       warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 1, 0.05);
