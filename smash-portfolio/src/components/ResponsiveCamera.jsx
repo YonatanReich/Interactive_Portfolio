@@ -15,15 +15,16 @@ export default function ResponsiveCamera() {
     if (!controls.current) return
 
     if (!isEntered) {
+      console.log("Exiting tunnel")
       // --- STATE A: THE BOOT SCREEN (Backwards) ---
+      
       controls.current.setLookAt(0, 0, 150, 0, 0, 0, true) 
 
       controls.current.mouseButtons.left = 0
       controls.current.touches.one = 0
     } 
     else {
-      // --- STATE B: THE TUNNEL VIEW (Forwards) ---
-      // 🚀 Determine destination: -10 for panels, homeZ for main tunnel
+     console.log("Entering tunnel")
       const targetZ = activeTarget ? -10 : homeZ
       const lookAtZ = activeTarget ? -20 : 0
       

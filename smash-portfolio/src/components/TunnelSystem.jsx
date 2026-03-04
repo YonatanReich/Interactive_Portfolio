@@ -71,57 +71,68 @@ export default function TunnelSystem() {
   const isEntered = useStore((state) => state.isEntered)
   const velocity = useScrollVelocity()
   const sharedTexture = useNeatTexture(NEAT_CONFIG)
-  
+  const isTransitioning = useStore((state) => state.isTransitioning);
   const warpVelocity = useRef(1)
   const hasReachedPeak = useRef(false) // 🚨 Track if we've already hit the high speed
 
   useFrame((state, delta) => {
-    const safeDelta = delta > 0.1 ? 0.1 : delta
+  const safeDelta = delta > 0.1 ? 0.1 : delta
+
+  // --- 1. STATE-BASED ACCELERATION LOGIC ---
+  if (isTransitioning) {
+    // ⏪ REVERSE WARP: Triggered during reset
+    // We target a high velocity (60) and heavy stretch (4.0)
+    warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 60, 0.08)
+    group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 4.0, 0.05)
+    group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 4.0, 0.05)
     
-if (isEntered) {
+    // IMPORTANT: Reset the forward peak flag so the next entry warp works
+    hasReachedPeak.current = false 
+  } 
+  else if (isEntered) {
+    // ⏩ FORWARD WARP: Standard entry
     if (!hasReachedPeak.current) {
-      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 80, 0.03); // 🚀 Higher peak
+      // Accelerate to peak
+      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 80, 0.03)
+      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 2.5, 0.02)
+      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 2.5, 0.02)
       
-      // 🚀 STRETCH EFFECT: Scale the tunnel chunks to make them feel longer
-      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 2.5, 0.02);
-      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 2.5, 0.02);
-      
-      if (warpVelocity.current > 45) hasReachedPeak.current = true;
+      if (warpVelocity.current > 75) hasReachedPeak.current = true
     } else {
-    // ⏪ REVERSE ACCELERATION: Briefly speed up and stretch while "flying back"
-    if (warpVelocity.current < 30 && state.clock.elapsedTime < 2) { // Temporary burst
-      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 30, 0.05);
-      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 2.5, 0.02);
-      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 2.5, 0.02);
-    } else {
-      // Settle back to idle speed
-      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 1, 0.05);
-      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 1, 0.05);
-      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 1, 0.05);
+      // Settle back to idle speed once peak is hit
+      warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 1, 0.05)
+      group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 1, 0.05)
+      group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 1, 0.05)
     }
-  }
+  } 
+  else {
+    // 💤 IDLE: Normal speed
+    warpVelocity.current = THREE.MathUtils.lerp(warpVelocity.current, 1, 0.05)
+    group1.current.scale.z = THREE.MathUtils.lerp(group1.current.scale.z, 1, 0.05)
+    group2.current.scale.z = THREE.MathUtils.lerp(group2.current.scale.z, 1, 0.05)
   }
 
+  // --- 2. APPLY MOVEMENT ---
   const moveDistance = velocity.total.current * safeDelta * warpVelocity.current
 
-    if (group1.current) group1.current.position.z += moveDistance
-    if (group2.current) group2.current.position.z += moveDistance
+  if (group1.current) group1.current.position.z += moveDistance
+  if (group2.current) group2.current.position.z += moveDistance
 
-    // Infinite Loop Logic
-    const REVERSE_LIMIT = -CHUNK_LENGTH
-    if (group1.current && group1.current.position.z > CHUNK_LENGTH) {
-      group1.current.position.z = group2.current.position.z - CHUNK_LENGTH
-    }
-    if (group2.current && group2.current.position.z > CHUNK_LENGTH) {
-      group2.current.position.z = group1.current.position.z - CHUNK_LENGTH
-    }
-    if (group1.current && group1.current.position.z < REVERSE_LIMIT) {
-       group1.current.position.z = group2.current.position.z + CHUNK_LENGTH
-    }
-    if (group2.current && group2.current.position.z < REVERSE_LIMIT) {
-       group2.current.position.z = group1.current.position.z + CHUNK_LENGTH
-    }
-  })
+  // --- 3. INFINITE LOOP LOGIC ---
+  const REVERSE_LIMIT = -CHUNK_LENGTH
+  if (group1.current && group1.current.position.z > CHUNK_LENGTH) {
+    group1.current.position.z = group2.current.position.z - CHUNK_LENGTH
+  }
+  if (group2.current && group2.current.position.z > CHUNK_LENGTH) {
+    group2.current.position.z = group1.current.position.z - CHUNK_LENGTH
+  }
+  if (group1.current && group1.current.position.z < REVERSE_LIMIT) {
+     group1.current.position.z = group2.current.position.z + CHUNK_LENGTH
+  }
+  if (group2.current && group2.current.position.z < REVERSE_LIMIT) {
+     group2.current.position.z = group1.current.position.z + CHUNK_LENGTH
+  }
+})
 
   return (
     <>

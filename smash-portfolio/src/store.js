@@ -20,7 +20,7 @@ export const useStore = create((set) => ({
     resetEntered: () => {
         set({ isTransitioning: true, activeTarget: null }); // Start 3D movement first
         // Delay the full state reset to let the animation breathe
-        setTimeout(() => set({ isEntered: false, isTransitioning: false }), 50);
+        setTimeout(() => set({ isEntered: false, isTransitioning: false }), 2000);
     },
 
     cameraZ: 12,
