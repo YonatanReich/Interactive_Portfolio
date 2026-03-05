@@ -742,3 +742,76 @@ button:focus-visible {
     font-size: 0.9rem !important;
   }
 }
+
+/* =========================================
+   NARROW MOBILE PHONES (Up to 480px)
+   ========================================= */
+@media (max-width: 480px) {
+
+  /* 1. Viewport Fix: Stop the bottom bar from hiding under Safari/Chrome toolbars */
+ 
+
+  /* 2. TOP BAR: Extreme Shrink */
+  .nav-style {
+    padding: 8px 5px !important;
+  }
+
+  .nav-style .tabs {
+    gap: 4px !important;
+  }
+
+  .nav-style button {
+    font-size: 0.65rem !important;
+    padding: 5px 6px !important;
+    letter-spacing: 0px !important;
+    /* Save horizontal space */
+  }
+
+  /* 3. BOTTOM BAR: Extreme Shrink & Realignment */
+  .bottom-bar-glass {
+    padding: 12px 15px !important;
+  }
+
+  .Name {
+    font-size: 1rem !important;
+  }
+
+  .Role {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  /* 4. SCROLL BUTTONS: Center them perfectly instead of using raw percentages */
+  .scroll-btn-container {
+    position: absolute;
+    left: 50% !important;
+    transform: translateX(-50%);
+    /* 🚀 Mathematically dead-centers the buttons */
+    gap: 15px !important;
+  }
+
+  .scroll-down-btn,
+  .scroll-up-btn {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .scroll-down-btn img,
+  .scroll-up-btn img {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  /* 5. CV BUTTON: Pin to the right edge so it never overflows */
+  .bottom-bar-glass .CV-btn-container {
+    left: auto !important;
+    right: 15px !important;
+    /* 🚀 Pins it safely to the right edge */
+  }
+
+  .bottom-bar-glass .CV-btn-container button {
+    font-size: 0.rem !important;
+    padding: 5px 8px !important;
+  }
+}
+

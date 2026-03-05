@@ -11,6 +11,7 @@ import ResponsiveCamera from './components/ResponsiveCamera.jsx'
 import BallManager from './components/BallManager.jsx'
 import InteractionHint from './components/InteractionHint.jsx'
 import LandingPage from './components/LoadingScreen.jsx'
+import './HomePage.css'
 
 // --- VISUAL PALETTE ---
 const TOP_COLOR = '#000000'     
@@ -45,6 +46,7 @@ export default function App() {
   const isEntered = useStore((state) => state.isEntered)
   const resetEntered = useStore((state) => state.resetEntered)
   const triggerPanelReset = useStore((state) => state.triggerPanelReset)
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 480;
   // --- BACKGROUND MUSIC LOGIC ---
   useEffect(() => {
     const audio = document.getElementById('bg_sound')
@@ -129,12 +131,12 @@ export default function App() {
     >
       <nav className="nav-style" style={{ pointerEvents: 'auto' }}>
         <div className="tabs">
-          <button className="cursor-target" onClick={() => { resetEntered(); setTarget(null); triggerPanelReset(); }} style={btnStyle}>Exit tunnel</button>
-          <button className="cursor-target" onClick={() => setTarget(null)} style={btnStyle}>Main menu</button>        
-          <button className="cursor-target" onClick={() => setTarget('modal_projects')} style={btnStyle}>Projects</button>
-          <button className="cursor-target" onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
-          <button className="cursor-target" onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>
-          <button className="cursor-target" onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
+          <button className="cursor-target nav-btn" onClick={() => { resetEntered(); setTarget(null); triggerPanelReset(); }} style={btnStyle}>Exit tunnel</button>
+          <button className="cursor-target nav-btn" onClick={() => setTarget(null)} style={btnStyle}>Main menu</button>        
+          <button className="cursor-target nav-btn" onClick={() => setTarget('modal_projects')} style={btnStyle}>Projects</button>
+          <button className="cursor-target nav-btn" onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
+          <button className="cursor-target nav-btn" onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>
+          <button className="cursor-target nav-btn" onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
         </div>
         
         <button className="cursor-target" onClick={toggleMute} style={muteBtnStyle}> 
@@ -143,9 +145,16 @@ export default function App() {
       </nav>
       
       <footer className="bottom-bar-glass" style={{ pointerEvents: 'auto' }}>
-        <span className="Name" style={{color: 'white', fontWeight: '700', marginRight: '10px'}}>Yonatan Reich</span>
-        <span className="Role" style={{ color: '#4CB4BB' }}>Software Developer</span>
-        
+        <div className="nav-nameplate cursor-target">
+  <span className="Name" style={{ color: 'white', fontWeight: isMobile ? '700' : '400', marginRight: '10px', transition: 'text-shadow 0.3s ease' }}>
+    YONATAN REICH
+  </span>
+  {!isMobile && (
+    <span className="Role" style={{ color: '#4CB4BB', transition: 'text-shadow 0.3s ease' }}>
+      SOFTWARE DEVELOPER
+    </span>
+  )}
+</div>
         <div className="scroll-btn-container">
           <button className="scroll-up-btn cursor-target" onPointerDown={startForward} onPointerUp={stop} onPointerLeave={stop}>
             <img width="40" height="40" src="https://img.icons8.com/ultraviolet/40/long-arrow-up.png" className='pixel-icon' alt="up" style={{ pointerEvents: 'none' }} />
@@ -168,9 +177,9 @@ export default function App() {
 </button>
         </div>
         
-        <div className="CV-btn-container">
+        <div className="CV-btn-container ">
           <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-              <button className="cursor-target" style={btnStyle}>My Resume 📄</button>
+              <button className="cursor-target nav-nameplate" style={btnStyle}>My Resume 📄</button>
           </a>
         </div>
       </footer>
