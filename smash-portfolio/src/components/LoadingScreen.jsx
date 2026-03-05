@@ -89,6 +89,7 @@ const LoadingScreen = () => {
 
   return (
     <>
+      
       {/* 🚀 THE MASTER CANVAS */}
       <canvas
         id="shared-neat-canvas"
@@ -106,7 +107,7 @@ const LoadingScreen = () => {
           pointerEvents: isWarping ? "none" : "auto"
         }}
       />
-
+     
       {/* THE UI OVERLAY */}
       <div 
         className={`gate-wrapper ${isWarping ? 'is-warping' : ''}`}
@@ -117,19 +118,19 @@ const LoadingScreen = () => {
       >
        <div className="terminal-card" style={{ pointerEvents: isWarping ? 'none' : 'auto' }}>
   
-  {/* Line 1: Yonatan Reich */}
+  <div className ="title-container">
   <TextType 
     as="h1"
     text="YONATAN REICH"
     loop={false}
     typingSpeed={60}
-    showCursor={!nameDone} // 🚀 Hide cursor when line 1 is done
+    showCursor={!nameDone} 
     cursorCharacter="█"
-    onSentenceComplete={() => setNameDone(true)} // 🚀 Trigger next line
+    onSentenceComplete={() => setNameDone(true)} 
     style={{ margin: 0 }}
   />
 
-  {/* Line 2: Software Developer */}
+  
   {nameDone && (
     <TextType 
       as="h2"
@@ -142,7 +143,7 @@ const LoadingScreen = () => {
       style={{ margin: 0 }}
     />
   )}
-
+</div>
   <button 
     className="warp-trigger-btn cursor-target" style={btnStyle} 
     onClick={() => useStore.getState().setEntered()}

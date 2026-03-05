@@ -55,7 +55,7 @@ export default function TunnelChunk({
         <meshStandardMaterial 
           transparent={false} // Solid blocks are much faster than transparent ones
           opacity={1}         
-          metalness={0.6}     // Keep the reflections
+          metalness={0.8}     // Keep the reflections
           roughness={0.1} 
           envMapIntensity={2}
           map={texture}

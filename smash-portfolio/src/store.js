@@ -25,13 +25,29 @@ export const useStore = create((set) => ({
 
     cameraZ: 12,
 
-    getHomeZ: () => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    return isMobile ? 12 : 30
+   getHomeZ: () => {
+      if (typeof window === 'undefined') return 12; // Safety fallback
+      
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      // 🚀 1. Mobile Phones: Needs the camera pushed the FURTHEST back
+      if (width < 768) {
+          return 55; 
+      }
+      
+      // 🚀 2. Vertical Tablets (iPad in portrait): Needs some extra room
+      if (width <= 1024 && height > width) {
+          return 40; 
+      }
+
+      // 🚀 3. Desktop / Landscape Tablets: Wide screens can be closer
+      return 25; 
     },
     
     setCameraZ: (z) => set({ cameraZ: z }),
 
     panelResetTrigger: 0,
     triggerPanelReset: () => set((state) => ({ panelResetTrigger: state.panelResetTrigger + 1 })),
+    
 }))

@@ -632,7 +632,8 @@ if (textRef.current) {
           fontSize={0.5}
           color="white"
           anchorX="center"
-          anchorY="middle"
+        anchorY="middle"
+        //font =   
         >
           {label}
         </Text>
@@ -649,4 +650,6 @@ if (textRef.current) {
     </group>
   )
 }
+  
+
 

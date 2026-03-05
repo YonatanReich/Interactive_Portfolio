@@ -139,7 +139,7 @@ export default function App() {
           <button className="cursor-target nav-btn" onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
         </div>
         
-        <button className="cursor-target" onClick={toggleMute} style={muteBtnStyle}> 
+        <button className="cursor-target nav-btn" onClick={toggleMute} style={muteBtnStyle}> 
             {isMuted ? '🔇' : '🔊'}  
         </button>
       </nav>
@@ -179,7 +179,7 @@ export default function App() {
         
         <div className="CV-btn-container ">
           <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-              <button className="cursor-target nav-nameplate" style={btnStyle}>My Resume 📄</button>
+              <button className="cursor-target nav-btn" style={btnStyle}>My Resume 📄</button>
           </a>
         </div>
       </footer>
