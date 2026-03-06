@@ -489,7 +489,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
       // Move to center of tunnel (z=-15) and grow huge
       const targetZ = -35
       goalPos.set(0, 1, targetZ)
-      const distance = Math.abs(targetZ - -10)
+      const distance = Math.abs(targetZ - camera.position.z)
       const vHeight = 2 * Math.tan((camera.fov * Math.PI / 180) / 2) * distance
       const vWidth = vHeight * camera.aspect
       goalScale.set(vWidth/2.9, vHeight/2, 1) 
@@ -585,7 +585,7 @@ if (textRef.current) {
       
         <RoundedBox 
   ref={meshRef}          // ✅ Pass the animation ref here
-  args={[3, 2, 0.2]}     // [Width, Height, Depth]
+  args={[3.5, 2, 0.2]}     // [Width, Height, Depth]
   radius={0.1}           // Radius of the rounded corners
         smoothness={4}         // Number of segments (higher = smoother)
         renderOrder={isTargeted? 999 : 0}
@@ -613,7 +613,7 @@ if (textRef.current) {
           color="white"
           anchorX="center"
         anchorY="middle"
-        //font =   
+        font =  '/Orbitron-VariableFont_wght.ttf'
         >
           {label}
         </Text>

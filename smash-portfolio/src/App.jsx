@@ -120,7 +120,7 @@ export default function App() {
         left: 0,
         width: '100%',
         height: '100%',
-        zIndex: 10,
+        zIndex: 999,
         opacity: isEntered ? 1 : 0, 
         transition: 'opacity 1s ease 1s', 
         pointerEvents: 'none', /* Clicks pass through to 3D scene */
@@ -146,14 +146,14 @@ export default function App() {
       
       <footer className="bottom-bar-glass" style={{ pointerEvents: 'auto' }}>
         <div className="nav-nameplate cursor-target">
-  <span className="Name" style={{ color: 'white', fontWeight: isMobile ? '700' : '400', marginRight: '10px', transition: 'text-shadow 0.3s ease' }}>
+  <span className="Name" >
     YONATAN REICH
   </span>
-  {!isMobile && (
-    <span className="Role" style={{ color: '#4CB4BB', transition: 'text-shadow 0.3s ease' }}>
+  
+    <span className="Role">
       SOFTWARE DEVELOPER
     </span>
-  )}
+  
 </div>
         <div className="scroll-btn-container">
           <button className="scroll-up-btn cursor-target" onPointerDown={startForward} onPointerUp={stop} onPointerLeave={stop}>
