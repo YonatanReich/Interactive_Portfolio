@@ -367,7 +367,8 @@ modal_contact: {
             </a>
 
             {/* Location */}
-            <div className="cyber-row cursor-target">
+            <a className="cyber-row cursor-target"> 
+            
                <div className="row-prefix">
   <span className="icon">
     <img 
@@ -380,8 +381,7 @@ modal_contact: {
 </div>
               <div className="row-data">Ramat Gan, Israel</div>
               <div className="row-action">[ I'm located here ]</div>
-            </div>
-
+</a>
             {/* LinkedIn */}
             <a href="https://linkedin.com/in/yonatan-reich-SWE" target="_blank" rel="noreferrer" className="cyber-row cursor-target">
                <div className="row-prefix">
@@ -632,7 +632,8 @@ if (textRef.current) {
           fontSize={0.5}
           color="white"
           anchorX="center"
-          anchorY="middle"
+        anchorY="middle"
+        //font =   
         >
           {label}
         </Text>
@@ -649,4 +650,6 @@ if (textRef.current) {
     </group>
   )
 }
+  
+
 
