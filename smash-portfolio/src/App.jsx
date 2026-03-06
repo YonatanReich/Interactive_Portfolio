@@ -13,6 +13,7 @@ import InteractionHint from './components/InteractionHint.jsx'
 import LandingPage from './components/LoadingScreen.jsx'
 import './HomePage.css'
 
+
 // --- VISUAL PALETTE ---
 const TOP_COLOR = '#000000'     
 const HORIZON_COLOR = '#ffffff' 
@@ -22,7 +23,7 @@ const FOG_COLOR = HORIZON_COLOR
 function GradientBackground() {
   return (
     <mesh scale={[400, 400, 400]}>
-      <sphereGeometry args={[1, 64, 64]} />
+      <sphereGeometry args={[1, 16, 16]} />
       <meshBasicMaterial side={THREE.BackSide} >
         <GradientTexture
           stops={[0, 0.45, 0.55, 1]}
@@ -81,7 +82,7 @@ export default function App() {
   <div style={{ position: 'relative', height: '100vh', width: '100vw', background: '#000', overflow: 'hidden' }}>
     
     {/* 1. BACKGROUND LAYER: The 3D Scene */}
-     <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={[1, 1.5] }>
+     <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={isMobile? 1: [1, 1.5] }>
        <color attach="background" args={['#202020']} />
       <ResponsiveCamera />
       <GradientBackground />
@@ -101,12 +102,11 @@ export default function App() {
       <TunnelSystem />
       <BallManager />
 
-      <Physics gravity={[0, -5, 0]}>
+      
         <GlassPanel position={[-5, 2, 0]} label="Projects" range={0.5} speed={1.2} id="modal_projects" />
         <GlassPanel position={[0, -3, -4]} label="About Me" range={0.8} speed={0.8} id="modal_about" />
         <GlassPanel position={[5, 1, -2]} label="Skills" range={0.6} speed={1.0} id="modal_skills" />
         <GlassPanel position={[0,2,-1]} label="Contact me" range={1} speed={1} id="modal_contact" />
-      </Physics>
     </Canvas>
 
     {/* 2. LOADING LAYER: Sits on top of Canvas but below UI HUD */}

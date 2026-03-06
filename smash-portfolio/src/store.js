@@ -33,16 +33,16 @@ export const useStore = create((set) => ({
 
       // 🚀 1. Mobile Phones: Needs the camera pushed the FURTHEST back
       if (width < 768) {
-          return 55; 
+          return 25; 
       }
       
       // 🚀 2. Vertical Tablets (iPad in portrait): Needs some extra room
-      if (width <= 1024 && height > width) {
-          return 40; 
+      if (width <= 900 && height > width) {
+          return 25; 
       }
 
       // 🚀 3. Desktop / Landscape Tablets: Wide screens can be closer
-      return 25; 
+      return 12; 
     },
     
     setCameraZ: (z) => set({ cameraZ: z }),

@@ -423,11 +423,8 @@ modal_contact: {
 
 export default function GlassPanel({ position, label, speed = 1, range = 1, id }) {
   // 1. Physics Body
-  const [ref, api] = useBox(() => ({
-    type: 'Kinematic', 
-    position: position,
-    args: [3, 2, 0.2] 
-  }))
+  const ref = useRef()
+  useEffect(() => { if (ref.current) ref.current.position.set(...position) }, [])
   const { viewport, camera } = useThree()
   const activeTarget = useStore((state) => state.activeTarget)
   const isTargeted = activeTarget === id
@@ -476,22 +473,14 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
           ref.current.position.z -= LOOP_LENGTH
           
           // 3. HARD TELEPORT PHYSICS
-          api.position.set(
-            ref.current.position.x, 
-            ref.current.position.y, 
-            ref.current.position.z
-          )
+         
        }
        
        // CASE B: Went too deep in Tunnel -> Send to Behind Camera
        if (startPos.current.z < -280) {
           startPos.current.z += LOOP_LENGTH
           ref.current.position.z += LOOP_LENGTH
-          api.position.set(
-            ref.current.position.x, 
-            ref.current.position.y, 
-            ref.current.position.z
-          )
+         
        }
     }
 
@@ -526,11 +515,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     
     // 3. Sync the PHYSICS BODY
     // "Teleport" the physics box to match our smooth visual animation
-    api.position.set(
-      ref.current.position.x, 
-      ref.current.position.y, 
-      ref.current.position.z
-    )
+    
 
     // 4. Child Mesh Effects (Color/Opacity)
     if (meshRef.current) {
@@ -570,20 +555,15 @@ if (textRef.current) {
       return
     }
 
-    // 1. Calculate the target Z (10-15 units in front of camera)
-    const homeZ = getHomeZ()
-    const resetZ = homeZ - 15
+    
+    const resetZ = position[2]
 
     gsap.to(startPos.current,{
       z: resetZ,
       duration: 0.5,
       ease: "power2.inOut",
       onUpdate: () => {
-        api.position.set(
-          ref.current.position.x,
-          ref.current.position.y,
-          ref.current.position.z
-        )
+      
       }
     })
   
@@ -651,5 +631,4 @@ if (textRef.current) {
   )
 }
   
-
 
