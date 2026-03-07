@@ -27,7 +27,7 @@ const CONTENT = {
   modal_projects: {
     title: "PROJECTS",
     body: (
-      <div className="project-container">
+      <>
         
         {/* --- PROJECT 1: PORTFOLIO --- */}
         <div className="project-card">
@@ -163,19 +163,19 @@ const CONTENT = {
             <a href="#" className="project-link cursor-target">View Progress &rarr;</a>
           </div>
         </div>
-        </div>
+      </>
     )
   },
   modal_about: {
     title: "ABOUT ME",
     body: (
-      <div className="project-container">
+      <>
         
         {/* --- BIO CARD --- */}
         <div className="project-card">
           <div className="project-header cursor-target" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h3>The Developer:</h3>
-            <span className="status-tag live">Yonatan Reich, CS STUDENT</span>
+            <h3>Yonatan Reich</h3>
+            
           </div>
           
           <p className="project-desc cursor-target">
@@ -213,13 +213,13 @@ const CONTENT = {
           </div>
         </div>
 
-      </div>
+      </>
     )
   },
   modal_skills: {
     title: "SKILLS",
     body: (
-      <div className="project-container">
+      <>
         
         {/* --- MAIN SKILLS CARD --- */}
         <div className="project-card">
@@ -313,13 +313,13 @@ const CONTENT = {
           </div>
 
         </div>
-      </div>
+      </>
     )
   },
-modal_contact: {
+  modal_contact: {
     title: "CONTACT",
     body: (
-      <div className="project-container">
+      <>
         <div className="project-card">
           
           <div className="project-header cursor-target">
@@ -337,15 +337,11 @@ modal_contact: {
             {/* Email */}
             <a href="mailto:yonatan.reich@gmail.com" className="cyber-row cursor-target">
                <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/email-svgrepo-com.svg" 
-      alt="Email" 
-      className="pixel-icon" 
-    />
-  </span> 
-  EMAIL
-</div>
+                  <span className="icon">
+                    <img src="/email-svgrepo-com.svg" alt="Email" className="pixel-icon" />
+                  </span> 
+                  EMAIL
+                </div>
               <div className="row-data">yonatan.reich@gmail.com</div>
               <div className="row-action">[ Email me ]</div>
             </a>
@@ -353,47 +349,35 @@ modal_contact: {
             {/* Phone */}
             <a href="tel:0503318885" className="cyber-row cursor-target">
               <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/phone-call-svgrepo-com.svg" 
-      alt="Phone" 
-      className="pixel-icon" 
-    />
-  </span> 
-  PHONE
-</div>
+                  <span className="icon">
+                    <img src="/phone-call-svgrepo-com.svg" alt="Phone" className="pixel-icon" />
+                  </span> 
+                  PHONE
+              </div>
               <div className="row-data">050-331-8885</div>
               <div className="row-action">[ Call me ]</div>
             </a>
 
             {/* Location */}
             <a className="cyber-row cursor-target"> 
-            
                <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/location-svgrepo-com.svg" 
-      alt="Location" 
-      className="pixel-icon" 
-    />
-  </span> 
-  LOCATION
-</div>
+                  <span className="icon">
+                    <img src="/location-svgrepo-com.svg" alt="Location" className="pixel-icon" />
+                  </span> 
+                  LOCATION
+              </div>
               <div className="row-data">Ramat Gan, Israel</div>
               <div className="row-action">[ I'm located here ]</div>
-</a>
+            </a>
+
             {/* LinkedIn */}
             <a href="https://linkedin.com/in/yonatan-reich-SWE" target="_blank" rel="noreferrer" className="cyber-row cursor-target">
                <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/LI-In-Bug.png" 
-      alt="LinkedIn" 
-      className="pixel-icon" 
-    />
-  </span> 
-  LINKEDIN
-</div>
+                  <span className="icon">
+                    <img src="/LI-In-Bug.png" alt="LinkedIn" className="pixel-icon" />
+                  </span> 
+                  LINKEDIN
+              </div>
              <div className="row-data"></div>
               <div className="row-action">[ Visit my profile ]</div>
             </a>
@@ -401,22 +385,18 @@ modal_contact: {
             {/* GitHub */}
             <a href="https://github.com/YonatanReich" target="_blank" rel="noreferrer" className="cyber-row cursor-target">
               <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/GitHub_Invertocat_Black.svg" 
-      alt="GitHub" 
-      className="pixel-icon" 
-    />
-  </span> 
-  GITHUB
-</div>
+                  <span className="icon">
+                    <img src="/GitHub_Invertocat_Black.svg" alt="GitHub" className="pixel-icon" />
+                  </span> 
+                  GITHUB
+              </div>
               <div className="row-data"></div>
               <div className="row-action">[ See my work ]</div>
             </a>
 
           </div>
         </div>
-      </div>
+      </>
     )
   }
 }

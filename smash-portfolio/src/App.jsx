@@ -78,6 +78,30 @@ export default function App() {
     }
   }, [isMuted]) 
 
+  // 🚀 THE DYNAMIC UI MEASURER
+  useEffect(() => {
+    const updateUIHeights = () => {
+      // Find the top and bottom bars in the DOM
+      const topBar = document.querySelector('.nav-style');
+      const bottomBar = document.querySelector('.bottom-bar-glass');
+
+      // If they exist, measure their exact pixel height and save them as CSS variables
+      if (topBar) {
+        document.documentElement.style.setProperty('--nav-height', `${topBar.offsetHeight}px`);
+      }
+      if (bottomBar) {
+        document.documentElement.style.setProperty('--footer-height', `${bottomBar.offsetHeight}px`);
+      }
+    };
+
+    // Run once on load
+    updateUIHeights();
+
+    // Re-run anytime the phone rotates or screen resizes
+    window.addEventListener('resize', updateUIHeights);
+    return () => window.removeEventListener('resize', updateUIHeights);
+  }, []);
+
  return (
   <div style={{ position: 'relative', height: '100vh', width: '100vw', background: '#000', overflow: 'hidden' }}>
     
