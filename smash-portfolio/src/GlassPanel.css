@@ -1,116 +1,49 @@
 /* src/GlassPanel.css */
 
 /* =========================================
-   1. BASE STYLES (Hidden State)
+   1. BASE STYLES & ANIMATIONS
    ========================================= */
 .glass-panel-content {
-    /* Positioning */
     position: absolute;
     top: 50%;
     left: 50%;
-
-    /* INITIAL STATE:
-     1. Scale down slightly (0.96)
-     2. Move it slightly higher (-48%) so it slides down into place
-  */
     transform: translate(-50%, -48%) scale(0.96);
-
-    /* TRANSITION SETTINGS (The "Exit" Animation):
-     When removing the class, we want it to disappear INSTANTLY.
-     So we set delay to 0s here.
-  */
-    transition:
-        opacity 0.2s ease-in,
-        transform 0.2s ease-in;
+    transition: opacity 0.2s ease-in, transform 0.2s ease-in;
     transition-delay: 0s;
-    /* Close immediately */
-
-    /* Visibility */
     opacity: 0;
     pointer-events: none;
 
-    /* Scroll Engine */
+    /* 🚀 The Scroll Engine */
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
 
-    /* Appearance */
+    /* 🚀 THE WIDTH FIX: Fill the screen with a touch of padding */
+    width: calc(100vw - 32px);
+    max-width: (100vw - 32px);
+    /* Keeps text readable on massive ultra-wide monitors */
+
     background: transparent;
     padding: 0 20px;
     box-sizing: border-box;
     color: rgba(255, 255, 255, 0.94);
-    font-size: 1rem;
+    font-size: 1.3rem;
     line-height: 1.5;
+    font-family: 'Rajdhani', sans-serif;
+    max-height: calc(100dvh - var(--nav-height, 70px) - var(--footer-height, 80px) - 45px);
+    color-scheme: light;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(76, 180, 187, 0.8) transparent;
 }
-
-/* =========================================
-   2. ACTIVE STATE (Visible)
-   ========================================= */
 .glass-panel-content.active {
     opacity: 1;
     pointer-events: auto;
-
-    /* Final Position: Dead Center */
     transform: translate(-50%, -50%) scale(1);
-
-    /* TRANSITION SETTINGS (The "Enter" Animation):
-     1. Duration: 0.5s (Slow and smooth)
-     2. Curve: cubic-bezier (Soft landing)
-     3. DELAY: 0.3s (WAIT for the glass panel to open before showing text)
-  */
-    transition:
-        opacity 0.6s ease-out,
-        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-
+    transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     transition-delay: 1s;
-    /* ✅ The fix: Waits 300ms before fading in */
+    /* Waits for the 3D panel to arrive before showing text */
 }
 
-/* =========================================
-   3. TABLET VERTICAL (Portrait Mode)
-   Fixes "Cuts off too early" on iPads
-   ========================================= */
-@media (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
-    .glass-panel-content {
-        width: 105vw !important;
-        height: 80vh !important;
-        /* Use 85% of screen width */
-        max-height: 90vh !important;
-        /* Use 80% of screen height */
-        padding: 0 30px;
-        font-size: 1.1rem;
-    }
-}
-
-/* =========================================
-   3. LAPTOPS & TABLETS (Width >= 800px)
-   ========================================= */
-@media (min-width: 800px) {
-    .glass-panel-content {
-        /* PC Positioning: Lower down (54%) */
-        top: 54%;
-
-        /* Dimensions */
-        width: 100vw;
-        max-width: 1600px;
-        height: 70vh;
-        max-height: 900px;
-
-        padding: 0 40px;
-        font-size: 1.1rem;
-        
-    }
-
-    /* IMPORTANT: 
-     We must update the 'hidden' transform for PC because the 'top' changed.
-     If we don't, the slide animation will look glitchy.
-  */
-    .glass-panel-content:not(.active) {
-        /* Slide from slightly above (-48%) relative to the new top */
-        transform: translate(-50%, -48%) scale(0.96);
-    }
-}
-
-/* === CUSTOM SCROLLBAR (Webkit) === */
+/* Custom Scrollbar */
 .glass-panel-content::-webkit-scrollbar {
     width: 8px;
 }
@@ -124,69 +57,145 @@
     border-radius: 4px;
 }
 
-@media (min-width: 1025px) {
-    .glass-panel-content {
-        
-        top: 55% !important;
-        left: 50% !important;
-        transform: translate(-50%, -45%) !important;
+/* =========================================
+   2. CONTENT LAYOUT & TYPOGRAPHY
+   ========================================= */
 
-        /* 2. THE HEIGHT FIX */
-        /* "Take full screen height (100vh) and subtract 140px for header/footer" */
-        height: calc(100vh - 140px) !important;
-        max-height: none !important;
+/* Typography Overrides for the Panel */
+.glass-panel-content h3,
+.glass-panel-content h4,
+.tech-stack-title,
+.status-tag-live,
+.status-tag-inDev,
+.row-prefix {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
 
-        /* 3. DIMENSIONS */
-        width: 105vw !important;
-       
+.project-card {
+    font-weight: 600;
+    letter-spacing: 1px;
+}
 
-        padding: 0 50px !important;
-        font-size: 1.2rem !important;
+.project-header {
+    text-decoration: underline rgba(76, 180, 187, 0.8) 2px;
+    text-align: center;
+    color: rgba(76, 180, 187, 1);
+    letter-spacing: 0.05rem;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(76, 180, 187, 0.6), 0 0 15px rgba(76, 180, 187, 0.2);
+    padding: 12px 16px;
+    margin: 0 auto 10px auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.project-header h3 {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.tech-stack-title {
+    text-align: center;
+    display: block;
+    width: 100%;
+    color: #ffffff;
+    font-size: 1.3rem;
+    letter-spacing: 0.15rem;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(76, 180, 187, 0.8), 0 0 20px rgba(76, 180, 187, 0.4);
+}
+
+.tech-reasoning-grid {
+    display: flex;
+    align-items: center;
+}
+
+.tech-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    margin-right: 40px;
+}
+
+.tech-name {
+    color: #b590ff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.project-link {
+    display: flex;
+    font-size: 2rem;
+}
+
+/* Status Tags */
+.status-tag-live,
+.status-tag-open,
+.status-tag-inDev {
+    display: inline-block;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+    transform: scale(1);
+    animation: pulsee 2s infinite;
+}
+
+.status-tag-live {
+    background-color: #00d532;
+}
+
+.status-tag-open {
+    background-color: #28a745;
+}
+
+.status-tag-inDev {
+    background-color: #28a1a7;
+}
+
+@keyframes pulsee {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 212, 212, 0.7);
     }
 
-    /* Update the Hidden State for PC animations */
-    .glass-panel-content:not(.active) {
-        transform: translate(-50%, -48%) scale(0.96) !important;
-        opacity: 0 !important;
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
     }
 }
 
-
-
-
-
-/* 1. HOVER STATE: Activates the glow, lift, and smooth entry */
-
+/* Hover Physics for Panel Items */
 .project-header:hover,
 .project-desc:hover,
 .project-problem:hover,
 .tech-item:hover,
 .project-link:hover,
-
 .contact-info:hover,
 .social-button:hover {
-    /* LIFT: Pulls it off the screen and scales it up slightly */
-    
-
-    /* FROST: Adds the glass thickness */
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(12px);
-
-    /* TRACE: Bright glowing border */
     border: 1px solid rgba(76, 180, 187, 0.8);
-    
-
-    /* HOLOGRAPHIC SHADOWS: Drop shadow + Outer glow + Inner reflection */
     box-shadow:
         0 15px 35px rgba(0, 0, 0, 0.4),
         0 0 20px rgba(76, 180, 187, 0.3),
         inset 0 0 15px rgba(76, 180, 187, 0.15);
-
-    /* Smooth entry animation (Will snap back instantly when mouse leaves) */
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
-
-/* 2. TEXT GLOW: Activates when the parent container is hovered */
 
 .project-card:hover .project-link,
 .tech-item:hover .tech-name,
@@ -196,11 +205,7 @@
     transition: text-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* =========================================
-   SHRINK-WRAP FIX (Limits div width to content)
-   ========================================= */
-
-/* Add this to force the inner elements to hug their text tightly */
+/* Shrink-Wrap Fix */
 .project-header,
 .project-desc,
 .project-problem,
@@ -210,8 +215,171 @@
 .social-button,
 .project-link {
     width: fit-content;
-
-    /* Optional: If shrink-wrapping makes them sit too close together, 
-       ensure they have a little breathing room */
     margin-bottom: 8px;
+}
+
+/* =========================================
+   3. CYBER TERMINAL UI (Contact Modal)
+   ========================================= */
+.cyber-terminal-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 850px;
+    margin: 35px auto 10px auto;
+    align-items: center;
+}
+
+.cyber-row {
+    display: grid;
+    grid-template-columns: max-content 1fr max-content;
+    align-items: center;
+    width: 100%;
+    padding: 16px 20px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.03);
+    border-top: 1px solid rgba(76, 180, 187, 0.1);
+    border-bottom: 1px solid rgba(76, 180, 187, 0.1);
+    border-left: 4px solid #4CB4BB;
+    border-right: 4px solid transparent;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    left: 0;
+}
+
+.row-prefix {
+    color: #4CB4BB;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.row-prefix .icon {
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px rgba(76, 180, 187, 0.6);
+}
+
+.row-data {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #ffffff;
+    text-align: center;
+}
+
+.row-action {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    color: rgb(0, 238, 255);
+    text-align: right;
+    letter-spacing: 0.1rem;
+}
+
+.cyber-row:hover {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    background: linear-gradient(90deg,
+            rgba(76, 180, 187, 0) 0%, rgba(76, 180, 187, 0.2) 20%,
+            rgba(76, 180, 187, 0.2) 80%, rgba(76, 180, 187, 0) 100%);
+    border-color: rgba(76, 180, 187, 0.8);
+    border-left: 10px solid #ffffff;
+    border-right: 10px solid #ffffff;
+    box-shadow: 0 0 40px rgba(76, 180, 187, 0.2);
+    padding: 18px 15vw;
+}
+
+.cyber-row:hover .row-data {
+    letter-spacing: 0.1rem;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    transition: all 0.4s ease;
+}
+
+.cyber-row:hover .row-action {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(76, 180, 187, 0.8);
+}
+
+.pixel-icon {
+    height: 40px;
+    width: auto;
+    display: block;
+    filter: brightness(0) saturate(100%) invert(72%) sepia(18%) saturate(1007%) hue-rotate(135deg) brightness(91%) contrast(88%) drop-shadow(0 0 5px rgba(76, 180, 187, 0.8));
+}
+
+.pixel-icon-phone {
+    height: 60px !important;
+    width: auto;
+    display: block;
+    filter: brightness(0) saturate(100%) invert(72%) sepia(18%) saturate(1007%) hue-rotate(135deg) brightness(91%) contrast(88%) drop-shadow(0 0 5px rgba(76, 180, 187, 0.8));
+}
+
+/* =========================================
+   4. PANEL MEDIA QUERIES & SIZING TRAPS
+   ========================================= */
+
+
+/* CYBER TERMINAL MOBILE STACKING */
+@media (max-width: 700px) {
+    .cyber-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 20px;
+    }
+
+    .cyber-row:hover {
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        border-right: none;
+    }
+}
+
+/* =========================================
+   LANDSCAPE MOBILE OPTIMIZATIONS
+   ========================================= */
+@media (max-height: 500px) and (orientation: landscape) {
+    .glass-panel-content {
+    max-height: calc(100dvh - var(--nav-height, 70px) - var(--footer-height, 80px) - 60px);
+    }
+
+
+}
+
+/* =========================================
+   🚀 BULLETPROOF NEON SCROLLBAR (Chrome/Edge/Safari)
+   ========================================= */
+
+/* 1. Track Sizing */
+.glass-panel-content::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+/* 2. Invisible Track */
+.glass-panel-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* 3. IDLE STATE: Dim Cyan Tube */
+.glass-panel-content::-webkit-scrollbar-thumb {
+    background: rgba(76, 180, 187, 0.3);
+    border-radius: 10px;
+}
+
+/* 4. ACTIVE STATE: White-Hot Lightsaber */
+.glass-panel-content::-webkit-scrollbar-thumb:hover,
+.glass-panel-content::-webkit-scrollbar-thumb:active {
+    background: #ffffff;
+    /* White core */
+    border: 1px solid #00ffff;
+    /* Glowing cyan aura */
+    border-radius: 10px;
+}
+
+/* Corner junction */
+.glass-panel-content::-webkit-scrollbar-corner {
+    background: transparent;
 }

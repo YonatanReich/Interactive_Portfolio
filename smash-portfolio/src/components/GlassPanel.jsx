@@ -27,7 +27,7 @@ const CONTENT = {
   modal_projects: {
     title: "PROJECTS",
     body: (
-      <div className="project-container">
+      <>
         
         {/* --- PROJECT 1: PORTFOLIO --- */}
         <div className="project-card">
@@ -163,19 +163,19 @@ const CONTENT = {
             <a href="#" className="project-link cursor-target">View Progress &rarr;</a>
           </div>
         </div>
-        </div>
+      </>
     )
   },
   modal_about: {
     title: "ABOUT ME",
     body: (
-      <div className="project-container">
+      <>
         
         {/* --- BIO CARD --- */}
         <div className="project-card">
           <div className="project-header cursor-target" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h3>The Developer:</h3>
-            <span className="status-tag live">Yonatan Reich, CS STUDENT</span>
+            <h3>Yonatan Reich</h3>
+            
           </div>
           
           <p className="project-desc cursor-target">
@@ -213,13 +213,13 @@ const CONTENT = {
           </div>
         </div>
 
-      </div>
+      </>
     )
   },
   modal_skills: {
     title: "SKILLS",
     body: (
-      <div className="project-container">
+      <>
         
         {/* --- MAIN SKILLS CARD --- */}
         <div className="project-card">
@@ -313,13 +313,13 @@ const CONTENT = {
           </div>
 
         </div>
-      </div>
+      </>
     )
   },
-modal_contact: {
+  modal_contact: {
     title: "CONTACT",
     body: (
-      <div className="project-container">
+      <>
         <div className="project-card">
           
           <div className="project-header cursor-target">
@@ -337,15 +337,11 @@ modal_contact: {
             {/* Email */}
             <a href="mailto:yonatan.reich@gmail.com" className="cyber-row cursor-target">
                <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/email-svgrepo-com.svg" 
-      alt="Email" 
-      className="pixel-icon" 
-    />
-  </span> 
-  EMAIL
-</div>
+                  <span className="icon">
+                    <img src="/email-svgrepo-com.svg" alt="Email" className="pixel-icon" />
+                  </span> 
+                  EMAIL
+                </div>
               <div className="row-data">yonatan.reich@gmail.com</div>
               <div className="row-action">[ Email me ]</div>
             </a>
@@ -353,47 +349,35 @@ modal_contact: {
             {/* Phone */}
             <a href="tel:0503318885" className="cyber-row cursor-target">
               <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/phone-call-svgrepo-com.svg" 
-      alt="Phone" 
-      className="pixel-icon" 
-    />
-  </span> 
-  PHONE
-</div>
+                  <span className="icon">
+                    <img src="/phone-call-svgrepo-com.svg" alt="Phone" className="pixel-icon" />
+                  </span> 
+                  PHONE
+              </div>
               <div className="row-data">050-331-8885</div>
               <div className="row-action">[ Call me ]</div>
             </a>
 
             {/* Location */}
             <a className="cyber-row cursor-target"> 
-            
                <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/location-svgrepo-com.svg" 
-      alt="Location" 
-      className="pixel-icon" 
-    />
-  </span> 
-  LOCATION
-</div>
+                  <span className="icon">
+                    <img src="/location-svgrepo-com.svg" alt="Location" className="pixel-icon" />
+                  </span> 
+                  LOCATION
+              </div>
               <div className="row-data">Ramat Gan, Israel</div>
               <div className="row-action">[ I'm located here ]</div>
-</a>
+            </a>
+
             {/* LinkedIn */}
             <a href="https://linkedin.com/in/yonatan-reich-SWE" target="_blank" rel="noreferrer" className="cyber-row cursor-target">
                <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/LI-In-Bug.png" 
-      alt="LinkedIn" 
-      className="pixel-icon" 
-    />
-  </span> 
-  LINKEDIN
-</div>
+                  <span className="icon">
+                    <img src="/LI-In-Bug.png" alt="LinkedIn" className="pixel-icon" />
+                  </span> 
+                  LINKEDIN
+              </div>
              <div className="row-data"></div>
               <div className="row-action">[ Visit my profile ]</div>
             </a>
@@ -401,33 +385,26 @@ modal_contact: {
             {/* GitHub */}
             <a href="https://github.com/YonatanReich" target="_blank" rel="noreferrer" className="cyber-row cursor-target">
               <div className="row-prefix">
-  <span className="icon">
-    <img 
-      src="/GitHub_Invertocat_Black.svg" 
-      alt="GitHub" 
-      className="pixel-icon" 
-    />
-  </span> 
-  GITHUB
-</div>
+                  <span className="icon">
+                    <img src="/GitHub_Invertocat_Black.svg" alt="GitHub" className="pixel-icon" />
+                  </span> 
+                  GITHUB
+              </div>
               <div className="row-data"></div>
               <div className="row-action">[ See my work ]</div>
             </a>
 
           </div>
         </div>
-      </div>
+      </>
     )
   }
 }
 
 export default function GlassPanel({ position, label, speed = 1, range = 1, id }) {
   // 1. Physics Body
-  const [ref, api] = useBox(() => ({
-    type: 'Kinematic', 
-    position: position,
-    args: [3, 2, 0.2] 
-  }))
+  const ref = useRef()
+  useEffect(() => { if (ref.current) ref.current.position.set(...position) }, [])
   const { viewport, camera } = useThree()
   const activeTarget = useStore((state) => state.activeTarget)
   const isTargeted = activeTarget === id
@@ -476,22 +453,14 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
           ref.current.position.z -= LOOP_LENGTH
           
           // 3. HARD TELEPORT PHYSICS
-          api.position.set(
-            ref.current.position.x, 
-            ref.current.position.y, 
-            ref.current.position.z
-          )
+         
        }
        
        // CASE B: Went too deep in Tunnel -> Send to Behind Camera
        if (startPos.current.z < -280) {
           startPos.current.z += LOOP_LENGTH
           ref.current.position.z += LOOP_LENGTH
-          api.position.set(
-            ref.current.position.x, 
-            ref.current.position.y, 
-            ref.current.position.z
-          )
+         
        }
     }
 
@@ -500,7 +469,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
       // Move to center of tunnel (z=-15) and grow huge
       const targetZ = -35
       goalPos.set(0, 1, targetZ)
-      const distance = Math.abs(targetZ - -10)
+      const distance = Math.abs(targetZ - camera.position.z)
       const vHeight = 2 * Math.tan((camera.fov * Math.PI / 180) / 2) * distance
       const vWidth = vHeight * camera.aspect
       goalScale.set(vWidth/2.9, vHeight/2, 1) 
@@ -526,11 +495,7 @@ export default function GlassPanel({ position, label, speed = 1, range = 1, id }
     
     // 3. Sync the PHYSICS BODY
     // "Teleport" the physics box to match our smooth visual animation
-    api.position.set(
-      ref.current.position.x, 
-      ref.current.position.y, 
-      ref.current.position.z
-    )
+    
 
     // 4. Child Mesh Effects (Color/Opacity)
     if (meshRef.current) {
@@ -570,20 +535,15 @@ if (textRef.current) {
       return
     }
 
-    // 1. Calculate the target Z (10-15 units in front of camera)
-    const homeZ = getHomeZ()
-    const resetZ = homeZ - 15
+    
+    const resetZ = position[2]
 
     gsap.to(startPos.current,{
       z: resetZ,
       duration: 0.5,
       ease: "power2.inOut",
       onUpdate: () => {
-        api.position.set(
-          ref.current.position.x,
-          ref.current.position.y,
-          ref.current.position.z
-        )
+      
       }
     })
   
@@ -605,7 +565,7 @@ if (textRef.current) {
       
         <RoundedBox 
   ref={meshRef}          // ✅ Pass the animation ref here
-  args={[3, 2, 0.2]}     // [Width, Height, Depth]
+  args={[3.5, 2, 0.2]}     // [Width, Height, Depth]
   radius={0.1}           // Radius of the rounded corners
         smoothness={4}         // Number of segments (higher = smoother)
         renderOrder={isTargeted? 999 : 0}
@@ -633,7 +593,7 @@ if (textRef.current) {
           color="white"
           anchorX="center"
         anchorY="middle"
-        //font =   
+        font =  '/Orbitron-VariableFont_wght.ttf'
         >
           {label}
         </Text>
@@ -651,5 +611,4 @@ if (textRef.current) {
   )
 }
   
-
 

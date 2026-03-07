@@ -19,7 +19,8 @@ export function useNeatTexture() {
     newTexture.wrapS = THREE.RepeatWrapping;
     newTexture.wrapT = THREE.RepeatWrapping;
     newTexture.minFilter = THREE.LinearFilter; 
-    newTexture.colorSpace=THREE.SRGBColorSpace; // Ensure correct color rendering
+    newTexture.colorSpace = THREE.SRGBColorSpace; // Ensure correct color rendering
+    newTexture.generateMipmaps = false;
     textureRef.current = newTexture;
     setTexture(newTexture);
 

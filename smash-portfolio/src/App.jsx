@@ -13,6 +13,7 @@ import InteractionHint from './components/InteractionHint.jsx'
 import LandingPage from './components/LoadingScreen.jsx'
 import './HomePage.css'
 
+
 // --- VISUAL PALETTE ---
 const TOP_COLOR = '#000000'     
 const HORIZON_COLOR = '#ffffff' 
@@ -22,7 +23,7 @@ const FOG_COLOR = HORIZON_COLOR
 function GradientBackground() {
   return (
     <mesh scale={[400, 400, 400]}>
-      <sphereGeometry args={[1, 64, 64]} />
+      <sphereGeometry args={[1, 16, 16]} />
       <meshBasicMaterial side={THREE.BackSide} >
         <GradientTexture
           stops={[0, 0.45, 0.55, 1]}
@@ -77,11 +78,35 @@ export default function App() {
     }
   }, [isMuted]) 
 
+  // 🚀 THE DYNAMIC UI MEASURER
+  useEffect(() => {
+    const updateUIHeights = () => {
+      // Find the top and bottom bars in the DOM
+      const topBar = document.querySelector('.nav-style');
+      const bottomBar = document.querySelector('.bottom-bar-glass');
+
+      // If they exist, measure their exact pixel height and save them as CSS variables
+      if (topBar) {
+        document.documentElement.style.setProperty('--nav-height', `${topBar.offsetHeight}px`);
+      }
+      if (bottomBar) {
+        document.documentElement.style.setProperty('--footer-height', `${bottomBar.offsetHeight}px`);
+      }
+    };
+
+    // Run once on load
+    updateUIHeights();
+
+    // Re-run anytime the phone rotates or screen resizes
+    window.addEventListener('resize', updateUIHeights);
+    return () => window.removeEventListener('resize', updateUIHeights);
+  }, []);
+
  return (
   <div style={{ position: 'relative', height: '100vh', width: '100vw', background: '#000', overflow: 'hidden' }}>
     
     {/* 1. BACKGROUND LAYER: The 3D Scene */}
-     <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={[1, 1.5] }>
+     <Canvas camera={{ position: [0, 0, 12], fov: 60 }} dpr={isMobile? 1: [1, 1.5] }>
        <color attach="background" args={['#202020']} />
       <ResponsiveCamera />
       <GradientBackground />
@@ -101,12 +126,11 @@ export default function App() {
       <TunnelSystem />
       <BallManager />
 
-      <Physics gravity={[0, -5, 0]}>
+      
         <GlassPanel position={[-5, 2, 0]} label="Projects" range={0.5} speed={1.2} id="modal_projects" />
         <GlassPanel position={[0, -3, -4]} label="About Me" range={0.8} speed={0.8} id="modal_about" />
         <GlassPanel position={[5, 1, -2]} label="Skills" range={0.6} speed={1.0} id="modal_skills" />
         <GlassPanel position={[0,2,-1]} label="Contact me" range={1} speed={1} id="modal_contact" />
-      </Physics>
     </Canvas>
 
     {/* 2. LOADING LAYER: Sits on top of Canvas but below UI HUD */}
@@ -120,7 +144,7 @@ export default function App() {
         left: 0,
         width: '100%',
         height: '100%',
-        zIndex: 10,
+        zIndex: 999,
         opacity: isEntered ? 1 : 0, 
         transition: 'opacity 1s ease 1s', 
         pointerEvents: 'none', /* Clicks pass through to 3D scene */
@@ -146,14 +170,14 @@ export default function App() {
       
       <footer className="bottom-bar-glass" style={{ pointerEvents: 'auto' }}>
         <div className="nav-nameplate cursor-target">
-  <span className="Name" style={{ color: 'white', fontWeight: isMobile ? '700' : '400', marginRight: '10px', transition: 'text-shadow 0.3s ease' }}>
+  <span className="Name" >
     YONATAN REICH
   </span>
-  {!isMobile && (
-    <span className="Role" style={{ color: '#4CB4BB', transition: 'text-shadow 0.3s ease' }}>
+  
+    <span className="Role">
       SOFTWARE DEVELOPER
     </span>
-  )}
+  
 </div>
         <div className="scroll-btn-container">
           <button className="scroll-up-btn cursor-target" onPointerDown={startForward} onPointerUp={stop} onPointerLeave={stop}>

@@ -5,6 +5,7 @@ import { useStore } from '../store';
 import './LoadingScreen.css';
 import TextType from './TextType';
 import { btnStyle } from '../App';
+import '../HomePage.css';
 
 
 const LOADING_NEAT_CONFIG = {

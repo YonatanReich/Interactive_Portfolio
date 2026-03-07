@@ -48,7 +48,8 @@ export default function TunnelChunk({
 
   return (
     <group position={position}>
-      <instancedMesh ref={mesh} args={[null, null, blockCount]} name ="TunnelWall">
+      <instancedMesh ref={mesh} args={[null, null, blockCount]} name="TunnelWall"
+      frustumCulled={false}> 
         <boxGeometry args={[1, 1, 1]} />
         
         {/* OPTIMIZATION: Use StandardMaterial instead of Physical */}
