@@ -3,9 +3,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { NeatGradient } from '@firecms/neat';
 import { useStore } from '../store';
 import './LoadingScreen.css';
-import TextType from './TextType';
+import ParticleLandingTitle from './ParticleeLandingTitle';
 import { btnStyle } from '../App';
 import '../HomePage.css';
+
 
 
 const LOADING_NEAT_CONFIG = {
@@ -70,93 +71,102 @@ const LoadingScreen = () => {
   const [nameDone, setNameDone] = useState(false);
   const canvasRef = useRef(null);
   const gradientRef = useRef(null);
-
   const isWarping = isEntered && !isTransitioning;
+  
+ useEffect(() => {
+    // 🚀 Only initialize if we are NOT entered and the canvas exists
+    if (!isEntered && canvasRef.current) {
+      // Cleanup any old instance first
+      if (gradientRef.current) {
+        gradientRef.current.destroy();
+      }
 
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-
-
-    gradientRef.current = new NeatGradient({
-      ref: canvasRef.current,
-      ...LOADING_NEAT_CONFIG
-    });
+      try {
+        gradientRef.current = new NeatGradient({
+          ref: canvasRef.current,
+          ...LOADING_NEAT_CONFIG
+        });
+      } catch (err) {
+        console.error("Failed to initialize Gradient:", err);
+      }
+    }
 
     return () => {
-      if (gradientRef.current) gradientRef.current.destroy();
+      if (gradientRef.current) {
+        gradientRef.current.destroy();
+        gradientRef.current = null;
+      }
     };
-  }, []);
+  }, [isEntered]); // 🚀 Re-run logic when isEntered changes
 
-  return (
-    <>
-      
-      {/* 🚀 THE MASTER CANVAS */}
-      <canvas
-        id="shared-neat-canvas"
-        ref={canvasRef}
-        style={{
-          position: "fixed", // Keeps it locked to the screen
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          zIndex: 9998, // 🚀 Just above the 3D scene, but below the UI!
-          opacity: isWarping ? 0.02 : 1,
-          transform: isWarping ? "scale(15)" : "scale(1)", // 🚀 Zooms in smoothly with the gate!
-          transition: "opacity 1.5s ease-in-out, transform 2s ease-in-out",
-          pointerEvents: isWarping ? "none" : "auto"
-        }}
-      />
-     
-      {/* THE UI OVERLAY */}
-      <div 
-        className={`gate-wrapper ${isWarping ? 'is-warping' : ''}`}
-        style={{ 
-            backgroundColor: 'transparent',
-            pointerEvents: 'none'
-        }}
-      >
-       <div className="terminal-card" style={{ pointerEvents: isWarping ? 'none' : 'auto' }}>
-  
-  <div className ="title-container">
-  <TextType 
-    as="h1"
-    text="YONATAN REICH"
-    loop={false}
-    typingSpeed={60}
-    showCursor={!nameDone} 
-    cursorCharacter="█"
-    onSentenceComplete={() => setNameDone(true)} 
-    style={{ margin: 0 }}
-  />
-
-  
-  {nameDone && (
-    <TextType 
-      as="h2"
-      text="SOFTWARE DEVELOPER."
-      loop={false}
-      typingSpeed={60}
-      showCursor={true}
-      cursorCharacter="█"
-      initialDelay={500} // 🚀 Slight pause before starting line 2
-      style={{ margin: 0 }}
-    />
-  )}
-</div>
-  <button 
-    className="warp-trigger-btn cursor-target" style={btnStyle} 
-    onClick={() => useStore.getState().setEntered()}
-  >
-    Learn more
-  </button>
-</div>
+ return (
+  <>
+    {/* 🚀 THE MASTER CANVAS (Background) */}
+    <canvas
+      id="shared-neat-canvas"
+      ref={canvasRef}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        zIndex: 9998, 
+        opacity: isWarping ? 0.02 : 1,
+        transform: isWarping ? "scale(15)" : "scale(1)",
+        transition: "opacity 1.5s ease-in-out, transform 2s ease-in-out",
+        pointerEvents: isEntered ? 'none' : 'auto',
         
-        <div className="vignette"></div>
-      </div>
-    </>
-  );
+        /* Do NOT set pointer-events: none here, the canvas needs to see the mouse! */
+      }}
+    />
+
+    {/* THE UI OVERLAY */}
+    <div 
+      className={`gate-wrapper ${isWarping ? 'is-warping' : ''}`}
+      style={{ 
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+        zIndex: 9999,
+        /* 🚀 THE FIX: Let mouse events pass through this giant div to the canvas below */
+        pointerEvents: 'none', 
+        overflow: 'visible'
+      }}
+    >
+      {!isEntered && (
+        <div style={{ pointerEvents: 'auto', marginBottom: '40px', overflow: 'visible' }}>
+          <ParticleLandingTitle />
+        </div>
+      )}
+      {!isEntered && (
+      <button 
+        className="warp-trigger-btn cursor-target" 
+        style={{
+          ...btnStyle,
+          pointerEvents: isWarping ? 'none' : 'auto',
+          position: 'relative',
+          zIndex: 10000
+        }} 
+        onClick={() => useStore.getState().setEntered()}
+      >
+        Learn more
+      </button>
+      )}
+      
+
+      <div className="vignette" ></div>
+      
+    </div>
+  </>
+);
 };
 
 export default LoadingScreen;

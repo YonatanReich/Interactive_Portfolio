@@ -102,6 +102,15 @@ export default function App() {
     return () => window.removeEventListener('resize', updateUIHeights);
   }, []);
 
+  useEffect(() => {
+  const checkClick = (e) => {
+    console.log("Element being clicked:", e.target);
+    console.log("Z-Index of element:", window.getComputedStyle(e.target).zIndex);
+  };
+  window.addEventListener('click', checkClick);
+  return () => window.removeEventListener('click', checkClick);
+}, []);
+
  return (
   <div style={{ position: 'relative', height: '100vh', width: '100vw', background: '#000', overflow: 'hidden' }}>
     
