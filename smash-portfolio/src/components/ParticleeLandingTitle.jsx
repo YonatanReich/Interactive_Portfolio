@@ -50,12 +50,11 @@ export default function ParticleLandingTitle() {
     const typeSpeed = 50;
     const blinkSpeed = 500;
 
-    // 🚀 DEFINITIVE SIZES: Name is 64px, Role is 24px
     const fontName = '900 64px "Orbitron", sans-serif';
-    const fontRole = '700 24px "Orbitron", sans-serif';
+    const fontRole = '700 32px "Orbitron", sans-serif';
     const spacing = "4px";
 
-    // 🚀 STEP A: PRE-COMPUTE PARTICLES
+    // 🚀 STEP A: PRE-COMPUTE TEXT & CURSOR PARTICLES
     const preComputeParticles = () => {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       ctx.textAlign = 'left';
@@ -64,25 +63,26 @@ export default function ParticleLandingTitle() {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
 
-      // --- SIZING & CENTERING LINE 1 (NAME) ---
+      // Sizing (Name)
       ctx.font = fontName;
       ctx.letterSpacing = spacing;
       const w1 = ctx.measureText(state.text1).width;
-      const startX1 = centerX - (w1 / 2); // 🚀 Fixed Centering: Removed +60
-      const y1 = centerY - 40; // Shifted up to make room
+      const startX1 = centerX - w1 / 2;
+      const y1 = centerY - 40;
 
-      // --- SIZING & CENTERING LINE 2 (ROLE) ---
+      // Sizing (Role)
       ctx.font = fontRole;
       ctx.letterSpacing = spacing;
       const w2 = ctx.measureText(state.text2).width;
-      const startX2 = centerX - (w2 / 2); // 🚀 Fixed Centering
-      const y2 = centerY + 30; // Shifted down
+      const startX2 = centerX - w2 / 2;
+      const y2 = centerY + 30;
 
-      ctx.font = fontName; // 🚀 FIX: Force canvas back to the BIG font before drawing Line 1
+      // Extract Text Pixels
+      ctx.font = fontName;
       ctx.fillStyle = '#ffffff'; 
       ctx.fillText(state.text1, startX1, y1);
       
-      ctx.font = fontRole; // 🚀 FIX: Force canvas to the SMALL font before drawing Line 2
+      ctx.font = fontRole;
       ctx.fillStyle = '#ffffff'; 
       ctx.fillText(state.text2, startX2, y2);
 
@@ -96,34 +96,58 @@ export default function ParticleLandingTitle() {
           const index = (y * canvas.width + x) * 4;
           if (data[index + 3] > 128) {
             particles.push({
-              x: x / dpr,
-              y: y / dpr,
-              baseX: x / dpr,
-              baseY: y / dpr,
-              vx: 0,
-              vy: 0,
-              disturbed: false,
+              x: x / dpr, y: y / dpr,
+              baseX: x / dpr, baseY: y / dpr,
+              vx: 0, vy: 0, disturbed: false,
               color: `rgba(${data[index]}, ${data[index + 1]}, ${data[index + 2]}, 1)`
             });
           }
         }
       }
-      particlesRef.current = { particles, startX1, startX2, y1, y2, centerY };
+
+      // 🚀 GENERATE CURSOR 1 PARTICLES (Big White Block)
+      const cursor1Particles = [];
+      const c1W = 32; const c1H = 54; 
+      for (let y = -c1H / 2; y < c1H / 2; y += step) {
+        for (let x = 0; x < c1W; x += step) {
+          cursor1Particles.push({
+            x: startX1 + x, y: y1 + y, // Start near the first letter
+            relX: x, relY: y, // Memory of its shape
+            vx: 0, vy: 0, disturbed: false, color: '#4CB4BB'
+          });
+        }
+      }
+
+      // 🚀 GENERATE CURSOR 2 PARTICLES (Small Cyan Block)
+      const cursor2Particles = [];
+      const c2W = 12; const c2H = 22;
+      for (let y = -c2H / 2; y < c2H / 2; y += step) {
+        for (let x = 0; x < c2W; x += step) {
+          cursor2Particles.push({
+            x: startX2 + x, y: y2 + y,
+            relX: x, relY: y,
+            vx: 0, vy: 0, disturbed: false, color: '#4CB4BB'
+          });
+        }
+      }
+
+      particlesRef.current = { 
+        particles, startX1, startX2, y1, y2, centerY, 
+        cursor1Particles, cursor2Particles 
+      };
     };
 
     // 🚀 STEP B: ANIMATION LOOP
     const loop = (time) => {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      const { particles, startX1, startX2, y1, y2, centerY } = particlesRef.current;
+      const { particles, startX1, startX2, y1, y2, centerY, cursor1Particles, cursor2Particles } = particlesRef.current;
       if (!particles) return;
 
-      // CURSOR BLINK
       if (time - state.lastBlink > blinkSpeed) {
         state.cursorOn = !state.cursorOn;
         state.lastBlink = time;
       }
 
-      // TYPING LOGIC
       if (state.phase === 'typing1') {
         if (time - state.lastTime > typeSpeed) {
           state.idx1++;
@@ -143,7 +167,6 @@ export default function ParticleLandingTitle() {
         }
       }
 
-      // 🚀 MEASURE EXACT WIDTHS USING THE EXACT SAME FONTS
       ctx.font = fontName;
       ctx.letterSpacing = spacing;
       const revealX1 = startX1 + ctx.measureText(state.text1.substring(0, state.idx1)).width;
@@ -152,28 +175,29 @@ export default function ParticleLandingTitle() {
       ctx.letterSpacing = spacing;
       const revealX2 = startX2 + ctx.measureText(state.text2.substring(0, state.idx2)).width;
 
-      // DRAW CURSOR (Matches the height/color of the line it is on)
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle'; 
+      // 🚀 DETERMINE WHICH CURSOR IS ACTIVE
+      let activeCursor = null;
+      let cursorTargetX = 0;
+      let cursorTargetY = 0;
+
       if (state.phase === 'typing1' || state.phase === 'delay') {
-        ctx.fillStyle = '#ffffff';
-        ctx.font = fontName;
-        if (state.cursorOn || state.phase === 'typing1') ctx.fillText('█', revealX1 + 5, y1);
+        activeCursor = cursor1Particles;
+        cursorTargetX = revealX1 + 8; // Follow line 1
+        cursorTargetY = y1;
       } else if (state.phase === 'typing2' || state.phase === 'done') {
-        ctx.fillStyle = '#ffffff';
-        ctx.font = fontRole;
-        if (state.cursorOn || state.phase === 'typing2') ctx.fillText('█', revealX2 + 5, y2);
+        activeCursor = cursor2Particles;
+        cursorTargetX = revealX2 + 6; // Follow line 2
+        cursorTargetY = y2;
       }
 
-      // DRAW & UPDATE PARTICLES
       const mouse = mouseRef.current;
       const isHovering = mouse.x !== -1000;
 
+      // 1. UPDATE & DRAW TEXT PARTICLES
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-
-        // Reveal logic
         let isVisible = false;
+
         if (p.baseY < centerY && p.baseX <= revealX1) isVisible = true;
         if (p.baseY >= centerY && p.baseX <= revealX2) isVisible = true;
 
@@ -183,11 +207,9 @@ export default function ParticleLandingTitle() {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          const interactionRadius = 50;
-
-          if (dist < interactionRadius) {
+          if (dist < 50) {
             p.disturbed = true;
-            const force = (interactionRadius - dist) / interactionRadius;
+            const force = (50 - dist) / 50;
             p.vx += (dx / dist) * force * 5;
             p.vy += (dy / dist) * force * 5;
           }
@@ -195,23 +217,63 @@ export default function ParticleLandingTitle() {
           if (p.disturbed) {
             p.vx += (Math.random() - 0.5) * 0.15;
             p.vy += (Math.random() - 0.5) * 0.15 - 0.02;
-            p.vx *= 0.96;
-            p.vy *= 0.96;
-            p.x += p.vx;
-            p.y += p.vy;
+            p.vx *= 0.96; p.vy *= 0.96;
+            p.x += p.vx; p.y += p.vy;
           }
         } else {
           p.disturbed = false;
           p.vx += (p.baseX - p.x) * 0.12;
           p.vy += (p.baseY - p.y) * 0.12;
-          p.vx *= 0.75;
-          p.vy *= 0.75;
-          p.x += p.vx;
-          p.y += p.vy;
+          p.vx *= 0.75; p.vy *= 0.75;
+          p.x += p.vx; p.y += p.vy;
         }
 
         ctx.fillStyle = p.color;
         ctx.fillRect(p.x, p.y, 2, 2);
+      }
+
+      // 2. UPDATE & DRAW DYNAMIC CURSOR PARTICLES
+      if (activeCursor) {
+        for (let i = 0; i < activeCursor.length; i++) {
+          const cp = activeCursor[i];
+
+          // Set the target coordinates for the cursor's current position
+          cp.baseX = cursorTargetX + cp.relX;
+          cp.baseY = cursorTargetY + cp.relY;
+
+          if (isHovering) {
+            const dx = cp.x - mouse.x;
+            const dy = cp.y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 50) {
+              cp.disturbed = true;
+              const force = (50 - dist) / 50;
+              cp.vx += (dx / dist) * force * 6; // Cursor scatters slightly faster
+              cp.vy += (dy / dist) * force * 6;
+            }
+
+            if (cp.disturbed) {
+              cp.vx += (Math.random() - 0.5) * 0.2;
+              cp.vy += (Math.random() - 0.5) * 0.2;
+              cp.vx *= 0.95; cp.vy *= 0.95;
+              cp.x += cp.vx; cp.y += cp.vy;
+            }
+          } else {
+            cp.disturbed = false;
+            // 🚀 Stiffer spring (0.3) so the cursor swarm quickly catches up to the typing
+            cp.vx += (cp.baseX - cp.x) * 0.3; 
+            cp.vy += (cp.baseY - cp.y) * 0.3;
+            cp.vx *= 0.65; cp.vy *= 0.65;
+            cp.x += cp.vx; cp.y += cp.vy;
+          }
+
+          // 🚀 Draw if blink is ON, OR if the cursor is scattered (visible glitch effect)
+          if (state.cursorOn || cp.disturbed) {
+            ctx.fillStyle = cp.color;
+            ctx.fillRect(cp.x, cp.y, 2, 2);
+          }
+        }
       }
 
       animationRef.current = requestAnimationFrame(loop);
@@ -225,13 +287,8 @@ export default function ParticleLandingTitle() {
     return () => cancelAnimationFrame(animationRef.current);
   }, []);
 
-  const handleMouseMove = (e) => {
-    mouseRef.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const handleMouseLeave = () => {
-    mouseRef.current = { x: -1000, y: -1000 };
-  };
+  const handleMouseMove = (e) => mouseRef.current = { x: e.clientX, y: e.clientY };
+  const handleMouseLeave = () => mouseRef.current = { x: -1000, y: -1000 };
 
   return (
     <div
@@ -261,7 +318,7 @@ export default function ParticleLandingTitle() {
           height: '100vh',
           pointerEvents: 'none', 
           zIndex: -1,
-          filter: 'drop-shadow(0 0 10px rgba(76, 180, 187, 0.8))',
+          filter: 'drop-shadow(0 0 10px rgba(76, 180, 187, 1.2))',
         }}
       />
     </div>
