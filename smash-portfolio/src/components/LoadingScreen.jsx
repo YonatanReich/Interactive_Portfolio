@@ -68,7 +68,6 @@ const LOADING_NEAT_CONFIG = {
 const LoadingScreen = () => {
   const isEntered = useStore((state) => state.isEntered);
   const isTransitioning = useStore((state) => state.isTransitioning);
-  const [nameDone, setNameDone] = useState(false);
   const canvasRef = useRef(null);
   const gradientRef = useRef(null);
   const isWarping = isEntered && !isTransitioning;
@@ -99,74 +98,87 @@ const LoadingScreen = () => {
     };
   }, [isEntered]); // 🚀 Re-run logic when isEntered changes
 
- return (
-  <>
-    {/* 🚀 THE MASTER CANVAS (Background) */}
-    <canvas
-      id="shared-neat-canvas"
-      ref={canvasRef}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        zIndex: 9998, 
-        opacity: isWarping ? 0.02 : 1,
-        transform: isWarping ? "scale(15)" : "scale(1)",
-        transition: "opacity 1.5s ease-in-out, transform 2s ease-in-out",
-        pointerEvents: isEntered ? 'none' : 'auto',
-        
-        /* Do NOT set pointer-events: none here, the canvas needs to see the mouse! */
-      }}
-    />
+return (
+    <>
+      {/* 1. Background Canvas */}
+      <canvas
+        id="shared-neat-canvas"
+        ref={canvasRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: 9998,
+          opacity: isWarping ? 0 : 1, 
+          transform: isWarping ? "scale(15)" : "scale(1)", 
+          transition: "opacity 1.5s ease-in-out, transform 2s ease-in-out",
+          pointerEvents: isEntered ? 'none' : 'auto'
+        }}
+      />
 
-    {/* THE UI OVERLAY */}
-    <div 
-      className={`gate-wrapper ${isWarping ? 'is-warping' : ''}`}
-      style={{ 
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'transparent',
-        zIndex: 9999,
-        /* 🚀 THE FIX: Let mouse events pass through this giant div to the canvas below */
-        pointerEvents: 'none', 
-        overflow: 'visible'
-      }}
-    >
-      {!isEntered && (
-        <div style={{ pointerEvents: 'auto', marginBottom: '40px', overflow: 'visible' }}>
+      {/* 2. UI Overlay */}
+      <div 
+        // 🚀 FIX 2: Removed `is-warping` class so the text container NEVER scales/deforms
+        className="gate-wrapper" 
+        style={{ 
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: 9999,
+          pointerEvents: 'none', 
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {/* 🚀 FIX 3: The Visibility Delay Trick */}
+        <div style={{ 
+          pointerEvents: isEntered ? 'none' : 'auto', 
+          marginBottom: '40px',
+          opacity: isEntered ? 0 : 1,
+         
+          // Fade out over 0.5s, THEN hide it. On return, show it instantly, THEN fade in.
+          transition: isEntered 
+            ? 'opacity 0.5s ease, visibility 0s linear 0.5s' 
+            : 'opacity 0.5s ease, visibility 0s linear 0s'
+        }}>
           <ParticleLandingTitle />
         </div>
-      )}
-      {!isEntered && (
-      <button 
-        className="warp-trigger-btn cursor-target" 
-        style={{
-          ...btnStyle,
-          pointerEvents: isWarping ? 'none' : 'auto',
-          position: 'relative',
-          zIndex: 10000
-        }} 
-        onClick={() => useStore.getState().setEntered()}
-      >
-        Learn more
-      </button>
-      )}
-      
 
-      <div className="vignette" ></div>
-      
-    </div>
-  </>
-);
+        <button 
+          className="warp-trigger-btn cursor-target" 
+          style={{
+            ...btnStyle,
+            pointerEvents: isEntered ? 'none' : 'auto',
+            opacity: isEntered ? 0 : 1,
+            visibility: isEntered ? 'hidden' : 'visible',
+            transition: isEntered 
+              ? 'opacity 0.5s ease, visibility 0s linear 0.5s' 
+              : 'opacity 0.5s ease, visibility 0s linear 0s',
+            position: 'relative',
+            zIndex: 10000
+          }} 
+          onClick={() => useStore.getState().setEntered()}
+        >
+          Learn more
+        </button>
+
+        <div 
+          className="vignette" 
+          style={{ 
+            pointerEvents: 'none',
+            opacity: isEntered ? 0 : 1,
+            transition: 'opacity 2s ease'
+          }} 
+        />
+      </div>
+    </>
+  );
 };
 
 export default LoadingScreen;

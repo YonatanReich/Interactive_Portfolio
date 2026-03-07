@@ -2,18 +2,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useStore } from '../store';
 
-
 export default function ParticleLandingTitle() {
   const canvasRef = useRef(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const particlesRef = useRef([]);
   const animationRef = useRef(null);
-    const [scale, setScale] = useState(1);
-    const isEntered = useStore((state) => state.isEntered); 
-    const isTransitioning = useStore((state) => state.isTransitioning);
+  const [scale, setScale] = useState(1);
+  const isEntered = useStore((state) => state.isEntered); 
+  const isTransitioning = useStore((state) => state.isTransitioning);
 
   // --- 1. RESPONSIVE SCALING ---
-  // Adjusts the UI hitbox size for mobile, but keeps canvas 1:1 with screen
   useEffect(() => {
     const handleResize = () => {
       const availableWidth = window.innerWidth - 40;
@@ -31,7 +29,6 @@ export default function ParticleLandingTitle() {
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const dpr = window.devicePixelRatio || 1;
 
-    // Canvas internal resolution matches the full window for infinite drift
     const updateCanvasSize = () => {
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
@@ -50,10 +47,15 @@ export default function ParticleLandingTitle() {
       lastBlink: performance.now(),
     };
 
-    const typeSpeed = 60;
+    const typeSpeed = 50;
     const blinkSpeed = 500;
 
-    // 🚀 STEP A: PRE-COMPUTE PARTICLES CENTERED ON SCREEN
+    // 🚀 DEFINITIVE SIZES: Name is 64px, Role is 24px
+    const fontName = '900 64px "Orbitron", sans-serif';
+    const fontRole = '700 24px "Orbitron", sans-serif';
+    const spacing = "4px";
+
+    // 🚀 STEP A: PRE-COMPUTE PARTICLES
     const preComputeParticles = () => {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       ctx.textAlign = 'left';
@@ -62,23 +64,27 @@ export default function ParticleLandingTitle() {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
 
-      // Line 1 Sizing
-      ctx.font = '900 56px Orbitron';
-      ctx.letterSpacing = "2.4px";
+      // --- SIZING & CENTERING LINE 1 (NAME) ---
+      ctx.font = fontName;
+      ctx.letterSpacing = spacing;
       const w1 = ctx.measureText(state.text1).width;
-      const startX1 = centerX - w1 / 2;
+      const startX1 = centerX - (w1 / 2); // 🚀 Fixed Centering: Removed +60
+      const y1 = centerY - 40; // Shifted up to make room
 
-      // Line 2 Sizing
-      ctx.font = '700 24px Orbitron';
-      ctx.letterSpacing = "2.4px";
+      // --- SIZING & CENTERING LINE 2 (ROLE) ---
+      ctx.font = fontRole;
+      ctx.letterSpacing = spacing;
       const w2 = ctx.measureText(state.text2).width;
-      const startX2 = centerX - w2 / 2;
+      const startX2 = centerX - (w2 / 2); // 🚀 Fixed Centering
+      const y2 = centerY + 30; // Shifted down
 
-      // Draw hidden text to extract pixels
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(state.text1, startX1, centerY - 30);
-      ctx.fillStyle = '#4CB4BB';
-      ctx.fillText(state.text2, startX2, centerY + 30);
+      ctx.font = fontName; // 🚀 FIX: Force canvas back to the BIG font before drawing Line 1
+      ctx.fillStyle = '#ffffff'; 
+      ctx.fillText(state.text1, startX1, y1);
+      
+      ctx.font = fontRole; // 🚀 FIX: Force canvas to the SMALL font before drawing Line 2
+      ctx.fillStyle = '#ffffff'; 
+      ctx.fillText(state.text2, startX2, y2);
 
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
@@ -102,14 +108,13 @@ export default function ParticleLandingTitle() {
           }
         }
       }
-      particlesRef.current = { particles, startX1, startX2, centerY };
+      particlesRef.current = { particles, startX1, startX2, y1, y2, centerY };
     };
 
     // 🚀 STEP B: ANIMATION LOOP
     const loop = (time) => {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      const centerX = window.innerWidth / 2;
-      const { particles, startX1, startX2, centerY } = particlesRef.current;
+      const { particles, startX1, startX2, y1, y2, centerY } = particlesRef.current;
       if (!particles) return;
 
       // CURSOR BLINK
@@ -123,10 +128,10 @@ export default function ParticleLandingTitle() {
         if (time - state.lastTime > typeSpeed) {
           state.idx1++;
           state.lastTime = time;
-          if (state.idx1 > state.text1.length) state.phase = 'delay';
+          if (state.idx1 >= state.text1.length) state.phase = 'delay';
         }
       } else if (state.phase === 'delay') {
-        if (time - state.lastTime > 500) {
+        if (time - state.lastTime > 600) {
           state.phase = 'typing2';
           state.lastTime = time;
         }
@@ -134,25 +139,30 @@ export default function ParticleLandingTitle() {
         if (time - state.lastTime > typeSpeed) {
           state.idx2++;
           state.lastTime = time;
-          if (state.idx2 > state.text2.length) state.phase = 'done';
+          if (state.idx2 >= state.text2.length) state.phase = 'done';
         }
       }
 
-      // CALCULATE REVEAL WIDTHS
-      ctx.font = '900 56px Orbitron';
+      // 🚀 MEASURE EXACT WIDTHS USING THE EXACT SAME FONTS
+      ctx.font = fontName;
+      ctx.letterSpacing = spacing;
       const revealX1 = startX1 + ctx.measureText(state.text1.substring(0, state.idx1)).width;
-      ctx.font = '700 24px Orbitron';
+      
+      ctx.font = fontRole;
+      ctx.letterSpacing = spacing;
       const revealX2 = startX2 + ctx.measureText(state.text2.substring(0, state.idx2)).width;
 
-      // DRAW CURSOR
+      // DRAW CURSOR (Matches the height/color of the line it is on)
       ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
+      ctx.textBaseline = 'middle'; 
       if (state.phase === 'typing1' || state.phase === 'delay') {
         ctx.fillStyle = '#ffffff';
-        if (state.cursorOn || state.phase === 'typing1') ctx.fillText('█', revealX1 + 5, centerY - 30);
+        ctx.font = fontName;
+        if (state.cursorOn || state.phase === 'typing1') ctx.fillText('█', revealX1 + 5, y1);
       } else if (state.phase === 'typing2' || state.phase === 'done') {
-        ctx.fillStyle = '#4CB4BB';
-        if (state.cursorOn || state.phase === 'typing2') ctx.fillText('█', revealX2 + 5, centerY + 30);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = fontRole;
+        if (state.cursorOn || state.phase === 'typing2') ctx.fillText('█', revealX2 + 5, y2);
       }
 
       // DRAW & UPDATE PARTICLES
@@ -178,15 +188,15 @@ export default function ParticleLandingTitle() {
           if (dist < interactionRadius) {
             p.disturbed = true;
             const force = (interactionRadius - dist) / interactionRadius;
-            p.vx += (dx / dist) * force * 4;
-            p.vy += (dy / dist) * force * 4;
+            p.vx += (dx / dist) * force * 5;
+            p.vy += (dy / dist) * force * 5;
           }
 
           if (p.disturbed) {
-            p.vx += (Math.random() - 0.5) * 0.12;
-            p.vy += (Math.random() - 0.5) * 0.12 - 0.02;
-            p.vx *= 0.97;
-            p.vy *= 0.97;
+            p.vx += (Math.random() - 0.5) * 0.15;
+            p.vy += (Math.random() - 0.5) * 0.15 - 0.02;
+            p.vx *= 0.96;
+            p.vy *= 0.96;
             p.x += p.vx;
             p.y += p.vy;
           }
@@ -201,7 +211,7 @@ export default function ParticleLandingTitle() {
         }
 
         ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, 1.8, 1.8);
+        ctx.fillRect(p.x, p.y, 2, 2);
       }
 
       animationRef.current = requestAnimationFrame(loop);
@@ -225,35 +235,33 @@ export default function ParticleLandingTitle() {
 
   return (
     <div
-  className="title-hitbox"
-  onMouseMove={handleMouseMove}
-  onMouseLeave={handleMouseLeave}
-  style={{
-    width: `${800 * scale}px`,
-    height: `${250 * scale}px`,
-    position: 'relative',
-    margin: '0 auto',
-    overflow: 'visible',
-    /* 🚀 FIXED: lowercase 'none' */
-    pointerEvents: isEntered ? 'none' : 'auto', 
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    /* 🚀 ADDITION: Ensure children follow the leader */
-    visibility: isEntered && isTransitioning ? 'hidden' : 'visible'
-  }}
->
+      className="title-hitbox"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        width: `${800 * scale}px`,
+        height: `${250 * scale}px`,
+        position: 'relative',
+        margin: '0 auto',
+        overflow: 'visible',
+        pointerEvents: isEntered ? 'none' : 'auto', 
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        visibility: isEntered && isTransitioning ? 'hidden' : 'visible'
+      }}
+    >
       <canvas
         ref={canvasRef}
         style={{
-          position: 'fixed', // 🚀 Lock to viewport for drift
+          position: 'fixed', 
           top: 0,
           left: 0,
           width: '100vw',
           height: '100vh',
-          pointerEvents: 'none',
+          pointerEvents: 'none', 
           zIndex: -1,
-          filter: 'drop-shadow(0 0 8px rgba(76, 180, 187, 0.6))',
+          filter: 'drop-shadow(0 0 10px rgba(76, 180, 187, 0.8))',
         }}
       />
     </div>
