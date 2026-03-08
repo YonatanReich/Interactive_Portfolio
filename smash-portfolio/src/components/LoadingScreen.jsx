@@ -3,9 +3,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { NeatGradient } from '@firecms/neat';
 import { useStore } from '../store';
 import './LoadingScreen.css';
-import TextType from './TextType';
+import ParticleLandingTitle from './ParticleeLandingTitle';
 import { btnStyle } from '../App';
 import '../HomePage.css';
+
 
 
 const LOADING_NEAT_CONFIG = {
@@ -67,93 +68,114 @@ const LOADING_NEAT_CONFIG = {
 const LoadingScreen = () => {
   const isEntered = useStore((state) => state.isEntered);
   const isTransitioning = useStore((state) => state.isTransitioning);
-  const [nameDone, setNameDone] = useState(false);
   const canvasRef = useRef(null);
   const gradientRef = useRef(null);
-
   const isWarping = isEntered && !isTransitioning;
+  
+ useEffect(() => {
+    // 🚀 Only initialize if we are NOT entered and the canvas exists
+    if (!isEntered && canvasRef.current) {
+      // Cleanup any old instance first
+      if (gradientRef.current) {
+        gradientRef.current.destroy();
+      }
 
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-
-
-    gradientRef.current = new NeatGradient({
-      ref: canvasRef.current,
-      ...LOADING_NEAT_CONFIG
-    });
+      try {
+        gradientRef.current = new NeatGradient({
+          ref: canvasRef.current,
+          ...LOADING_NEAT_CONFIG
+        });
+      } catch (err) {
+        console.error("Failed to initialize Gradient:", err);
+      }
+    }
 
     return () => {
-      if (gradientRef.current) gradientRef.current.destroy();
+      if (gradientRef.current) {
+        gradientRef.current.destroy();
+        gradientRef.current = null;
+      }
     };
-  }, []);
+  }, [isEntered]); // 🚀 Re-run logic when isEntered changes
 
-  return (
+return (
     <>
-      
-      {/* 🚀 THE MASTER CANVAS */}
+      {/* 1. Background Canvas */}
       <canvas
         id="shared-neat-canvas"
         ref={canvasRef}
         style={{
-          position: "fixed", // Keeps it locked to the screen
+          position: "fixed",
           top: 0,
           left: 0,
           width: "100vw",
           height: "100vh",
-          zIndex: 9998, // 🚀 Just above the 3D scene, but below the UI!
-          opacity: isWarping ? 0.02 : 1,
-          transform: isWarping ? "scale(15)" : "scale(1)", // 🚀 Zooms in smoothly with the gate!
+          zIndex: 9998,
+          opacity: isWarping ? 0 : 1, 
+          transform: isWarping ? "scale(15)" : "scale(1)", 
           transition: "opacity 1.5s ease-in-out, transform 2s ease-in-out",
-          pointerEvents: isWarping ? "none" : "auto"
+          pointerEvents: isEntered ? 'none' : 'auto'
         }}
       />
-     
-      {/* THE UI OVERLAY */}
+
+      {/* 2. UI Overlay */}
       <div 
-        className={`gate-wrapper ${isWarping ? 'is-warping' : ''}`}
+        // 🚀 FIX 2: Removed `is-warping` class so the text container NEVER scales/deforms
+        className="gate-wrapper" 
         style={{ 
-            backgroundColor: 'transparent',
-            pointerEvents: 'none'
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: 9999,
+          pointerEvents: 'none', 
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-       <div className="terminal-card" style={{ pointerEvents: isWarping ? 'none' : 'auto' }}>
-  
-  <div className ="title-container">
-  <TextType 
-    as="h1"
-    text="YONATAN REICH"
-    loop={false}
-    typingSpeed={60}
-    showCursor={!nameDone} 
-    cursorCharacter="█"
-    onSentenceComplete={() => setNameDone(true)} 
-    style={{ margin: 0 }}
-  />
+        {/* 🚀 FIX 3: The Visibility Delay Trick */}
+        <div style={{ 
+          pointerEvents: isEntered ? 'none' : 'auto', 
+          marginBottom: '40px',
+          opacity: isEntered ? 0 : 1,
+         
+          // Fade out over 0.5s, THEN hide it. On return, show it instantly, THEN fade in.
+          transition: isEntered 
+            ? 'opacity 0.5s ease, visibility 0s linear 0.5s' 
+            : 'opacity 0.5s ease, visibility 0s linear 0s'
+        }}>
+          <ParticleLandingTitle />
+        </div>
 
-  
-  {nameDone && (
-    <TextType 
-      as="h2"
-      text="SOFTWARE DEVELOPER."
-      loop={false}
-      typingSpeed={60}
-      showCursor={true}
-      cursorCharacter="█"
-      initialDelay={500} // 🚀 Slight pause before starting line 2
-      style={{ margin: 0 }}
-    />
-  )}
-</div>
-  <button 
-    className="warp-trigger-btn cursor-target" style={btnStyle} 
-    onClick={() => useStore.getState().setEntered()}
-  >
-    Learn more
-  </button>
-</div>
-        
-        <div className="vignette"></div>
+        <button 
+          className="warp-trigger-btn cursor-target" 
+          style={{
+            ...btnStyle,
+            pointerEvents: isEntered ? 'none' : 'auto',
+            opacity: isEntered ? 0 : 1,
+            visibility: isEntered ? 'hidden' : 'visible',
+            transition: isEntered 
+              ? 'opacity 0.5s ease, visibility 0s linear 0.5s' 
+              : 'opacity 0.5s ease, visibility 0s linear 0s',
+            position: 'relative',
+            zIndex: 10000
+          }} 
+          onClick={() => useStore.getState().setEntered()}
+        >
+          Learn more
+        </button>
+
+        <div 
+          className="vignette" 
+          style={{ 
+            pointerEvents: 'none',
+            opacity: isEntered ? 0 : 1,
+            transition: 'opacity 2s ease'
+          }} 
+        />
       </div>
     </>
   );
