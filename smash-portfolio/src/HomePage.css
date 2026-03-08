@@ -139,75 +139,121 @@
 }
 
 /* =========================================
-   CYBERPUNK HUD BUTTONS
+   CYBERPUNK UNIFIED BUTTONS (Nav & Hint)
    ========================================= */
 
-.nav-btn {
+/* --- 1. SHARED BASE STYLES --- */
+.nav-btn,
+.hint-toggle-btn {
     position: relative;
     background: transparent;
+    /* Stripped the solid glass away from hints to unify them */
     color: rgba(255, 255, 255, 0.7);
     font-family: 'Orbitron', sans-serif;
     font-size: 1rem;
+    /* Unified Size */
     font-weight: 700;
     text-transform: uppercase;
-    margin-right: 0.1rem;
     padding: 6px 12px;
+    /* Unified Spacing */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     overflow: hidden;
     transition: all 0.3s ease;
     z-index: 2;
+
+    /* Default Theme: Nav Cyan */
+    --btn-theme: 76, 180, 187;
+}
+    
+/* --- 2. DISTINCT THEME COLORS FOR HINTS --- */
+.hint-controls-container {
+    border: #ff0000;
+    display: flex;
+    gap: 100px;
 }
 
-/* 1. HUD Targeting Border */
-.nav-btn::after {
+.hint-btn-primary {
+    --btn-theme: 52, 100, 138;
+    /* #34648a Steel Blue */
+}
+
+.hint-btn-danger {
+    --btn-theme: 168, 66, 66;
+    /* #a84242 Muted Red */
+}
+
+
+/* --- 3. HUD TARGETING BORDER (Applies to all) --- */
+.nav-btn::after,
+.hint-toggle-btn::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    border: 1px solid rgba(76, 180, 187, 0);
+    /* Uses the dynamic variable for border color */
+    border: 1px solid rgba(var(--btn-theme), 0);
     border-radius: 4px;
     transform: scale(1.1);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: none;
 }
 
-.nav-btn:hover::after {
-    border: 1px solid rgba(76, 180, 187, 0.8);
-    box-shadow: inset 0 0 15px rgba(76, 180, 187, 0.2);
+.nav-btn:hover::after,
+.hint-toggle-btn:hover::after {
+    border: 1px solid rgba(var(--btn-theme), 0.8);
+    box-shadow: inset 0 0 15px rgba(var(--btn-theme), 0.2);
     transform: scale(1);
-    background: rgba(76, 180, 187, 0.05);
+    background: rgba(var(--btn-theme), 0.05);
 }
 
-/* 2. Sweeping Laser Line */
-.nav-btn::before {
+
+/* --- 4. SWEEPING LASER LINE (Applies to all) --- */
+.nav-btn::before,
+.hint-toggle-btn::before {
     content: '';
     position: absolute;
     top: 0;
     left: -150%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), rgba(76, 180, 187, 0.6), transparent);
+    /* Laser is tinted by the dynamic variable */
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), rgba(var(--btn-theme), 0.6), transparent);
     transform: skewX(-25deg);
     pointer-events: none;
     z-index: -1;
 }
 
-.nav-btn:hover::before {
+.nav-btn:hover::before,
+.hint-toggle-btn:hover::before {
     animation: hud-sweep 1.5s ease-in-out infinite;
 }
 
-/* 3. Chromatic Aberration Text Glitch */
-.nav-btn:hover {
+
+/* --- 5. TEXT HOVER GLOWS --- */
+.nav-btn:hover,
+.hint-toggle-btn:hover {
     color: #ffffff;
+    letter-spacing: 1px;
+    /* Unified text expansion */
+}
+
+/* Nav buttons get the chaotic chromatic glitch */
+.nav-btn:hover {
     text-shadow:
         -2px 0px 4px rgba(0, 255, 255, 0.9),
         2px 0px 4px rgba(255, 0, 255, 0.7),
         0 0 10px rgba(255, 255, 255, 0.6);
-    letter-spacing: 1px;
+}
+
+/* Hint buttons get a clean, polished glow in their respective theme color */
+.hint-toggle-btn:hover {
+    text-shadow:
+        0 0 8px rgba(var(--btn-theme), 0.8),
+        0 0 15px rgba(var(--btn-theme), 0.5);
 }
 
 /* =========================================
@@ -248,4 +294,166 @@
         font-size: 0.45rem !important;
         letter-spacing: 0px !important;
     }
+}
+
+/* --- HINT BOT CONTROLS --- */
+.hint-controls-container {
+  position: absolute;
+  top: 20px;
+  right: 80px; 
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+}
+
+
+
+@keyframes cyber-target-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px rgba(52, 100, 138, 0.4), inset 0 0 5px rgba(52, 100, 138, 0.2);
+        border: 1px solid rgba(52, 100, 138, 0.4);
+        background: rgba(52, 100, 138, 0.05);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(52, 100, 138, 0.9), inset 0 0 15px rgba(52, 100, 138, 0.6);
+        border: 1px solid rgba(52, 100, 138, 1);
+        background: rgba(52, 100, 138, 0.2);
+    }
+}
+
+.neon-target-active {
+    animation: cyber-target-pulse 1.2s ease-in-out infinite !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    z-index: 1005;
+    /* Ensures it pops above other UI elements */
+}
+
+/* --- THE CYBERPUNK DRAWER MASK (Allows the physical slide) --- */
+.hint-drawer-mask {
+    position: absolute;
+    top: var(--nav-height, 60px);
+    left: 0;
+    width: 100vw;
+    /* 🚀 This clips the drawer exactly at the nav-line so it disappears when it slides up */
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 990;
+    /* Adds a tiny bit of padding so the neon glow isn't cut off when fully open */
+    padding-bottom: 30px;
+}
+
+/* --- THE HARDWARE DRAWER --- */
+/* --- THE HARDWARE DRAWER --- */
+.hint-drawer {
+    position: relative;
+    margin: 0 auto;
+    transform: translateY(-100%);
+    opacity: 0;
+
+    /* Swapped to a deep blue-grey background */
+    background: rgba(10, 16, 22, 0.85);
+    backdrop-filter: blur(12px);
+    /* Themed #34648a border */
+    border: 1px solid rgba(52, 100, 138, 0.4);
+    border-top: none;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px));
+
+    width: max-content;
+    min-width: 320px;
+    max-width: 600px;
+    color: #ffffff;
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 0.4s ease-out,
+        width 0.4s ease,
+        height 0.4s ease;
+}
+
+.hint-drawer.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* --- CRT SCANLINES --- */
+.hint-drawer-scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(transparent 0px,
+            transparent 2px,
+            rgba(52, 100, 138, 0.08) 3px,
+            /* #34648a tint */
+            rgba(52, 100, 138, 0.08) 4px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* --- GLOWING BOTTOM LIP --- */
+.hint-drawer-lip {
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    height: 2px;
+    background: #34648a;
+    /* Themed */
+    box-shadow: 0 0 8px #34648a, 0 0 15px #34648a;
+    z-index: 2;
+}
+
+/* --- THE "SCREEN REFRESH" ANIMATION --- */
+@keyframes cyber-refresh {
+    0% {
+        opacity: 0;
+        transform: scale(0.98);
+        filter: brightness(1.5) drop-shadow(0 0 10px #34648a);
+        /* Themed */
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: brightness(1) drop-shadow(0 0 0 transparent);
+    }
+}
+
+
+
+
+.pixel-icon-mute {
+    /* 🚀 REDUCED SIZE: Changed from 40px to match your nav text scale */
+    height: 1.1rem;
+    width: auto;
+    display: inline-block;
+    /* Changed from 'block' to keep it inline with text if needed */
+    vertical-align: middle;
+
+    /* Your specific Cyan Filter and Glow */
+    filter: brightness(0) saturate(100%) invert(72%) sepia(18%) saturate(1007%) hue-rotate(135deg) brightness(91%) contrast(88%) drop-shadow(0 0 5px rgba(76, 180, 187, 0.8));
+
+    transition: transform 0.2s ease;
+}
+
+.mute-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Keeps the button height consistent with your other nav-btns */
+    padding: 6px 12px !important;
+    min-height: 32px;
+}
+
+.mute-btn:hover .pixel-icon-mute {
+    transform: scale(1.1);
+    /* Boosts the glow slightly on hover */
+    filter: brightness(0) saturate(100%) invert(72%) sepia(18%) saturate(1007%) hue-rotate(135deg) brightness(100%) contrast(100%) drop-shadow(0 0 8px rgba(76, 180, 187, 1));
 }

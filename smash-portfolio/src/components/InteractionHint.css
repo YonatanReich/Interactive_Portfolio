@@ -82,3 +82,35 @@
     }
 }
 
+/* --- 3D HTML BOT TEXT --- */
+.hint-3d-html-text {
+    font-family: 'Orbitron', sans-serif;
+    color: #ffffff;
+    font-size: 14px;
+    text-align: center;
+    width: 380px;
+    /* Gives the paragraph room to breathe */
+    line-height: 1.6;
+    pointer-events: none;
+    /* Let clicks pass through to the 3D scene */
+
+    /* Mimics the black outline of the 3D Text component */
+    text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000,
+        0px 3px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Styles for the embedded inline images */
+.hint-3d-html-text .inline-icon {
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0 4px;
+    /* Optional: adds a subtle dark drop shadow to the icons to match the text */
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.8));
+}
+
+/* Optional: If your reset SVG is dark by default, uncomment this to turn it white */
+/* .hint-3d-html-text .reset-icon { filter: invert(1) drop-shadow(0px 2px 2px rgba(0,0,0,0.8)); } */
