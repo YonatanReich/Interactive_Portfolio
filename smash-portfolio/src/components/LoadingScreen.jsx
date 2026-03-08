@@ -9,6 +9,7 @@ import '../HomePage.css';
 
 
 
+
 const LOADING_NEAT_CONFIG = {
     colors: [
         { color: '#899D99', enabled: true },
@@ -72,31 +73,22 @@ const LoadingScreen = () => {
   const gradientRef = useRef(null);
   const isWarping = isEntered && !isTransitioning;
   
- useEffect(() => {
-    // 🚀 Only initialize if we are NOT entered and the canvas exists
-    if (!isEntered && canvasRef.current) {
-      // Cleanup any old instance first
-      if (gradientRef.current) {
-        gradientRef.current.destroy();
-      }
-
+  useEffect(() => {
+   //if the canvasRef is not set, we can't initialize Neat, so we return early.
+    if (!canvasRef.current) return;
+    // We only want to initialize NeatGradient once, when the component mounts. If gradientRef.current is already set, we skip initialization.
+    if (!gradientRef.current) {
       try {
         gradientRef.current = new NeatGradient({
           ref: canvasRef.current,
           ...LOADING_NEAT_CONFIG
         });
-      } catch (err) {
-        console.error("Failed to initialize Gradient:", err);
+      } catch (error) {
+        console.error("Failed to initialize NeatGradient:", error);
       }
     }
-
-    return () => {
-      if (gradientRef.current) {
-        gradientRef.current.destroy();
-        gradientRef.current = null;
-      }
-    };
-  }, [isEntered]); // 🚀 Re-run logic when isEntered changes
+   
+  }, []); 
 
 return (
     <>
@@ -136,20 +128,20 @@ return (
           justifyContent: 'center',
         }}
       >
-        {/* 🚀 FIX 3: The Visibility Delay Trick */}
-        <div style={{ 
-          pointerEvents: isEntered ? 'none' : 'auto', 
+      
+        <div style={{
+          pointerEvents: isEntered ? 'none' : 'auto',
           marginBottom: '40px',
           opacity: isEntered ? 0 : 1,
          
           // Fade out over 0.5s, THEN hide it. On return, show it instantly, THEN fade in.
-          transition: isEntered 
-            ? 'opacity 0.5s ease, visibility 0s linear 0.5s' 
+          transition: isEntered
+            ? 'opacity 0.5s ease, visibility 0s linear 0.5s'
             : 'opacity 0.5s ease, visibility 0s linear 0s'
         }}>
           <ParticleLandingTitle />
         </div>
-
+      
         <button 
           className="warp-trigger-btn cursor-target" 
           style={{

@@ -79,8 +79,36 @@
    ========================================= */
 
 /* Both start as Solid White with a constant Cyan Neon Glow */
-.nav-nameplate .Name,
+/* 🚀 ADD THIS: The Flexbox Container */
+.nav-nameplate {
+    display: flex;
+    flex-direction: column;
+    /* Stacks children vertically */
+    align-items: center;
+    /* Centers children horizontally */
+    justify-content: center;
+    /* Optional: Use gap to control the exact spacing between Name and Role */
+    gap: 4px;
+}
+
+/* Your existing styles remain largely unchanged */
+.nav-nameplate .Name {
+    position: relative;
+    font-size: x-large;
+    z-index: 2;
+    transition: all 0.3s ease;
+    font-family: 'Orbitron', sans-serif;
+    color: #ffffff;
+    text-shadow:
+        0 0 8px rgba(76, 180, 187, 1),
+        0 0 20px rgba(76, 180, 187, 0.6),
+        0 0 30px rgba(76, 180, 187, 0.3);
+    margin: 0;
+    /* Reset default margins just in case */
+}
+
 .nav-nameplate .Role {
+    font-size: small;
     position: relative;
     z-index: 2;
     transition: all 0.3s ease;
@@ -90,6 +118,8 @@
         0 0 8px rgba(76, 180, 187, 1),
         0 0 20px rgba(76, 180, 187, 0.6),
         0 0 30px rgba(76, 180, 187, 0.3);
+    margin: 0;
+    /* Reset default margins just in case */
 }
 
 /* =========================================

@@ -184,7 +184,7 @@ export default function App() {
   </span>
   
     <span className="Role">
-      SOFTWARE DEVELOPER
+      SOFTWARE DEVELOPER.
     </span>
   
 </div>
