@@ -112,6 +112,7 @@ button:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
   box-sizing: border-box;
   user-select: none;
   -webkit-user-select: none;
@@ -144,7 +145,8 @@ button:focus-visible {
   padding: 0;
 }
 
-.bottom-bar-glass .CV-btn-container {
+.bottom-bar-glass .mute-and-hint-btn-container {
+  flex-wrap: nowrap;
   position: absolute;
   left: 82%;
 }
@@ -329,12 +331,12 @@ button:focus-visible {
     height: 25px !important;
   }
 
-  .bottom-bar-glass .CV-btn-container {
+  .bottom-bar-glass .mute-and-hint-btn-container {
     left: auto !important;
     right: 15px !important;
   }
 
-  .bottom-bar-glass .CV-btn-container button {
+  .bottom-bar-glass .mute-and-hint-btn-container button {
     font-size: 0.7rem !important;
     padding: 5px 8px !important;
   }

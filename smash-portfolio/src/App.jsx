@@ -11,6 +11,7 @@ import BallManager from './components/BallManager.jsx'
 import InteractionHint from './components/InteractionHint.jsx'
 import LandingPage from './components/LoadingScreen.jsx'
 import './HomePage.css'
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 
 
 // --- VISUAL PALETTE ---
@@ -52,6 +53,7 @@ const startHint = useStore((state) => state.startHint);
 const advanceHint = useStore((state) => state.advanceHint);
   const cancelHint = useStore((state) => state.cancelHint);
   const previousHint = useStore((state) => state.previousHint);
+  const activeTarget = useStore((state) => state.activeTarget);
   // --- BACKGROUND MUSIC LOGIC ---
   useEffect(() => {
     const audio = document.getElementById('bg_sound')
@@ -106,15 +108,9 @@ const advanceHint = useStore((state) => state.advanceHint);
     return () => window.removeEventListener('resize', updateUIHeights);
   }, []);
 
-  useEffect(() => {
-  const checkClick = (e) => {
-    console.log("Element being clicked:", e.target);
-    console.log("Z-Index of element:", window.getComputedStyle(e.target).zIndex);
-  };
-  window.addEventListener('click', checkClick);
-  return () => window.removeEventListener('click', checkClick);
-}, []);
-
+  if (activeTarget) {
+    useStore.setState({ hintStep: 0 }); 
+  }
   // Add this inside the App component, before the return statement
   const getHintContent = (step) => {
     switch (step) {
@@ -171,7 +167,7 @@ const advanceHint = useStore((state) => state.advanceHint);
        <GlassPanel position={[0, 2, -1]} label="Contact me" range={1} speed={1} id="modal_contact" />
        <Suspense fallback={null}>
          <InteractionHint />
-        </Suspense>
+       </Suspense>
     </Canvas>
 
     {/* 2. LOADING LAYER: Sits on top of Canvas but below UI HUD */}
@@ -202,55 +198,20 @@ const advanceHint = useStore((state) => state.advanceHint);
           <button className="cursor-target nav-btn" onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
           <button className="cursor-target nav-btn" onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>
            <button className="cursor-target nav-btn" onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
-           {hintStep === 0 ? (
-    <button 
-      className="hint-toggle-btn hint-btn-primary cursor-target" 
-      onClick={startHint}
-    >
-      SHOW HINT
-    </button>
-  ) : (
-    <>
-      <button 
-        className="hint-toggle-btn hint-btn-danger cursor-target" 
-        onClick={cancelHint}
-      >
-        CANCEL
-      </button>
-
-      {/* Only show PREVIOUS if we are on Step 2, 3, or 4 */}
-      {hintStep > 1 && (
-        <button 
-          className="hint-toggle-btn hint-btn-primary cursor-target" 
-          onClick={previousHint}
-        >
-          ⭠ PREV
-        </button>
-      )}
-
-      <button 
-        className="hint-toggle-btn hint-btn-primary cursor-target" 
-        onClick={advanceHint}
-      >
-        {/* Dynamically change the text if it's the last step */}
-        {hintStep >= 4 ? "FINISH ⭢" : "NEXT HINT ⭢"}
-      </button>
-    </>
-           )}
-           <button 
-  className={`mute-btn cursor-target nav-btn ${hintStep === 4 ? 'neon-target-active' : ''}`} 
-  onClick={toggleMute}
-> 
+           <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+            <button className="cursor-target nav-btn resume-nav-btn" style={btnStyle}>
+  My Resume
   <img 
-    src={isMuted ? "/sound-max-svgrepo-com.svg" : "/sound-min-svgrepo-com.svg"} 
-    className="pixel-icon-mute" 
-    alt="Volume Control" 
+    src="/resume-4-svgrepo-com.svg" 
+    className="resume-icon" 
+    alt="resume icon" 
   />
 </button>
+           </a>
         </div>
 
-      <div className="hint-drawer-mask">
-        <div className={`hint-drawer ${hintStep > 0 && hintStep < 5 ? 'open' : ''}`}>
+      <div className="hint-drawer-mask" style={{pointerEvents : 'none'}}>
+        <div className={`hint-drawer ${hintStep > 0 && hintStep < 5 ? 'open' : ''}`} >
           
           {/* The scanline overlay */}
           <div className="hint-drawer-scanlines"></div>
@@ -300,10 +261,53 @@ const advanceHint = useStore((state) => state.advanceHint);
 </button>
         </div>
         
-        <div className="CV-btn-container ">
-          <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-              <button className="cursor-target nav-btn" style={btnStyle}>My Resume 📄</button>
-          </a>
+        <div className="mute-and-hint-btn-container ">
+                      {hintStep === 0 ? (
+             
+    <button 
+      className="hint-toggle-btn hint-btn-primary cursor-target" 
+      onClick={startHint}
+    >
+      SHOW HINT
+    </button>
+  ) : (
+    <>
+      <button 
+        className="hint-toggle-btn hint-btn-danger cursor-target" 
+        onClick={cancelHint}
+      >
+        CANCEL
+      </button>
+
+      {/* Only show PREVIOUS if we are on Step 2, 3, or 4 */}
+      {hintStep > 1 && (
+        <button 
+          className="hint-toggle-btn hint-btn-primary cursor-target" 
+                     onClick={previousHint}
+        >
+          ⭠ PREV
+        </button>
+      )}
+
+      <button 
+        className="hint-toggle-btn hint-btn-primary cursor-target" 
+        onClick={advanceHint}
+      >
+        {/* Dynamically change the text if it's the last step */}
+        {hintStep >= 4 ? "FINISH ⭢" : "NEXT HINT ⭢"}
+      </button>
+    </>
+           )}
+           <button 
+  className={`mute-btn cursor-target nav-btn ${hintStep === 4 ? 'neon-target-active' : ''}`} 
+             onClick={toggleMute}
+> 
+  <img 
+    src={isMuted ? "/mute-sound-audio-svgrepo-com.svg" : "/speaker-sound-music-svgrepo-com.svg"} 
+    className="pixel-icon-mute" 
+    alt="Volume Control" 
+  />
+</button>
         </div>
       </footer>
     </div>
