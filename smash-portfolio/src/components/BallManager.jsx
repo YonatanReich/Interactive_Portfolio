@@ -70,9 +70,21 @@ function Ball({ id, startPos, startDir, onRemove }) {
         velocity.current.clone().normalize(), 
         0, 
         2 
-    )
-    
-    const hits = raycaster.intersectObjects(state.scene.children, true)
+    );
+    // 🚀 Fixes the "Raycaster.camera needs to be set" error for Sprites
+    raycaster.camera = state.camera; 
+
+    // 🚀 BULLETPROOF FILTER: Only scan actual 3D meshes
+    const safeObjects = [];
+    state.scene.traverse((child) => {
+      // Ignores UI nodes, Sprites, and hidden Drei helpers that crash the loop
+      if (child.isMesh && typeof child.raycast === 'function') {
+        safeObjects.push(child);
+      }
+    });
+
+    // We pass 'false' because `traverse` already found all the nested children for us!
+    const hits = raycaster.intersectObjects(safeObjects, false);
     
     for (const hit of hits) {
       if (hit.object.name === "GlassPanel") {

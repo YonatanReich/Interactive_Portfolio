@@ -115,9 +115,9 @@ const advanceHint = useStore((state) => state.advanceHint);
   const getHintContent = (step) => {
     switch (step) {
       case 1: 
-        return <>Welcome to my portfolio.<br/>Click 'NEXT HINT' to explore.</>;
+        return <>Welcome to my portfolio.<br/>On the right bottom corner of your screen, you'll find the hint system controls and your guide.<br/>For further explanation, Click on "Next" and follow the guide, or hide the hint system and explore on your own.</>;
       case 2: 
-        return <>Click tabs or shoot panels to open them.</>;
+        return <>Click tabs or shoot their respective panels (PC users- aim with the cursor and click, Mobile users- tap) to open them.</>;
       case 3: 
         return (
           <>
@@ -127,11 +127,11 @@ const advanceHint = useStore((state) => state.advanceHint);
             or the scroll button on the mouse to navigate the tunnel.<br/>
             Use the reset button 
             <img width="20" height="20" src="/reset-svgrepo-com.svg" className="pixel-icon inline-icon reset-icon" alt="reset" />
-            to snap the panels in location.
+            to snap the panels back to their default location.
           </>
         );
       case 4: 
-        return <>Toggle audio here.</>;
+        return <>Toggle audio On/Off here.<br/>Happy exploration!</>;
       default: 
         return null;
     }
@@ -261,14 +261,14 @@ const advanceHint = useStore((state) => state.advanceHint);
 </button>
         </div>
         
-        <div className="mute-and-hint-btn-container ">
+        <div className={`mute-and-hint-btn-container ${hintStep === 1 ? 'neon-target-active' : ''}`}>
                       {hintStep === 0 ? (
              
     <button 
-      className="hint-toggle-btn hint-btn-primary cursor-target" 
+      className="hint-toggle-btn hint-btn-notActive cursor-target" 
       onClick={startHint}
     >
-      SHOW HINT
+      How do I use this?
     </button>
   ) : (
     <>
@@ -276,7 +276,7 @@ const advanceHint = useStore((state) => state.advanceHint);
         className="hint-toggle-btn hint-btn-danger cursor-target" 
         onClick={cancelHint}
       >
-        CANCEL
+        Hide hint
       </button>
 
       {/* Only show PREVIOUS if we are on Step 2, 3, or 4 */}
@@ -285,7 +285,7 @@ const advanceHint = useStore((state) => state.advanceHint);
           className="hint-toggle-btn hint-btn-primary cursor-target" 
                      onClick={previousHint}
         >
-          ⭠ PREV
+        PREV
         </button>
       )}
 
@@ -294,7 +294,7 @@ const advanceHint = useStore((state) => state.advanceHint);
         onClick={advanceHint}
       >
         {/* Dynamically change the text if it's the last step */}
-        {hintStep >= 4 ? "FINISH ⭢" : "NEXT HINT ⭢"}
+        {hintStep >= 4 ? "FINISH" : "NEXT"}
       </button>
     </>
            )}

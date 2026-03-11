@@ -38,35 +38,44 @@ export default function InteractionHint() {
     const getBotPos = (selector, placement) => {
       const el = document.querySelector(selector);
       if (!el) return new THREE.Vector3(0, 0, targetZ);
+      
       const rect = el.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      let botY = placement === 'under' ? rect.bottom + 60 : rect.top - 60;
+      const isMobile = window.innerWidth <= 768; // 🚀 Detect screen size
+      const isTabletVertical = window.innerWidth <= 1024 && window.innerHeight > window.innerWidth;
+      const isTabletPortrait = window.innerWidth > 1024 && window.innerHeight < window.innerWidth;
+      
+      // Center X is always the same
+      let targetX = rect.left + rect.width / 2;
+      let targetY; 
+
+      if (placement === 'under') {
+        // 🚀 Mobile: 30px below (closer). Desktop: 70px below.
+        targetY = rect.bottom + (isMobile  ? 30 : 70); 
+      } else {
+        // 🚀 'above' (default)
+        // Mobile: 120px above (higher up). Desktop: 75px above.
+        targetY = rect.top - (isMobile ? 140 : 75, isTabletVertical? 120 : 75, isTabletPortrait ? 120 : 75); 
+      }
+
+      // Convert pixel coordinates to 3D space
       const botVec = new THREE.Vector3(
-        (centerX / window.innerWidth) * 2 - 1,
-        -(botY / window.innerHeight) * 2 + 1,
+        (targetX / window.innerWidth) * 2 - 1, 
+        -(targetY / window.innerHeight) * 2 + 1,
         0.5
       );
+      
       botVec.unproject(camera).sub(camera.position).normalize();
       const botDist = (targetZ - camera.position.z) / botVec.z;
+      
       return new THREE.Vector3().copy(camera.position).add(botVec.multiplyScalar(botDist));
     };
 
     switch (hintStep) {
-      case 1: case 1: 
-  // 🚀 Read the actual height of the nav-style element
-  const navElement = document.querySelector('.nav-style');
-  const navHeight = navElement ? navElement.getBoundingClientRect().height : 60;
-
-  // Use your existing logic to convert that height into a 3D coordinate
-  // We're placing it at the center of the screen horizontally (0) 
-  // and at the vertical level of the nav bar.
-  currentBotPos.current.copy(getBotPos('.nav-style', 'under')); 
-  break;
-
+      case 1: currentBotPos.current.copy(getBotPos('.mute-and-hint-btn-container', 'above')); break;
       case 2: currentBotPos.current.copy(getBotPos('.tabs', 'under')); break;
       case 3: currentBotPos.current.copy(getBotPos('.scroll-btn-container', 'above')); break;
-      case 4: currentBotPos.current.copy(getBotPos('.mute-btn', 'under')); break;
-      default: currentBotPos.current.set(0, 0, targetZ);
+      case 4: currentBotPos.current.copy(getBotPos('.mute-btn', 'above')); break;
+      default: currentBotPos.current.copy(getBotPos('.hint-drawer-mask', 'under'));
     }
   };
 
@@ -108,7 +117,7 @@ export default function InteractionHint() {
 
   return (
     <Float speed={2} rotationIntensity={0} floatIntensity={0.2}>
-      <group ref={groupRef}>
+      <group ref={groupRef} raycast={null}>
         {/* Core */}
         <mesh ref={coreRef}>
           <octahedronGeometry args={[0.08, 0]} />
@@ -116,7 +125,7 @@ export default function InteractionHint() {
         </mesh>
 
         {/* 🚀 Smooth Sprite Glow */}
-        <sprite scale={[0.8, 0.8, 1]}>
+        <sprite scale={[0.8, 0.8, 1]} raycast={null}>
           <spriteMaterial 
             map={glowTexture} 
             blending={THREE.AdditiveBlending} 

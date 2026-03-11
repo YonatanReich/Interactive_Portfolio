@@ -312,15 +312,15 @@
 
     0%,
     100% {
-        box-shadow: 0 0 5px rgba(52, 100, 138, 0.4), inset 0 0 5px rgba(52, 100, 138, 0.2);
-        border: 1px solid rgba(52, 100, 138, 0.4);
-        background: rgba(52, 100, 138, 0.05);
+        box-shadow: 0 0 5px rgba(252, 238, 10, 0.4), inset 0 0 5px rgba(252, 238, 10, 0.2);
+        border: 1px solid rgba(252, 238, 10, 0.4);
+        background: rgba(252, 238, 10, 0.05);
     }
 
     50% {
-        box-shadow: 0 0 20px rgba(52, 100, 138, 0.9), inset 0 0 15px rgba(52, 100, 138, 0.6);
-        border: 1px solid rgba(52, 100, 138, 1);
-        background: rgba(52, 100, 138, 0.2);
+        box-shadow: 0 0 20px rgba(252, 238, 10, 0.9), inset 0 0 15px rgba(252, 238, 10, 0.6);
+        border: 1px solid rgba(252, 238, 10, 1);
+        background: rgba(252, 238, 10, 0.2);
     }
 }
 
@@ -335,10 +335,15 @@
 /* --- THE CYBERPUNK DRAWER MASK (Allows the physical slide) --- */
 .hint-drawer-mask {
     position: absolute;
-    top: var(--nav-height, 60px);
+
+    /* 🚀 THE FIX: Automatically glues it to the absolute bottom edge of the Nav Bar */
+    top: 100%;
+
     left: 0;
-    width: 100vw;
-    /* 🚀 This clips the drawer exactly at the nav-line so it disappears when it slides up */
+    width: 100%;
+    /* Changed from 100vw to 100% to prevent horizontal scrollbars */
+
+    /* This clips the drawer exactly at the nav-line so it disappears when it slides up */
     overflow: hidden;
     pointer-events: none;
     z-index: 990;
@@ -358,22 +363,17 @@
     border-top: none;
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px));
 
-    /* 🚀 THE FIX: Lock the width so it stops snapping horizontally on every step! */
-    width: 420px;
-    max-width: 90vw;
-    /* Keeps it safe on mobile screens */
-    min-height: 90px;
-    /* Prevents it from collapsing too small */
+    /* 🚀 FLUID SIZING: Scales from 260px on phones up to 420px on desktop */
+    width: clamp(260px, 85vw, 420px);
+    /* 🚀 FLUID HEIGHT: Shrinks the vertical minimum height on phones */
+    min-height: clamp(65px, 12vw, 90px);
 
     color: #ffffff;
     font-family: 'Orbitron', sans-serif;
     text-align: left;
-    /* 🚀 Left-align looks much better with the scanner wipe */
     pointer-events: none;
-    /* The physical slide-down animation */
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
         opacity 0.4s ease-out;
-        
 }
 
 /* --- CRT SCANLINES --- */
@@ -396,7 +396,10 @@
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
-    padding: 35px 40px 25px 40px;
+
+    /* 🚀 FLUID PADDING: Shrinks the inner spacing on small screens */
+    /* Format: top | right | bottom | left */
+    padding: clamp(20px, 4vw, 35px) clamp(20px, 5vw, 40px) clamp(15px, 3vw, 25px) clamp(20px, 5vw, 40px);
 }
 
 /* --- GLOWING BOTTOM LIP --- */
@@ -432,11 +435,10 @@
 .hint-drawer .inline-icon {
     vertical-align: middle;
     display: inline-block;
-    margin: 0 8px;
-    height: 1.4em;
-    /* Scales perfectly with the surrounding text */
+    margin: 0 clamp(4px, 1vw, 8px);
+    height: clamp(1.1em, 3vw, 1.4em);
+    /* 🚀 Fluid icon scaling */
     width: auto;
-    /* 🚀 Strips the original colors and forces a pure white silhouette with a Steel Blue glow */
     filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(52, 100, 138, 0.9));
 }
 
@@ -444,11 +446,13 @@
 .hint-drawer-content {
     position: relative;
     z-index: 1;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 
-    /* 🚀 Fast, aggressive, and snappy */
+    /* 🚀 FLUID FONT: Shrinks text to 0.7rem on phones, maxes at 0.95rem */
+    font-size: clamp(0.7rem, 2.5vw, 0.95rem);
+    /* 🚀 FLUID LINE HEIGHT: Keeps sentences tightly packed when shrunk */
+    line-height: clamp(1.3, 3vw, 1.6);
+
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     animation: cyber-rgb-flicker 0.45s ease-in forwards;
 }
 
@@ -543,3 +547,40 @@
     transform: scale(1.1);
     filter: brightness(0) saturate(100%) invert(72%) sepia(18%) saturate(1007%) hue-rotate(135deg) brightness(100%) contrast(100%) drop-shadow(0 0 8px rgba(76, 180, 187, 2));
 }
+
+/* =========================================
+   HINT ICON - UNMISSABLE ALERT STYLE
+   ========================================= */
+
+.hint-btn-notActive {
+    /* 🚀 True Cyberpunk Warning Yellow - Physically impossible to ignore */
+    background-color: #FCEE0A !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+    padding: 6px 14px !important;
+    border-radius: 4px;
+    border: 2px solid #FCEE0A !important;
+
+    /* A bold, solid light spill */
+    box-shadow: 0 0 15px rgba(252, 238, 10, 0.6) !important;
+
+    /* Override your old complex filters */
+    filter: none !important;
+    text-shadow: none !important;
+
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+
+
+/* --- Hover State --- */
+.hint-btn-notActive:hover {
+    transform: scale(1.1);
+    /* Snaps to pure white-hot on hover */
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.9) !important;
+}
+
+
