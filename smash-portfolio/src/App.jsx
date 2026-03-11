@@ -1,8 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { GradientTexture, Environment } from '@react-three/drei' 
-import { Physics } from '@react-three/cannon'
 import * as THREE from 'three'
-import { useEffect } from 'react'
+import { useEffect,Suspense } from 'react'
 import { useStore } from './store.js'
 import TargetCursor from './components/TargetCursor.jsx';
 import GlassPanel from './components/GlassPanel.jsx'
@@ -12,6 +11,7 @@ import BallManager from './components/BallManager.jsx'
 import InteractionHint from './components/InteractionHint.jsx'
 import LandingPage from './components/LoadingScreen.jsx'
 import './HomePage.css'
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 
 
 // --- VISUAL PALETTE ---
@@ -48,6 +48,12 @@ export default function App() {
   const resetEntered = useStore((state) => state.resetEntered)
   const triggerPanelReset = useStore((state) => state.triggerPanelReset)
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 480;
+ const hintStep = useStore((state) => state.hintStep);
+const startHint = useStore((state) => state.startHint);
+const advanceHint = useStore((state) => state.advanceHint);
+  const cancelHint = useStore((state) => state.cancelHint);
+  const previousHint = useStore((state) => state.previousHint);
+  const activeTarget = useStore((state) => state.activeTarget);
   // --- BACKGROUND MUSIC LOGIC ---
   useEffect(() => {
     const audio = document.getElementById('bg_sound')
@@ -102,15 +108,34 @@ export default function App() {
     return () => window.removeEventListener('resize', updateUIHeights);
   }, []);
 
-  useEffect(() => {
-  const checkClick = (e) => {
-    console.log("Element being clicked:", e.target);
-    console.log("Z-Index of element:", window.getComputedStyle(e.target).zIndex);
+  if (activeTarget) {
+    useStore.setState({ hintStep: 0 }); 
+  }
+  // Add this inside the App component, before the return statement
+  const getHintContent = (step) => {
+    switch (step) {
+      case 1: 
+        return <>Welcome to my portfolio.<br/>On the right bottom corner of your screen, you'll find the hint system controls and your guide.<br/>For further explanation, Click on "Next" and follow the guide, or hide the hint system and explore on your own.</>;
+      case 2: 
+        return <>Click tabs or shoot their respective panels (PC users- aim with the cursor and click, Mobile users- tap) to open them.</>;
+      case 3: 
+        return (
+          <>
+            Use the arrow buttons 
+            <img width="20" height="20" src="https://img.icons8.com/ultraviolet/40/long-arrow-up.png" className="pixel-icon inline-icon" alt="up" />
+            <img width="20" height="20" src="https://img.icons8.com/ultraviolet/40/long-arrow-down.png" className="pixel-icon inline-icon" alt="down" />
+            or the scroll button on the mouse to navigate the tunnel.<br/>
+            Use the reset button 
+            <img width="20" height="20" src="/reset-svgrepo-com.svg" className="pixel-icon inline-icon reset-icon" alt="reset" />
+            to snap the panels back to their default location.
+          </>
+        );
+      case 4: 
+        return <>Toggle audio On/Off here.<br/>Happy exploration!</>;
+      default: 
+        return null;
+    }
   };
-  window.addEventListener('click', checkClick);
-  return () => window.removeEventListener('click', checkClick);
-}, []);
-
  return (
   <div style={{ position: 'relative', height: '100vh', width: '100vw', background: '#000', overflow: 'hidden' }}>
     
@@ -139,7 +164,10 @@ export default function App() {
         <GlassPanel position={[-5, 2, 0]} label="Projects" range={0.5} speed={1.2} id="modal_projects" />
         <GlassPanel position={[0, -3, -4]} label="About Me" range={0.8} speed={0.8} id="modal_about" />
         <GlassPanel position={[5, 1, -2]} label="Skills" range={0.6} speed={1.0} id="modal_skills" />
-        <GlassPanel position={[0,2,-1]} label="Contact me" range={1} speed={1} id="modal_contact" />
+       <GlassPanel position={[0, 2, -1]} label="Contact me" range={1} speed={1} id="modal_contact" />
+       <Suspense fallback={null}>
+         <InteractionHint />
+       </Suspense>
     </Canvas>
 
     {/* 2. LOADING LAYER: Sits on top of Canvas but below UI HUD */}
@@ -163,18 +191,41 @@ export default function App() {
       }}
     >
       <nav className="nav-style" style={{ pointerEvents: 'auto' }}>
-        <div className="tabs">
+        <div className={`tabs ${hintStep === 2 ? 'neon-target-active' : ''}`}>
           <button className="cursor-target nav-btn" onClick={() => { resetEntered(); setTarget(null); triggerPanelReset(); }} style={btnStyle}>Exit tunnel</button>
           <button className="cursor-target nav-btn" onClick={() => setTarget(null)} style={btnStyle}>Main menu</button>        
           <button className="cursor-target nav-btn" onClick={() => setTarget('modal_projects')} style={btnStyle}>Projects</button>
           <button className="cursor-target nav-btn" onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
           <button className="cursor-target nav-btn" onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>
-          <button className="cursor-target nav-btn" onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
+           <button className="cursor-target nav-btn" onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
+           <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+            <button className="cursor-target nav-btn resume-nav-btn" style={btnStyle}>
+  My Resume
+  <img 
+    src="/resume-4-svgrepo-com.svg" 
+    className="resume-icon" 
+    alt="resume icon" 
+  />
+</button>
+           </a>
         </div>
-        
-        <button className="cursor-target nav-btn" onClick={toggleMute} style={muteBtnStyle}> 
-            {isMuted ? '🔇' : '🔊'}  
-        </button>
+
+      <div className="hint-drawer-mask" style={{pointerEvents : 'none'}}>
+        <div className={`hint-drawer ${hintStep > 0 && hintStep < 5 ? 'open' : ''}`} >
+          
+          {/* The scanline overlay */}
+          <div className="hint-drawer-scanlines"></div>
+          
+          {/* 🚀 The `key` forces React to replay the CSS animation when the step changes! */}
+          <div className="hint-drawer-content" key={hintStep}>
+            {getHintContent(hintStep)}
+          </div>
+          
+          {/* The glowing hardware lip */}
+          <div className="hint-drawer-lip"></div>
+          
+        </div>
+      </div>
       </nav>
       
       <footer className="bottom-bar-glass" style={{ pointerEvents: 'auto' }}>
@@ -184,11 +235,11 @@ export default function App() {
   </span>
   
     <span className="Role">
-      SOFTWARE DEVELOPER
+      SOFTWARE DEVELOPER.
     </span>
   
 </div>
-        <div className="scroll-btn-container">
+         <div className={`scroll-btn-container ${hintStep === 3 ? 'neon-target-active' : ''}`} >
           <button className="scroll-up-btn cursor-target" onPointerDown={startForward} onPointerUp={stop} onPointerLeave={stop}>
             <img width="40" height="40" src="https://img.icons8.com/ultraviolet/40/long-arrow-up.png" className='pixel-icon' alt="up" style={{ pointerEvents: 'none' }} />
           </button>
@@ -210,22 +261,65 @@ export default function App() {
 </button>
         </div>
         
-        <div className="CV-btn-container ">
-          <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-              <button className="cursor-target nav-btn" style={btnStyle}>My Resume 📄</button>
-          </a>
+        <div className={`mute-and-hint-btn-container ${hintStep === 1 ? 'neon-target-active' : ''}`}>
+                      {hintStep === 0 ? (
+             
+    <button 
+      className="hint-toggle-btn hint-btn-notActive cursor-target" 
+      onClick={startHint}
+    >
+      How do I use this?
+    </button>
+  ) : (
+    <>
+      <button 
+        className="hint-toggle-btn hint-btn-danger cursor-target" 
+        onClick={cancelHint}
+      >
+        Hide hint
+      </button>
+
+      {/* Only show PREVIOUS if we are on Step 2, 3, or 4 */}
+      {hintStep > 1 && (
+        <button 
+          className="hint-toggle-btn hint-btn-primary cursor-target" 
+                     onClick={previousHint}
+        >
+        PREV
+        </button>
+      )}
+
+      <button 
+        className="hint-toggle-btn hint-btn-primary cursor-target" 
+        onClick={advanceHint}
+      >
+        {/* Dynamically change the text if it's the last step */}
+        {hintStep >= 4 ? "FINISH" : "NEXT"}
+      </button>
+    </>
+           )}
+           <button 
+  className={`mute-btn cursor-target nav-btn ${hintStep === 4 ? 'neon-target-active' : ''}`} 
+             onClick={toggleMute}
+> 
+  <img 
+    src={isMuted ? "/mute-sound-audio-svgrepo-com.svg" : "/speaker-sound-music-svgrepo-com.svg"} 
+    className="pixel-icon-mute" 
+    alt="Volume Control" 
+  />
+</button>
         </div>
       </footer>
     </div>
 
-    {/* 4. TOP MOST UTILITY LAYER: Cursor, Audio, and Hints */}
+    
     <TargetCursor 
       spinDuration={1.5}
       hideDefaultCursor
       parallaxOff={false}
       hoverDuration={1}
     />  
-    <InteractionHint />
+    
     <audio id="bg_sound" src="/Hole In One - Spiritual Ideas For Virtual Reality.mp3" loop />
 
   </div>
@@ -248,11 +342,3 @@ export const btnStyle = {
   cursor: 'pointer',
 }
 
-const muteBtnStyle = {
-  background: 'rgba(255, 255, 255, 0.1)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  color: 'white',
-  padding: '0.5rem 1rem',
-  borderRadius: '20px',
-  cursor: 'pointer'
-}

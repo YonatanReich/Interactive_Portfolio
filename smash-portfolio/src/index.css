@@ -112,52 +112,107 @@ button:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
   box-sizing: border-box;
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* =========================================
+   UNIVERSAL BOTTOM BAR FLUID SCALING
+   ========================================= */
 
 .bottom-bar-glass {
   position: fixed;
   bottom: max(0px, env(safe-area-inset-bottom));
   pointer-events: auto;
   width: 100%;
-  padding: 1rem 2rem;
+  padding: clamp(8px, 1.5vw, 20px) 2vw;
   background-color: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
+  justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   font-weight: 600;
   letter-spacing: 1px;
+  flex-wrap: nowrap !important;
+  overflow: hidden;
 }
 
-.bottom-bar-glass .scroll-btn-container {
-  position: absolute;
+/* 🚀 FIX: Isolate the Nameplate to stack vertically */
+.bottom-bar-glass .nav-nameplate {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
   display: flex;
-  left: 45%;
-  flex-direction: row;
-  gap: 25px;
+  flex-direction: column;
+  /* Stacks Name and Role vertically */
+  align-items: center;
+  /* Centers Role perfectly underneath Name */
   justify-content: center;
-  padding: 0;
+  flex-shrink: 1;
+  min-width: 0;
+  line-height: 1.1;
+  /* Keeps them tightly squeezed together */
+  gap: 2px;
 }
 
-.bottom-bar-glass .CV-btn-container {
-  position: absolute;
-  left: 82%;
+/* Scroll and Hint groups stay side-by-side */
+.bottom-bar-glass .scroll-btn-container,
+.bottom-bar-glass .mute-and-hint-btn-container {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  display: flex;
+  align-items: center;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
+/* 🚀 FIX: Name and Role typography scaling & margins */
+.bottom-bar-glass .Name {
+  font-size: clamp(0.7rem, 1.5vw, 1.3rem) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.bottom-bar-glass .Role {
+  font-size: clamp(0.4rem, 0.8vw, 0.75rem) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.bottom-bar-glass button,
+.bottom-bar-glass .nav-btn,
+.bottom-bar-glass .hint-toggle-btn {
+  font-size: clamp(0.55rem, 1.2vw, 1rem) !important;
+  padding: clamp(4px, 0.8vw, 8px) clamp(6px, 1.2vw, 12px) !important;
+}
+
+.bottom-bar-glass .scroll-btn-container,
+.bottom-bar-glass .mute-and-hint-btn-container {
+  gap: clamp(4px, 1.5vw, 25px) !important;
+}
+
+.bottom-bar-glass img,
+.bottom-bar-glass .pixel-icon,
+.bottom-bar-glass .pixel-icon-mute {
+  height: clamp(20px, 3.5vw, 45px) !important;
+  width: auto !important;
+}
+
+/* Scroll button specific shapes */
 .scroll-down-btn,
 .scroll-up-btn {
-  width: 50px;
-  height: 50px;
+  width: clamp(35px, 4vw, 50px);
+  height: clamp(35px, 4vw, 50px);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
-  font-size: 24px;
   cursor: pointer;
   backdrop-filter: blur(5px);
   display: flex;
@@ -166,7 +221,6 @@ button:focus-visible {
   transition: all 0.2s ease;
   user-select: none;
   touch-action: manipulation;
-  -webkit-user-select: none;
 }
 
 .scroll-down-btn:active,
@@ -239,46 +293,14 @@ button:focus-visible {
   }
 
   /* BOTTOM BAR FIXES */
-  .bottom-bar-glass {
-    padding: 20px !important;
-    flex-direction: row;
-    gap: 20px;
-  }
-
   .bottom-bar-glass button {
-    font-size: 0.7rem !important;
-    padding: 5px 8px !important;
     margin-right: 0 !important;
-  }
-
-  .Name {
-    font-size: 0.9rem !important;
-    margin-right: -8px !important;
-  }
-
-  .Role {
-    font-size: 0.8rem !important;
-  }
-
-  .scroll-btn-container {
-    position: absolute;
-    display: flex;
-    left: 53% !important;
-    flex-direction: row;
-    gap: 25px;
-    justify-content: center;
-    padding: 0;
   }
 
   .scroll-btn-container button {
     margin: 0 -5px !important;
     padding: 0 !important;
     transform: scale(0.8);
-  }
-
-  .scroll-btn-container img {
-    width: 30px !important;
-    height: 30px !important;
   }
 }
 
@@ -297,45 +319,58 @@ button:focus-visible {
     letter-spacing: 0px !important;
   }
 
-  .bottom-bar-glass {
-    padding: 12px 15px !important;
-  }
-
-  .Name {
-    font-size: 1rem !important;
-  }
-
-  .Role {
-    font-size: 0.65rem !important;
-    letter-spacing: 0.5px !important;
-  }
-
-  .scroll-btn-container {
-    position: absolute;
-    left: 50% !important;
-    transform: translateX(-50%);
-    gap: 15px !important;
-  }
-
   .scroll-down-btn,
   .scroll-up-btn {
     width: 40px !important;
     height: 40px !important;
   }
 
-  .scroll-down-btn img,
-  .scroll-up-btn img {
-    width: 25px !important;
-    height: 25px !important;
-  }
-
-  .bottom-bar-glass .CV-btn-container {
-    left: auto !important;
-    right: 15px !important;
-  }
-
-  .bottom-bar-glass .CV-btn-container button {
-    font-size: 0.7rem !important;
+  .bottom-bar-glass .mute-and-hint-btn-container button {
     padding: 5px 8px !important;
   }
+}
+
+/* =========================================
+   UNIVERSAL FLUID TEXT SIZING (Top & Bottom)
+   ========================================= */
+
+/* 1. All Navigation & Hint Buttons */
+.nav-style button,
+.tabs button,
+.nav-btn,
+.hint-toggle-btn {
+  /* Shrinks down to 0.5rem on tiny phones, stays around 0.9rem on desktop */
+  font-size: clamp(0.5rem, 1.2vw, 1rem) !important;
+  padding: clamp(4px, 0.8vw, 8px) clamp(6px, 1vw, 12px) !important;
+  
+  /* Prevents button text from breaking into two lines */
+}
+
+/* 2. The Nameplate (Bottom Left) */
+.nav-nameplate .Name {
+  /* Shrinks down to 0.7rem on phones, maxes at 1.4rem on desktop */
+  font-size: clamp(0.7rem, 2vw, 1.4rem) !important;
+  white-space: nowrap;
+}
+
+.nav-nameplate .Role {
+  /* Shrinks down to a tiny 0.45rem, maxes at 0.8rem */
+  font-size: clamp(0.45rem, 1vw, 0.8rem) !important;
+  white-space: nowrap;
+}
+
+/* 3. The SVG Icons (Volume, Resume, Arrows) */
+.pixel-icon-mute,
+.resume-icon,
+.scroll-btn-container img {
+  /* Shrinks the actual images dynamically */
+  height: clamp(16px, 3vw, 30px) !important;
+  width: auto !important;
+}
+
+/* 4. The Scroll Circles (Up/Down/Reset) */
+.scroll-down-btn,
+.scroll-up-btn {
+  width: clamp(35px, 4vw, 50px) !important;
+  height: clamp(35px, 4vw, 50px) !important;
 }

@@ -49,5 +49,17 @@ export const useStore = create((set) => ({
 
     panelResetTrigger: 0,
     triggerPanelReset: () => set((state) => ({ panelResetTrigger: state.panelResetTrigger + 1 })),
+
+// Replace your current hint state with this:
+hintStep: 0, // 0 means completely hidden by default
+startHint: () => set({ hintStep: 1 }),
+advanceHint: () => set((state) => ({ 
+  // If we are on step 4, advancing finishes it (resets to 0). Otherwise, go to next.
+  hintStep: state.hintStep >= 4 ? 0 : state.hintStep + 1 
+})),
+    cancelHint: () => set({ hintStep: 0 }),
+previousHint: () => set((state) => ({ 
+    hintStep: state.hintStep > 1 ? state.hintStep - 1 : state.hintStep 
+  })),
     
 }))
