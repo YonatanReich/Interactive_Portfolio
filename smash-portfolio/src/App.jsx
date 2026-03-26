@@ -198,7 +198,7 @@ const advanceHint = useStore((state) => state.advanceHint);
           <button className="cursor-target nav-btn" onClick={() => setTarget('modal_about')} style={btnStyle}>About Me</button>
           <button className="cursor-target nav-btn" onClick={() => setTarget('modal_skills')} style={btnStyle}>Skills</button>
            <button className="cursor-target nav-btn" onClick={() => setTarget('modal_contact')} style={btnStyle}>Contact Me</button>
-           <a href="YonatanR_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+           <a href="YonatanReich_Junior_SWE_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
             <button className="cursor-target nav-btn resume-nav-btn" style={btnStyle}>
   My Resume
   <img 
