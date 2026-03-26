@@ -433,7 +433,7 @@
 
     /* Highly recommended: Stops the user from getting trapped scrolling inside a tiny window. 
      Treats it like a pure visual "thumbnail" they can look at. */
-    pointer-events: visible;
+    pointer-events: none;
 }
 
 .applicant-iframe-unclickable {
@@ -453,4 +453,31 @@
     /* Highly recommended: Stops the user from getting trapped scrolling inside a tiny window. 
      Treats it like a pure visual "thumbnail" they can look at. */
     pointer-events: none;
+}
+
+/* --- TECH BADGE ARRAY --- */
+.tech-badges-array {
+    display:flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* Space between badges */
+    margin-bottom: 1.5rem;
+}
+
+/* Optional: Adds a subtle hover lift to the badges so they feel interactive */
+.tech-badges-array img {
+    border-radius: 4px;
+    /* Optional: smooths the hard corners of the for-the-badge style */
+    transition: transform 0.2s ease;
+}
+
+.tech-intro {
+    color: rgba(76, 180, 187, 1);
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    text-decoration: underline;
+    margin-right: 8px;
 }
