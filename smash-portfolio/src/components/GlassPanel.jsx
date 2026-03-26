@@ -1,5 +1,4 @@
 // src/components/GlassPanel.jsx
-import { useBox } from '@react-three/cannon'
 import { Text, Html, RoundedBox } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useLayoutEffect, useRef } from 'react'
@@ -9,6 +8,8 @@ import * as THREE from 'three'
 import '../GlassPanel.css' 
 import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
 import gsap from 'gsap'
+import { GrResources } from "react-icons/gr";
+import {FiTarget, FiLayout, FiDatabase,  FiCode, FiSettings} from "react-icons/fi"
 
 
 
@@ -28,99 +29,149 @@ const CONTENT = {
     title: "PROJECTS",
     body: (
       <>
+        <div className="project-card">
+  <div className="project-header cursor-target">
+    <h3>Applican-t</h3>
+    <span className="status-tag-live">LIVE</span>
+  </div>
+  
+  <p className="project-desc cursor-target">
+  <strong className="tech-intro">What it is:</strong>  A Job seeker's best friend, A tool that let's users manage a top view of a process that can be complex and tiring, in a way that's intuitive and serves actionable data.
+  </p>
+  <br/>
+  <div className="project-problem cursor-target">
+    <strong className="tech-intro">What it solves:</strong> In the current Tech Job market, applicants sometimes need to juggle between tens of application processes, each in different stages, and each may focus on different technologies. Managing this process and producing actionable data that can help users focus on how to maximize their chances at a desired position is what this tool is meant for.
+  </div>
+
+  <div className="preview-frame-wrapper cursor-target">
+    <iframe 
+      src="https://applican-t.com" 
+      title="Applicant Mobile Preview"
+      className="applicant-iframe-unclickable"
+      loading="lazy"
+    ></iframe>
+  </div>
+
+  <div className="tech-stack-section">
+    <h4 className="tech-stack-title" style={{ marginBottom: '12px' }}>
+      <GrResources style={{ verticalAlign: '-3', marginRight: '8px' }}/>
+      Tech stack
+    </h4>
+    
+    
+    <div className="tech-badges-array">
+      <img src="https://img.shields.io/badge/Next.js-28a1a7?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+      <img src="https://img.shields.io/badge/TypeScript-28a1a7?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+      <img src="https://img.shields.io/badge/React_Flow-28a1a7?style=for-the-badge&logo=react&logoColor=white" alt="React Flow" />
+      <img src="https://img.shields.io/badge/Prisma-28a1a7?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" />
+      <img src="https://img.shields.io/badge/Clerk-28a1a7?style=for-the-badge&logo=clerk&logoColor=white" alt="Clerk" />
+    </div>
+
+    <div className="tech-reasoning-grid" style={{ marginTop: '20px' }}>
+      
+      <div className="tech-item cursor-target">
+        <span className="tech-name">Next.js & TypeScript</span>
+        <span className="tech-why">
+          Utilizes the App Router and Server Actions for a unified, strictly type-safe full-stack environment.
+        </span>
+      </div>
+
+      <div className="tech-item cursor-target">
+        <span className="tech-name">React Flow & Pure CSS</span>
+        <span className="tech-why">
+          Modern CSS for a slick design, and react flow to produce personalized diagrams that provide a top level view of each user's process.
+        </span>
+      </div>
+
+      <div className="tech-item cursor-target">
+        <span className="tech-name">Clerk & Prisma</span>
+        <span className="tech-why">
+          Clerk for user Auth, Prisma for a modern, postgreSQL db storage.
+        </span>
+      </div>
+
+    </div>
+  </div>
+  
+  <div className="project-links">
+    <a href="https://applican-t.com" className="project-link cursor-target" target="_blank" rel="noopener noreferrer">Try it yourself &rarr;</a>
+  </div>
+</div>
+
+        <hr className="divider"/>
+        {/* --- PROJECT 2: PORTFOLIO --- */}
+        <div className="project-card">
+  <div className="project-header cursor-target">
+    <h3>My portfolio - You're here right now</h3>
+    <h4 className="status-tag-live">LIVE</h4>
+  </div>
+  
+  <p className="project-desc cursor-target">
+    <strong className="tech-intro">What it is:</strong> A high end 3D web application meant to demonstrate high level front end skills, and differentiate me from other developers.
+  </p>
+  <br/>
+  <div className="project-problem cursor-target">
+    <strong className="tech-intro">What it solves:</strong> With modern tools, standard, minimalist dev websites are so easy to create that it means nothing to have one. This portfolio aims at delivering a unique experience while presenting high-end frontend skills, with the added bonus of doing everything else a dev portfolio does.
+  </div>
+  
+  <div className="preview-frame-wrapper">
+    <iframe 
+      src="https://yonatanreich.dev" 
+      title="Portfolio Mobile Preview"
+      className="applicant-iframe"
+      loading="lazy"
+    ></iframe>
+  </div>
+  
+  <div className="tech-stack-section">
+    <h4 className="tech-stack-title" style={{ marginBottom: '12px' }}>
+      <GrResources style={{ verticalAlign: '-3', marginRight: '8px' }}/>
+      Tech stack
+    </h4>
+
+    {/* NEW: Stylized Badge Array directly below the title */}
+    <div className="tech-badges-array cursor-target">
+      <img src="https://img.shields.io/badge/React_19-28a1a7?style=for-the-badge&logo=react&logoColor=white" alt="React 19" />
+      <img src="https://img.shields.io/badge/Three.js-28a1a7?style=for-the-badge&logo=threedotjs&logoColor=white" alt="Three.js" />
+      <img src="https://img.shields.io/badge/React_Three_Fiber-28a1a7?style=for-the-badge&logo=react&logoColor=white" alt="React Three Fiber" />
+      <img src="https://img.shields.io/badge/Vite-28a1a7?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+    </div>
+
+    <div className="tech-reasoning-grid" style={{ marginTop: '20px' }}>
+      <div className="tech-item cursor-target">
+        <span className="tech-name">React 19 & JavaScript</span>
+        <span className="tech-why">
+          Manages the complex state synchronization between the standard 2D DOM (like this scrollable text) and the WebGL canvas without blocking the main thread.
+        </span>
+      </div>
+      
+      <div className="tech-item cursor-target">
+        <span className="tech-name">React Three Fiber (WebGL)</span>
+        <span className="tech-why">
+          Powers the interactive 3D environment, custom shaders, and physics loop natively within the React component tree for maximum performance.
+        </span>
+      </div>
+      
+      <div className="tech-item cursor-target">
+        <span className="tech-name">Vite Ecosystem</span>
+        <span className="tech-why">
+          Provides a lightning-fast build pipeline with advanced asset optimization to ensure heavy 3D models and textures load instantly on mobile devices.
+        </span>
+      </div>
+    </div>
+  </div>
+  
+  <div className="project-links">
+    <a href="https://github.com/YonatanReich/Interactive_Portfolio" className="project-link cursor-target" target="_blank" rel="noopener noreferrer">Source code &rarr;</a>
+  </div>
+</div>
+
+        <hr className="divider"/>
+
         
-        {/* --- PROJECT 1: PORTFOLIO --- */}
-        <div className="project-card">
-          <div className="project-header cursor-target">
-            <h3>Interactive SWE Portfolio</h3>
-            <h4 className="status-tag-live">LIVE</h4>
-            </div>
-            
-          
-          <p className="project-desc cursor-target">
-            A high-performance 3D web experience built to demonstrate front-end mastery and graphics programming skills.
-          </p>
-          <div className="project-problem cursor-target">
-            <strong>The Problem:</strong> In a saturated junior market, standard resumes are skimmed and forgotten. This project aims to arrest attention immediately, increasing dwell time and leaving a memorable impression on recruiters.
-          </div>
-          <div className="tech-stack-section">
-            <h4 className="tech-stack-title">⚡ Tech Architecture</h4>
-            <div className="tech-reasoning-grid">
-              <div className="tech-item cursor-target">
-                <span className="tech-name">React 19 & JavaScript</span>
-                <span className="tech-why ">
-                  Provides the component-based architecture needed to manage the complex synchronization between the 2D UI overlays and the 3D scene state.
-                </span>
-              </div>
-              <div className="tech-item cursor-target">
-                <span className="tech-name">React Three Fiber (WebGL)</span>
-                <span className="tech-why">
-                  A declarative renderer that optimizes the Three.js loop, allowing for efficient 60FPS animation while keeping the codebase modular and readable.
-                </span>
-              </div>
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Vite Ecosystem</span>
-                <span className="tech-why">
-                  Selected for its high-performance build pipeline, enabling rapid prototyping of shaders and physics interactions.
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="project-links">
-            <a href="https://yonatanreich.dev" className="project-link cursor-target">Go to project &rarr;</a>
-            <a href="https://github.com/YonatanReich/Interactive_Portfolio" className="project-link cursor-target">View Repository &rarr;</a>
-          </div>
-        </div>
+       
 
-        <hr className="divider"/>
-
-        {/* --- PROJECT 2: SANKEY TRACKER --- */}
-        <div className="project-card">
-          <div className="project-header cursor-target">
-            <h3>Sankey Job Tracker</h3>
-            <span className="status-tag-inDev">IN DEVELOPMENT</span>
-          </div>
-          <p className="project-desc cursor-target">
-            A data-visualization tool designed to organize the chaotic job hunt process into actionable insights.
-          </p>
-          <div className="project-problem cursor-target">
-            <strong>The Problem:</strong> Tracking hundreds of applications via spreadsheets lacks depth. Candidates lose track of where they fail (Resume vs. Interview). This app visualizes the funnel to reveal bottlenecks in the process.
-          </div>
-          <div className="tech-stack-section">
-            <h4 className="tech-stack-title">⚡ Tech Architecture</h4>
-            <div className="tech-reasoning-grid">
-              
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Next.js 14 & TypeScript</span>
-                <span className="tech-why">
-                  Utilizes the App Router and Server Actions to unify the frontend and backend, ensuring end-to-end type safety without the need for a separate API layer.
-                </span>
-              </div>
-
-              <div className="tech-item cursor-target">
-                <span className="tech-name">D3.js Visualization Engine</span>
-                <span className="tech-why">
-                  Bypasses standard charting libraries in favor of raw D3 calculations, enabling custom Sankey flow logic that dynamically adapts to complex job application states.
-                </span>
-              </div>
-
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Prisma & PostgreSQL</span>
-                <span className="tech-why">
-                  A robust relational database strategy managed via Prisma ORM to strictly enforce schema validation for user data and application history.
-                </span>
-              </div>
-
-            </div>
-          </div>
-          <div className="project-links">
-            <a href="https://github.com/YonatanReich/Sankey-job-hunt-web-app" className="project-link  cursor-target">View Progress &rarr;</a>
-          </div>
-        </div>
-
-        <hr className="divider"/>
-
-        {/* --- PROJECT 3: DRIVE CLONE --- */}
+        {/* --- PROJECT 3: DRIVE CLONE --- 
         <div className="project-card">
           <div className="project-header cursor-target">
             <h3>Full-Stack Drive Clone</h3>
@@ -129,11 +180,14 @@ const CONTENT = {
           <p className="project-desc cursor-target">
             A distributed file storage system featuring web and mobile clients, architected with a polyglot backend.
           </p>
+          <br/>
           <div className="project-problem cursor-target">
              <strong>The Problem:</strong> Bridging the gap between high-level web APIs and low-level systems programming. This project solves the challenge of handling binary streams and compression by offloading heavy lifting to C++.
           </div>
           <div className="tech-stack-section">
-            <h4 className="tech-stack-title">⚡ Tech Architecture</h4>
+            <h4 className="tech-stack-title">
+               <GrResources style={{ verticalAlign: '-3', marginRight: '8px' }}/>
+              Tech Architecture</h4>
             <div className="tech-reasoning-grid">
               
               <div className="tech-item cursor-target">
@@ -162,160 +216,153 @@ const CONTENT = {
           <div className="project-links">
             <a href="#" className="project-link cursor-target">View Progress &rarr;</a>
           </div>
-        </div>
+        </div>  */}
       </>
     )
   },
   modal_about: {
-    title: "ABOUT ME",
-    body: (
-      <>
+  title: "ABOUT ME",
+  body: (
+    <>
+      <div className="project-card">
+        <div className="project-header cursor-target" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <h3>Yonatan Reich</h3>
+        </div>
         
-        {/* --- BIO CARD --- */}
-        <div className="project-card">
-          <div className="project-header cursor-target" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h3>Yonatan Reich</h3>
+        <p className="project-desc cursor-target">
+          I love building things that work, and providing solutions for real world problems.
+          <br/><br/>
+          My approach to software engineering is defined by strict discipline and a drive to build things that matter. I don't just write code; I take ownership of the entire lifecycle. Whether diving into complex backend logic or crafting high-performance interactive interfaces, I thrive on turning abstract requirements into robust, production-ready solutions.
+        </p>
+
+        <div className="tech-stack-section">
+          <h4 className="tech-stack-title" style={{ marginBottom: '16px' }}>
+            <FiTarget style={{ verticalAlign: '-3px', marginRight: '8px', color: 'var(--primary-color)' }} />
+            Why Work With Me
+          </h4>
+          
+          <div className="tech-reasoning-grid">
             
-          </div>
-          
-          <p className="project-desc cursor-target">
-            I am a Computer Science student at <strong>Bar-Ilan University</strong>, expected to graduate in <strong>Summer 2027</strong>.
-            <br/><br/>
-            Beyond the code, I am defined by a disciplined approach to life. I believe in smart, but rigours work in order to achieve any goal I put in front of myself. My passion lies in seeing a process through from <strong>A to Z</strong>—taking an abstract concept, architecting the solution, and driving it all the way to a polished deployment.
-          </p>
-
-          <div className="tech-stack-section">
-            <h4 className="tech-stack-title">⚛ Core Philosophy</h4>
-            <div className="tech-reasoning-grid">
-              
-              <div className="tech-item cursor-target">
-                <span className="tech-name">End-to-End Ownership</span>
-                <span className="tech-why">
-                  I thrive on responsibility. Whether it's a low-level backend service or a responsive UI, I am committed to understanding and mastering every layer of the stack to deliver a complete product.
-                </span>
-              </div>
-
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Creative Problem Solving</span>
-                <span className="tech-why">
-                  I view constraints as opportunities. I enjoy dissecting complex problems to find elegant, efficient solutions rather than relying on quick fixes or patches.
-                </span>
-              </div>
-
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Disciplined Growth</span>
-                <span className="tech-why">
-                  Consistency is my superpower. I am constantly refining my toolset, learning new paradigms (like this portfolio), and holding my code to the highest standard.
-                </span>
-              </div>
-
+            <div className="tech-item cursor-target">
+              <span className="tech-name">End-to-End Ownership</span>
+              <span className="tech-why">
+                I take features from concept to deployment. I am equally comfortable designing database schemas and optimizing low-level systems as I am building fluid, High level user interfaces.
+              </span>
             </div>
+
+            <div className="tech-item cursor-target">
+              <span className="tech-name">Disciplined Problem Solving</span>
+              <span className="tech-why">
+                I bring a rigorous, systematic work ethic to debugging and architecture. I view constraints as opportunities, breaking down complex bottlenecks to build scalable, long-term solutions rather than quick patches.
+              </span>
+            </div>
+
+            <div className="tech-item cursor-target">
+              <span className="tech-name">Clear & Collaborative Communication</span>
+              <span className="tech-why">
+                Great code requires great communication. Fully fluent in both English and Hebrew, I prioritize writing clean documentation, sharing knowledge, and maintaining transparent alignment with my team.
+              </span>
+            </div>
+
+            <div className="tech-item cursor-target">
+              <span className="tech-name">Adaptable Foundations</span>
+              <span className="tech-why">
+                My academic background (BSc in Computer Science at BIU, ongoing) provides me with solid fundementals that help me understand new tools and technologies quickly
+              </span>
+            </div>
+
           </div>
         </div>
-
-      </>
-    )
-  },
+      </div>
+    </>
+  )
+},
   modal_skills: {
-    title: "SKILLS",
-    body: (
-      <>
-        
-        {/* --- MAIN SKILLS CARD --- */}
-        <div className="project-card">
-          <div className="project-header cursor-target">
-            <h3>Technical Toolkit</h3>
-          </div>
-          
-          <p className="project-desc cursor-target">
-            I am constantly polishing my skills and upgrading my technical toolkit. My goal is to understand the "magic" behind the code- from how a CPU executes instructions to how a web browser renders a page.
-          </p>
-
-          {/* 1. SYSTEMS (Honest Student Level) */}
-          <div className="tech-stack-section">
-            <h4 className="tech-stack-title">⚙️ Systems Programming</h4>
-            <div className="tech-reasoning-grid">
-              
-              <div className="tech-item cursor-target">
-                <span className="tech-name">C & C++</span>
-                <span className="tech-why">
-                  My primary languages for university coursework. Experienced with manual memory management (pointers/malloc) and systems-level logic.
-                </span>
-              </div>
-
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Operating Systems Concepts</span>
-                <span className="tech-why">
-                   Currently analyzing the internals of process management, threads, and concurrency to understand how software interacts with hardware.
-                </span>
-              </div>
-              
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Assembly (x86)</span>
-                <span className="tech-why">
-                   Gained exposure to low-level instructions and registers, providing a mental model for how high-level code is actually executed.
-                </span>
-              </div>
-
-            </div>
-          </div>
-
-          {/* 2. WEB DEV (Project Level) */}
-          <div className="tech-stack-section ">
-            <h4 className="tech-stack-title">🌐 Web Development</h4>
-            <div className="tech-reasoning-grid ">
-              
-              <div className="tech-item cursor-target">
-                <span className="tech-name">React & Frontend</span>
-                <span className="tech-why">
-                  Self-taught. Comfortable building interactive UIs (like this portfolio) using Hooks, State, and modern CSS/Tailwind.
-                </span>
-              </div>
-
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Node.js & Databases</span>
-                <span className="tech-why">
-                   Experience connecting frontends to scalable backends, working with REST APIs, authentication, and SQL/NoSQL databases.
-                </span>
-              </div>
-
-            </div>
-          </div>
-
-          {/* 3. CORE THEORY (OOP Added Here) */}
-          <div className="tech-stack-section ">
-            <h4 className="tech-stack-title">🧠 CS Fundamentals</h4>
-            <div className="tech-reasoning-grid ">
-              
-              {/* ✅ OOP added prominently here */}
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Object-Oriented Programming</span>
-                <span className="tech-why">
-                   Strong academic foundation in Design Patterns, Inheritance, and Polymorphism (via C++ & Java). I focus on writing modular, maintainable code structures.
-                </span>
-              </div>
-
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Algorithms & Data Structures</span>
-                <span className="tech-why">
-                   Studying core theory (Graphs, Trees, Sorting) to solve problems efficiently. I prioritize logical correctness and time complexity (Big O) in my solutions.
-                </span>
-              </div>
-              
-               <div className="tech-item cursor-target">
-                <span className="tech-name">Python</span>
-                <span className="tech-why">
-                   My go-to tool for automation scripts, data processing, and rapid prototyping.
-                </span>
-              </div>
-
-            </div>
-          </div>
-
+  title: "SKILLS",
+  body: (
+    <>
+      <div className="project-card">
+        <div className="project-header cursor-target">
+          <h3>Engineering Capabilities</h3>
         </div>
-      </>
-    )
-  },
+        
+        <p className="project-desc cursor-target">
+          My focus is on building practical, reliable software. Whether I'm designing a fast, intuitive user interface or architecting the secure database that powers it, I care about delivering a complete, polished product that solves real business problems.
+        </p>
+
+        {/* --- SECTION 1: THE FULL STACK SPECTRUM --- */}
+        <div className="tech-stack-section" style={{ marginTop: '20px' }}>
+          
+          <div className="tech-reasoning-grid">
+            
+            <div className="tech-item cursor-target">
+              <span className="tech-name">
+                <FiLayout style={{ display: 'inline', marginRight: '6px', verticalAlign: '-2px' }} />
+                Frontend & User Experience
+              </span>
+              <span className="tech-why">
+                Focused on what the user actually sees and feels. I build responsive, highly interactive web applications that look professional, load instantly, and are genuinely enjoyable to use.
+              </span>
+            </div>
+
+            <div className="tech-item cursor-target">
+              <span className="tech-name">
+                <FiDatabase style={{ display: 'inline', marginRight: '6px', verticalAlign: '-2px' }} />
+                Backend & Data Infrastructure
+              </span>
+              <span className="tech-why">
+                Focused on reliability and security. I design structured databases and robust servers to ensure user data is handled safely and applications run smoothly behind the scenes without interruption.
+              </span>
+            </div>
+
+            <div className="tech-item cursor-target">
+              <span className="tech-name">
+                <FiSettings style={{ display: 'inline', marginRight: '6px', verticalAlign: '-2px' }} />
+                Systems & Performance
+              </span>
+              <span className="tech-why">
+                Focused on speed and efficiency. By understanding how software operates under the hood, I write clean, optimized code that prevents bottlenecks and scales easily as a platform grows.
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+        {/* --- SECTION 2: TECHNOLOGIES & TOOLS --- */}
+        <div className="tech-stack-section" style={{ marginTop: '30px' }}>
+          <h4 className="tech-stack-title" style={{ marginBottom: '16px' }}>
+            <FiCode style={{ verticalAlign: '-3px', marginRight: '8px', color: 'var(--primary-color)' }} />
+            Technologies & Languages
+          </h4>
+          
+          <div className="tech-badges-array">
+            {/* Frontend */}
+            <img src="https://img.shields.io/badge/React-28a1a7?style=for-the-badge&logo=react&logoColor=white" alt="React" />
+            <img src="https://img.shields.io/badge/React_Native-28a1a7?style=for-the-badge&logo=react&logoColor=white" alt="React Native" />
+            <img src="https://img.shields.io/badge/Next.js-28a1a7?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+            <img src="https://img.shields.io/badge/Three.js-28a1a7?style=for-the-badge&logo=threedotjs&logoColor=white" alt="Three.js" />
+            
+            {/* Backend & DB */}
+            <img src="https://img.shields.io/badge/Node.js-28a1a7?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+            <img src="https://img.shields.io/badge/Express-28a1a7?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
+            <img src="https://img.shields.io/badge/PostgreSQL-28a1a7?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+            <img src="https://img.shields.io/badge/Prisma-28a1a7?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" />
+            
+            {/* Languages */}
+            <img src="https://img.shields.io/badge/TypeScript-28a1a7?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+            <img src="https://img.shields.io/badge/JavaScript-28a1a7?style=for-the-badge&logo=javascript&logoColor=white" alt="JavaScript" />
+            <img src="https://img.shields.io/badge/Java-28a1a7?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java" />
+            <img src="https://img.shields.io/badge/C%2B%2B-28a1a7?style=for-the-badge&logo=cplusplus&logoColor=white" alt="C++" />
+            <img src="https://img.shields.io/badge/C-28a1a7?style=for-the-badge&logo=c&logoColor=white" alt="C" />
+            <img src="https://img.shields.io/badge/Python-28a1a7?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+            <img src="https://img.shields.io/badge/Assembly-28a1a7?style=for-the-badge&logoColor=white" alt="Assembly" />
+          </div>
+        </div>
+
+      </div>
+    </>
+  )
+},
   modal_contact: {
     title: "CONTACT",
     body: (
