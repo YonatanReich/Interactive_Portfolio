@@ -1,5 +1,4 @@
 // src/components/GlassPanel.jsx
-import { useBox } from '@react-three/cannon'
 import { Text, Html, RoundedBox } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useLayoutEffect, useRef } from 'react'
@@ -9,6 +8,8 @@ import * as THREE from 'three'
 import '../GlassPanel.css' 
 import { useScrollVelocity } from '../hooks/useScrollVelocity.jsx'
 import gsap from 'gsap'
+import { GrResources } from "react-icons/gr";
+
 
 
 
@@ -40,11 +41,22 @@ const CONTENT = {
           <p className="project-desc cursor-target">
             A high-performance 3D web experience built to demonstrate front-end mastery and graphics programming skills.
           </p>
+          <br/>
           <div className="project-problem cursor-target">
             <strong>The Problem:</strong> In a saturated junior market, standard resumes are skimmed and forgotten. This project aims to arrest attention immediately, increasing dwell time and leaving a memorable impression on recruiters.
           </div>
+          <div className="preview-frame-wrapper cursor-target">
+    <iframe 
+      src="https://yonatanreich.dev" 
+      title="Applicant Mobile Preview"
+      className="applicant-iframe"
+      loading="lazy"
+    ></iframe>
+  </div>
           <div className="tech-stack-section">
-            <h4 className="tech-stack-title">⚡ Tech Architecture</h4>
+            <h4 className="tech-stack-title">
+              <GrResources style={{ verticalAlign: '-3', marginRight: '8px' }}/>
+               Tech Architecture</h4>
             <div className="tech-reasoning-grid">
               <div className="tech-item cursor-target">
                 <span className="tech-name">React 19 & JavaScript</span>
@@ -74,49 +86,68 @@ const CONTENT = {
 
         <hr className="divider"/>
 
-        {/* --- PROJECT 2: SANKEY TRACKER --- */}
-        <div className="project-card">
-          <div className="project-header cursor-target">
-            <h3>Sankey Job Tracker</h3>
-            <span className="status-tag-inDev">IN DEVELOPMENT</span>
-          </div>
-          <p className="project-desc cursor-target">
-            A data-visualization tool designed to organize the chaotic job hunt process into actionable insights.
-          </p>
-          <div className="project-problem cursor-target">
-            <strong>The Problem:</strong> Tracking hundreds of applications via spreadsheets lacks depth. Candidates lose track of where they fail (Resume vs. Interview). This app visualizes the funnel to reveal bottlenecks in the process.
-          </div>
-          <div className="tech-stack-section">
-            <h4 className="tech-stack-title">⚡ Tech Architecture</h4>
-            <div className="tech-reasoning-grid">
-              
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Next.js 14 & TypeScript</span>
-                <span className="tech-why">
-                  Utilizes the App Router and Server Actions to unify the frontend and backend, ensuring end-to-end type safety without the need for a separate API layer.
-                </span>
-              </div>
+        
+       <div className="project-card">
+  <div className="project-header cursor-target">
+    <h3>Applicant</h3>
+    {/* Kept your original class name, just updated the text to LIVE */}
+    <span className="status-tag-live">LIVE</span>
+  </div>
+  
+  <p className="project-desc cursor-target">
+    A Job seeker's best friend, A tool that let's users manage a top view of a process that can be complex and tiring, in a way that's intuitive and serves actionable data.
+  </p>
+  <br/>
+  <div className="project-problem cursor-target">
+    <strong>The Problem:</strong> In the current Job market, applicant sometimes need to apply to tens, if not
+  </div>
 
-              <div className="tech-item cursor-target">
-                <span className="tech-name">D3.js Visualization Engine</span>
-                <span className="tech-why">
-                  Bypasses standard charting libraries in favor of raw D3 calculations, enabling custom Sankey flow logic that dynamically adapts to complex job application states.
-                </span>
-              </div>
+  
+  <div className="preview-frame-wrapper cursor-target">
+    <iframe 
+      src="https://applican-t.com" 
+      title="Applicant Mobile Preview"
+      className="applicant-iframe-unclickable"
+      loading="lazy"
+    ></iframe>
+  </div>
 
-              <div className="tech-item cursor-target">
-                <span className="tech-name">Prisma & PostgreSQL</span>
-                <span className="tech-why">
-                  A robust relational database strategy managed via Prisma ORM to strictly enforce schema validation for user data and application history.
-                </span>
-              </div>
+  <div className="tech-stack-section">
+            <h4 className="tech-stack-title">
+               <GrResources style={{ verticalAlign: '-3', marginRight: '8px' }}/>
+              Tech Architecture</h4>
+    <div className="tech-reasoning-grid">
+      
+      <div className="tech-item cursor-target">
+        <span className="tech-name">Next.js & TypeScript</span>
+        <span className="tech-why">
+          Utilizes the App Router and Server Actions for a unified, strictly type-safe full-stack environment.
+        </span>
+      </div>
 
-            </div>
-          </div>
-          <div className="project-links">
-            <a href="https://github.com/YonatanReich/Sankey-job-hunt-web-app" className="project-link  cursor-target">View Progress &rarr;</a>
-          </div>
-        </div>
+      <div className="tech-item cursor-target">
+        <span className="tech-name">React Flow & Pure CSS</span>
+        <span className="tech-why">
+          Powers the interactive node-based pipeline diagrams and high-performance, hardware-accelerated glassmorphism UI.
+        </span>
+      </div>
+
+      <div className="tech-item cursor-target">
+        <span className="tech-name">Postgres, Prisma & Gemini AI</span>
+        <span className="tech-why">
+          Defensive DB upserts guarantee relational integrity, while a resilient Exponential Backoff algorithm handles AI API rate limits.
+        </span>
+      </div>
+
+    </div>
+  </div>
+  
+  <div className="project-links">
+    <a href="https://github.com/YonatanReich/Sankey-job-hunt-web-app" className="project-link cursor-target" target="_blank" rel="noopener noreferrer">View Source &rarr;</a>
+    {/* Added a quick out-link so they can view it full screen */}
+    <a href="https://applican-t.com" className="project-link cursor-target" target="_blank" rel="noopener noreferrer">Open Live App &rarr;</a>
+  </div>
+</div>
 
         <hr className="divider"/>
 
@@ -129,11 +160,14 @@ const CONTENT = {
           <p className="project-desc cursor-target">
             A distributed file storage system featuring web and mobile clients, architected with a polyglot backend.
           </p>
+          <br/>
           <div className="project-problem cursor-target">
              <strong>The Problem:</strong> Bridging the gap between high-level web APIs and low-level systems programming. This project solves the challenge of handling binary streams and compression by offloading heavy lifting to C++.
           </div>
           <div className="tech-stack-section">
-            <h4 className="tech-stack-title">⚡ Tech Architecture</h4>
+            <h4 className="tech-stack-title">
+               <GrResources style={{ verticalAlign: '-3', marginRight: '8px' }}/>
+              Tech Architecture</h4>
             <div className="tech-reasoning-grid">
               
               <div className="tech-item cursor-target">
